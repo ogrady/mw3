@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="30" height="30" tilewidth="17" tileheight="17">
+ <tileset firstgid="1" name="5b8mj9" tilewidth="17" tileheight="17">
+  <image source="5b8mj9.png" trans="3151f3" width="407" height="275"/>
+ </tileset>
+ <layer name="background" width="30" height="30">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3BAQEAAACCIP+vbkhAAQAA8Gh7blyXEA4AAA==
+  </data>
+ </layer>
+ <layer name="destructable" width="30" height="30">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC2NgGAWjYPgDXiRMb/vwYWrZRQ230dpeQm4hVQ81AClxRM/0gwzIsZeacUNrPdS0lxL7qWEvLjNolffJcd9AgFF7R+2lhZ3D1V508+mVf7HVd6P2jhwAAOCJMp8QDgAA
+  </data>
+ </layer>
+ <layer name="solid" width="30" height="30">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC2NhYGBgGSBMbzBq76i9o/aO2jtqL3n2HgTifUj4EJ3sfQ/Eb5DwBzrZS2sAs3cflTGheIHZe5XK+OaovaP2DkN7QeUetjxFa3tv4PD7qL30tXckYQC2ihjqEA4AAA==
+  </data>
+ </layer>
+</map>

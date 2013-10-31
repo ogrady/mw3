@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="50" height="50" tilewidth="16" tileheight="16">
+ <tileset firstgid="1" name="SMB-Tiles" tilewidth="16" tileheight="16" spacing="1">
+  <image source="SMB-Tiles.bmp" trans="5c94fc" width="220" height="186"/>
+ </tileset>
+ <layer name="background" width="50" height="50">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3YMROCIACGYS9rS2vV31bt6m7t2f/2G5o89QRJwN7n7hv0BDwREZIEMWqVp/LyfSMrvZVO+WzUHs8NCAtj0sxNuSsPT+VdqZRaaTyVn8L7CAAAljiMnDsrmcP6XEuVo3L6HufKRbkOriuU0qL+qfps8E8GbCOU9eGY4Tdrzq/Wh7EKuV9N0K9mmDv3gfELn0zmXgAA/s2afb+Q2O77xawHxpWCbxAnAAA=
+  </data>
+ </layer>
+ <layer name="destructable" width="50" height="50">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+2YSw7AIAgFPVST3v9m3eqqfkAfMpOwfWGgjbalQAae0w0E5g1UeGiVEmr9zIKHFp4eO88ttX3Muqt5zNLroX63ybYPdSw8Vp85i/uEwj7waDNOg0ebcRo82oyM9M5odJ67wQMPD7J5eGD5DaQ84xHw0CKyR/1+eXns/o8ReR812c4PPPaAh51HT/ZfvqWHd93isdIfHnjgkcfjBj7mcKFeECcAAA==
+  </data>
+ </layer>
+ <layer name="solid" width="50" height="50">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+2Vuw2AMAxEsxDKLnwHYAH2r4AiEk0QieP4sO5JV+OHL/IQQhic5O/QAwt6YEEPLOiBBT2woAcWmh7xEW2876PXf2zF2z569kKK915ZEkN5FxA9aqAHFt48xiuTUeaGHn+HHljQA4vksVxZX7JZDfiR3D723oMIyXkcvQcRQg8s6IEFPbCw9Gh5e0s80ne1brvk9pbuQ/POSzpQ6qHZN3q095C8ISSPm9o3hOZROw89/Hl4yAlm0v07ECcAAA==
+  </data>
+ </layer>
+</map>
