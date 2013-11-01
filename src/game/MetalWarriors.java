@@ -53,7 +53,7 @@ public class MetalWarriors extends BasicGame implements
 			listeners = new ListenerSet<IGameListener>();
 			configuration = new Configuration(CONF_PATH);
 			container = _container;
-			player = PlayerMechFactory.create(500, 500,
+			player = PlayerMechFactory.create(500, 480,
 					PlayerMechFactory.EMech.NITRO, configuration);
 			map = MapLoader.load("rsc/map/tm3.tmx");
 			viewport.centerAround(player);
@@ -66,6 +66,7 @@ public class MetalWarriors extends BasicGame implements
 	public void update(final GameContainer container, final int delta)
 			throws SlickException {
 		player.getController().update(container.getInput(), delta);
+		player.getRenderer().getCurrentAnimation().update(delta);
 		for (final Movable mv : Movable.instances) {
 			mv.applyGravity(9.81f);
 		}

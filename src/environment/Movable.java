@@ -2,8 +2,6 @@ package environment;
 
 import java.util.ArrayList;
 
-import level.Block;
-
 import org.newdawn.slick.geom.Vector2f;
 
 import controller.IControllable;
@@ -75,44 +73,28 @@ public abstract class Movable extends Positionable implements IMassObject,
 		final float oldY = position.y;
 		position.x += x * xspeed;
 		position.y += y * xspeed; // TODO yspeed
-		if (!getCollisions().isEmpty()) {
-			System.out.println(getCollisions().size());
-			position.x = oldX;
-			position.y = oldY;
+		final ArrayList<Positionable> collisions = getCollisions();
+		if (!collisions.isEmpty()) {
 			moved = false;
+			if (oldX != position.x) {
+
+			}
+			if (oldY != position.y) {
+				final Positionable first = collisions.get(0);
+				// movement from top
+				if (oldY < first.getPosition().y) {
+					position.y = first.getPosition().y - height;
+				}
+				// movement from below
+				else if (oldY > first.getPosition().y) {
+					position.y = first.getPosition().y + first.getHeight();
+				}
+			}
+			/*position.x = oldX;
+			position.y = oldY;
+			moved = false;*/
 		}
 		return moved;
-	}
-
-	/**
-	 * Checks the whole list of {@link Positionable}s for collisions with the
-	 * object
-	 * 
-	 * @return a list of {@link Positionable}s we collide with
-	 */
-	protected ArrayList<Positionable> getCollisions() {
-		final ArrayList<Positionable> collisions = new ArrayList<Positionable>();
-		for (final Positionable p : Positionable.instances) {
-			if (p != this && collides(p)) {
-				collisions.add(p);
-			}
-		}
-		return collisions;
-	}
-
-	/**
-	 * Checks whether we collide with another {@link Positionable}. That happens
-	 * whenever their hitboxes intersect
-	 * 
-	 * @param _other
-	 *            other {@link Positionable} to check against
-	 * @return true, if the hitboxes of the two objects intersect
-	 */
-	protected boolean collides(final Positionable _other) {
-		// TODO currently only checking for blocked Blocks. this works fine for
-		// movement but not suited for other things like bullet-mech collision
-		return _other instanceof Block && ((Block) _other).isSolid()
-				&& getHitbox().intersects(_other.getHitbox());
 	}
 
 	@Override
