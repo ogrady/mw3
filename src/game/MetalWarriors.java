@@ -56,7 +56,6 @@ public class MetalWarriors extends BasicGame implements
 			player = PlayerMechFactory.create(500, 480,
 					PlayerMechFactory.EMech.NITRO, configuration);
 			map = MapLoader.load("rsc/map/tm3.tmx");
-			viewport.centerAround(player);
 		} catch (final MapException e) {
 			e.printStackTrace();
 		}
@@ -67,6 +66,7 @@ public class MetalWarriors extends BasicGame implements
 			throws SlickException {
 		player.getController().update(container.getInput(), delta);
 		player.getRenderer().getCurrentAnimation().update(delta);
+		viewport.centerAround(player);
 		for (final Movable mv : Movable.instances) {
 			mv.applyGravity(9.81f);
 		}

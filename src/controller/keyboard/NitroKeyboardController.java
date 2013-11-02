@@ -39,6 +39,10 @@ public class NitroKeyboardController extends KeyboardController {
 			renderer.turnRight();
 			moving = true;
 		}
+		if (isKeyPressed(configuration.getInteger(Configuration.JUMP_KEY))) {
+			deltaY -= 2;
+			renderer.jump();
+		}
 		if (controllable.move(deltaX, deltaY)) {
 			renderer.getCurrentAnimation().setAutoUpdate(moving);
 			MetalWarriors.instance.getViewPort().getPosition().x -= deltaX
