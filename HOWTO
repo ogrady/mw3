@@ -1,0 +1,30 @@
+How to approach the different topics in the source:
+
+Prequisites:
+Controller != MVC-Controller (Controller represents the interface of the game
+to interpret various input methods and how they affect the game.)
+
+Mech
+    - PlayerMechFactory creates mechs with create(..).
+      => create(..) reates Mechs depending on the given Type (Ex.: NITRO (Enum EMech)).
+         First creates a Player (Preferences for the player and their position. Represents the Model.)
+         Given to: Renderer (holds Sprites, ...), Controller (Interface for controls in general for this Player. (Netzwerk, Keyboard, ...))
+
+Input (Controller)
+    - Look up update(..) in MechWarrior (Main Class)
+    - There GameContainer passes all inputs from any input device on to a Controller.
+
+Physics
+    - move(..) called in Movable objects will be called in the Controller depending on the input.
+      (Ex.: Mech derives from Entities derives from Movable, where Mech then holds it's own move(..).)
+    => Apply physics depending on the changes in move(..).
+
+Renderer
+    - PositionableRenderer: Facing for the model (and animations like standing, walking, ...)
+      are set by the Controller depending on the input given. (Move Left -> Face Left)
+    - render(..) in MetalWarriors renders from objects in the background to the foreground.
+      => render(..) called on objects in the render(..) method in MetalWarriors first, are further in the background.
+      (Right now: 1. Map 2. Player)
+
+Network
+    - Not implemented yet.
