@@ -8,8 +8,8 @@ import environment.Positionable;
 public class NitroRenderer extends PositionableRenderer {
 	private final Animation walking, jumping;
 
-	public NitroRenderer(final Positionable _pos) {
-		super(_pos);
+	public NitroRenderer(final Positionable pos) {
+		super(pos);
 		final float factor = 2;
 		walking = new Animation(loadScaledSpriteSheet("rsc/nitro/walking.png",
 				43, 48, factor), 100);
@@ -19,11 +19,11 @@ public class NitroRenderer extends PositionableRenderer {
 	}
 
 	public void turnLeft() {
-		direction = -1;
+		_direction = -1;
 	}
 
 	public void turnRight() {
-		direction = 1;
+		_direction = 1;
 	}
 
 	public void jump() {

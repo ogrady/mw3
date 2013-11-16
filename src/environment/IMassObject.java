@@ -7,7 +7,7 @@ package environment;
 public interface IMassObject {
 	/**
 	 * Apply a certain vertical pull to the object (positive: down, negative: up)
-	 * @param _g gravity
+	 * @param g gravity
 	 */
-	void applyGravity(float _g);
+	void applyGravity(float g);
 }

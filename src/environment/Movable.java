@@ -17,28 +17,40 @@ import controller.IController;
 public abstract class Movable extends Positionable implements IMassObject,
 		IControllable {
 	public static final ArrayList<Movable> instances = new ArrayList<Movable>();
-	protected float xspeed;
-	protected float yspeed;
-	protected IController controller;
+	protected float _xspeed;
+	protected float _yspeed;
+	protected IController _controller;
 
 	/**
 	 * @return speed at which the object moves horizontally (walking)
 	 */
 	public float getXSpeed() {
-		return xspeed;
+		return _xspeed;
 	}
 
 	/**
 	 * @return speed at which the object moves vertically (jumping, gravity)
 	 */
 	public float getYSpeed() {
-		return yspeed;
+		return _yspeed;
 	}
 
-	public Movable(final Vector2f _position, final float _width,
-			final float _height, final float _speed) {
-		super(_position, _width, _height);
-		xspeed = _speed;
+	/**
+	 * Constructor
+	 * 
+	 * @param position
+	 *            initial position
+	 * @param width
+	 *            initial width
+	 * @param height
+	 *            initial height
+	 * @param speed
+	 *            horizontal speed
+	 */
+	public Movable(final Vector2f position, final float width,
+			final float height, final float speed) {
+		super(position, width, height);
+		_xspeed = speed;
 		Movable.instances.add(this);
 	}
 
@@ -49,7 +61,7 @@ public abstract class Movable extends Positionable implements IMassObject,
 	}
 
 	@Override
-	public void applyGravity(final float _g) {
+	public void applyGravity(final float g) {
 		// yspeed += _g;
 		move(0, 1);
 	}
@@ -60,34 +72,41 @@ public abstract class Movable extends Positionable implements IMassObject,
 	 * direction.<br>
 	 * Fails when collisions occur.
 	 * 
-	 * @param x
+	 * @param moveFactorX
 	 *            times the x-speed
-	 * @param y
+	 * @param moveFactorY
 	 *            times the y-speed
 	 * @return whether or not the movement was successful (true, if no
 	 *         collisions occurred)
 	 */
-	public boolean move(final float x, final float y) {
+	// TODO abstract und inhalt in unterklasse //
+	public boolean move(final float moveFactorX, final float moveFactorY) {
 		boolean moved = true;
-		final float oldX = position.x;
-		final float oldY = position.y;
-		position.x += x * xspeed;
-		position.y += y * xspeed; // TODO yspeed
+		final float oldX = _position.x;
+		final float oldY = _position.y;
+		_position.x += moveFactorX * _xspeed;
+		_position.y += moveFactorY * _xspeed; // TODO yspeed
 		final ArrayList<Positionable> collisions = getCollisions();
 		if (!collisions.isEmpty()) {
 			moved = false;
-			if (oldX != position.x) {
-
+			if (oldX != _position.x) {
+				/*final Positionable first = collisions.get(0);
+				if (oldX < first.getPosition().x) {
+					_position.x = first.getPosition().x - _width;
+				} else if (oldX > first.getPosition().x) {
+					_position.x = first.getPosition().x + first.getWidth();
+				}*/
 			}
-			if (oldY != position.y) {
+			if (oldY != _position.y) {
 				final Positionable first = collisions.get(0);
 				// movement from top
 				if (oldY < first.getPosition().y) {
-					position.y = first.getPosition().y - height;
+					// - 1 to prevent touching
+					_position.y = first.getPosition().y - _height - 1;
 				}
 				// movement from below
 				else if (oldY > first.getPosition().y) {
-					position.y = first.getPosition().y + first.getHeight();
+					_position.y = first.getPosition().y + first.getHeight();
 				}
 			}
 			/*position.x = oldX;
@@ -98,12 +117,12 @@ public abstract class Movable extends Positionable implements IMassObject,
 	}
 
 	@Override
-	public void setController(final IController _controller) {
-		controller = _controller;
+	public void setController(final IController controller) {
+		_controller = controller;
 	}
 
 	@Override
 	public IController getController() {
-		return controller;
+		return _controller;
 	}
 }

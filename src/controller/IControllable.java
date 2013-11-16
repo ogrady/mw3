@@ -14,11 +14,11 @@ package controller;
  */
 public interface IControllable {
 	/**
-	 * @param _controller
+	 * @param controller
 	 *            the controller that is used to controller movements and
 	 *            actions
 	 */
-	void setController(IController _controller);
+	void setController(IController controller);
 
 	/**
 	 * @return the current controller the controls the objects movements and

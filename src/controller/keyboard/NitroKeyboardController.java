@@ -8,47 +8,53 @@ import org.newdawn.slick.Input;
 import renderer.slick.mech.NitroRenderer;
 import controller.IControllable;
 
+/**
+ * Keyboard controller specific for the Nitro mech
+ * 
+ * @author Daniel
+ * 
+ */
 public class NitroKeyboardController extends KeyboardController {
-	private final NitroRenderer renderer;
+	private final NitroRenderer _renderer;
 
-	public NitroKeyboardController(final IControllable _controllable,
-			final Configuration _configuration, final NitroRenderer _renderer) {
-		super(_controllable, _configuration);
-		renderer = _renderer;
+	public NitroKeyboardController(final IControllable controllable,
+			final Configuration configuration, final NitroRenderer renderer) {
+		super(controllable, configuration);
+		_renderer = renderer;
 	}
 
 	@Override
-	public void update(final Input _input, final int _delta) {
-		setInput(_input);
-		_input.addKeyListener(this);
+	public void update(final Input input, final int delta) {
+		setInput(input);
+		input.addKeyListener(this);
 		boolean moving = false;
 		int deltaX = 0, deltaY = 0;
-		if (isKeyPressed(configuration.getInteger(Configuration.UP_KEY))) {
+		if (isKeyPressed(_configuration.getInteger(Configuration.UP_KEY))) {
 			deltaY -= 1;
 		}
-		if (isKeyPressed(configuration.getInteger(Configuration.LEFT_KEY))) {
+		if (isKeyPressed(_configuration.getInteger(Configuration.LEFT_KEY))) {
 			deltaX -= 1;
-			renderer.turnLeft();
+			_renderer.turnLeft();
 			moving = true;
 		}
-		if (isKeyPressed(configuration.getInteger(Configuration.DOWN_KEY))) {
+		if (isKeyPressed(_configuration.getInteger(Configuration.DOWN_KEY))) {
 			deltaY += 1;
 		}
-		if (isKeyPressed(configuration.getInteger(Configuration.RIGHT_KEY))) {
+		if (isKeyPressed(_configuration.getInteger(Configuration.RIGHT_KEY))) {
 			deltaX += 1;
-			renderer.turnRight();
+			_renderer.turnRight();
 			moving = true;
 		}
-		if (isKeyPressed(configuration.getInteger(Configuration.JUMP_KEY))) {
+		if (isKeyPressed(_configuration.getInteger(Configuration.JUMP_KEY))) {
 			deltaY -= 2;
-			renderer.jump();
+			_renderer.jump();
 		}
-		if (controllable.move(deltaX, deltaY)) {
-			renderer.getCurrentAnimation().setAutoUpdate(moving);
+		if (_controllable.move(deltaX, deltaY)) {
+			_renderer.getCurrentAnimation().setAutoUpdate(moving);
 			MetalWarriors.instance.getViewPort().getPosition().x -= deltaX
-					* controllable.getXSpeed();
+					* _controllable.getXSpeed();
 			MetalWarriors.instance.getViewPort().getPosition().y -= deltaY
-					* controllable.getXSpeed();
+					* _controllable.getXSpeed();
 		}
 	}
 

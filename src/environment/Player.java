@@ -4,12 +4,12 @@ import org.newdawn.slick.geom.Vector2f;
 
 public class Player extends Entity {
 
-	public Player(Vector2f _position, float _width, float _height, float _speed, String _description) {
-		super(_position, _width, _height, _speed, _description);
+	public Player(Vector2f position, float width, float height, float speed, String description) {
+		super(position, width, height, speed, description);
 	}
 
 	@Override
-	public void onCollide(Positionable _collider) {
+	public void onCollide(Positionable collider) {
 
 	}
 

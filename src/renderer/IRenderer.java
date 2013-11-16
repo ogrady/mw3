@@ -12,8 +12,8 @@ import org.newdawn.slick.Graphics;
 public interface IRenderer {
 	/**
 	 * Renders the renderable on the given graphics-object 
-	 * @param _g graphics to draw on
-	 * @param _vp viewport the game currently has
+	 * @param g graphics to draw on
+	 * @param vp viewport the game currently has
 	 */
-	void render(Graphics _g, Viewport _vp);
+	void render(Graphics g, Viewport vp);
 }

@@ -4,10 +4,17 @@ import org.newdawn.slick.geom.Vector2f;
 
 import environment.Positionable;
 
+/**
+ * Block of which a map consists of. They hold information such as whether they
+ * are destructable or not
+ * 
+ * @author Daniel
+ * 
+ */
 public class Block extends Positionable {
-	private final Map map;
-	private boolean solid, destructable;
-	private final int xIndex, yIndex;
+	private final Map _map;
+	private boolean _solid, _destructable;
+	private final int _xIndex, _yIndex;
 
 	/**
 	 * @return the x-coordinate this block has in the grid of the map (not to
@@ -16,7 +23,7 @@ public class Block extends Positionable {
 	 *         block in absolute pixels)
 	 */
 	public int getX() {
-		return xIndex;
+		return _xIndex;
 	}
 
 	/**
@@ -26,49 +33,48 @@ public class Block extends Positionable {
 	 *         block in absolute pixels)
 	 */
 	public int getY() {
-		return yIndex;
+		return _yIndex;
 	}
 
 	/**
 	 * @return the map this block resides in
 	 */
 	public Map getMap() {
-		return map;
+		return _map;
 	}
 
 	/**
 	 * @return whether this block is solid
 	 */
 	public boolean isSolid() {
-		return solid;
+		return _solid;
 	}
 
 	/**
 	 * @param _solid
 	 *            set a block solid or not
 	 */
-	public void setSolid(final boolean _solid) {
-		solid = _solid;
+	public void setSolid(final boolean solid) {
+		_solid = solid;
 	}
 
 	/**
 	 * @return whether this block is destructable
 	 */
 	public boolean isDestructable() {
-		return destructable;
+		return _destructable;
 	}
 
-	public void setDestructable(final boolean _destructable) {
-		destructable = _destructable;
+	public void setDestructable(final boolean destructable) {
+		_destructable = destructable;
 	}
 
-	public Block(final int _x, final int _y, final Map _map) {
-		super(new Vector2f(_x * _map.getBlockWidth(), _y
-				* _map.getBlockHeight()), _map.getBlockWidth(), _map
-				.getBlockHeight());
-		xIndex = _x;
-		yIndex = _y;
-		map = _map;
+	public Block(final int x, final int y, final Map map) {
+		super(new Vector2f(x * map.getBlockWidth(), y * map.getBlockHeight()),
+				map.getBlockWidth(), map.getBlockHeight());
+		_xIndex = x;
+		_yIndex = y;
+		_map = map;
 	}
 
 	@Override

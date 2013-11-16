@@ -8,22 +8,22 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
 public class MapRenderer extends Slick2DRenderer {
-	private final Map renderable;
-	private Image backgroundImage;
+	private final Map _renderable;
+	private Image _backgroundImage;
 
-	public MapRenderer(final Map _renderable) {
-		renderable = _renderable;
+	public MapRenderer(final Map renderable) {
+		_renderable = renderable;
 		try {
-			backgroundImage = new Image("rsc/map/background.jpg");
+			_backgroundImage = new Image("rsc/map/background.jpg");
 		} catch (final SlickException e) {
 			e.printStackTrace();
 		}
 	}
 
 	@Override
-	public void render(final Graphics _g, final Viewport _vp) {
-		_g.drawImage(backgroundImage, _vp.getPosition().x / 10,
-				_vp.getPosition().y / 10);
-		renderable.getTiledMap().render(0, 0);
+	public void render(final Graphics g, final Viewport vp) {
+		g.drawImage(_backgroundImage, vp.getPosition().x / 10,
+				vp.getPosition().y / 10);
+		_renderable.getTiledMap().render(0, 0);
 	}
 }

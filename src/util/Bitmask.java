@@ -9,30 +9,30 @@ package util;
  *
  */
 public class Bitmask {
-	private int bits;
+	private int _bits;
 	
 	/**
 	 * Add a value to the map (idempotent)
-	 * @param _val value to add
+	 * @param val value to add
 	 */
-	public void add(int _val) {
-		bits |= _val;
+	public void add(int val) {
+		_bits |= val;
 	}
 	
 	/**
 	 * Remove a value from the map (idempotent)
-	 * @param _val value to remove
+	 * @param val value to remove
 	 */
-	public void remove(int _val) {
-		bits &= ~_val;
+	public void remove(int val) {
+		_bits &= ~val;
 	}
 	
 	/**
 	 * Checks whether a given value is contained in the map
-	 * @param _val true, if the corresponding bit is set
+	 * @param val true, if the corresponding bit is set
 	 * @return
 	 */
-	public boolean has(int _val) {
-		return (bits & _val) != 0;
+	public boolean has(int val) {
+		return (_bits & val) != 0;
 	}
 }

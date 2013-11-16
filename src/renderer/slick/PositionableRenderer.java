@@ -10,54 +10,71 @@ import environment.Positionable;
 import game.Viewport;
 
 public class PositionableRenderer extends Slick2DRenderer {
-	protected Positionable renderable;
-	protected int direction;
+	protected Positionable _renderable;
+	/**
+	 * 1 means looking right, -1 looking left
+	 */
+	protected int _direction;
 
-	public PositionableRenderer(final Positionable _renderable) {
-		renderable = _renderable;
-		direction = 1;
-	}
-
-	@Override
-	public void render(final Graphics _g, final Viewport _vp) {
-		final Image frame = current.getCurrentFrame();
-		frame.draw(renderable.getPosition().x, renderable.getPosition().y,
-				(direction - 1) * -frame.getWidth() / 2, 0, (direction + 1)
-						* frame.getWidth() / 2, frame.getHeight());
-		for (final Positionable p : renderable.getCollisions()) {
-			_g.draw(p.getHitbox());
-		}
-		_g.draw(renderable.getHitbox());
+	/**
+	 * Constructor<br>
+	 * constructs a renderer which is looking to the right side
+	 * 
+	 * @param renderable
+	 */
+	public PositionableRenderer(final Positionable renderable) {
+		_renderable = renderable;
+		_direction = 1;
 	}
 
 	/**
-	 * Sets the current animation and adjusts the size of the hitbox to the size
-	 * of the passed animation.<br>
-	 * It also restarts the former animation so it can restart when being used
-	 * again. Thus the animation should only contain frames of the same size
-	 * 
-	 * @param _current
-	 *            new current animation
+	 * Renders the positionable at its current position. Flips the animation if
+	 * the direction isinversed (= -1)
 	 */
-	protected void setCurrentAnimation(final Animation _current) {
-		final Animation old = current;
-		current = _current;
-		if (current != old && old != null) {
-			old.restart();
+	@Override
+	public void render(final Graphics g, final Viewport vp) {
+		final Image frame = _current.getCurrentFrame();
+		frame.draw(_renderable.getPosition().x, _renderable.getPosition().y,
+				(_direction - 1) * -frame.getWidth() / 2, 0, (_direction + 1)
+						* frame.getWidth() / 2, frame.getHeight());
+		for (final Positionable p : _renderable.getCollisions()) {
+			g.draw(p.getHitbox());
 		}
-		renderable.setWidth(current.getWidth());
-		renderable.setHeight(current.getHeight());
+		g.draw(_renderable.getHitbox());
 	}
 
-	final protected static SpriteSheet loadScaledSpriteSheet(
-			final String _path, final int _frameWidth, final int _frameHeight,
-			final float _factor) {
+	/**
+	 * As in {@link Slick2DRenderer#setCurrentAnimation(Animation)} but also
+	 * adjusts the width and height of the rendered object according to the
+	 * current frame of the current animation
+	 */
+	@Override
+	public void setCurrentAnimation(final Animation newCurrent) {
+		super.setCurrentAnimation(newCurrent);
+		_renderable.setWidth(newCurrent.getWidth());
+		_renderable.setHeight(newCurrent.getHeight());
+	}
+
+	/**
+	 * Loads a {@link SpriteSheet} in scaled form
+	 * 
+	 * @param path
+	 *            path to the spritesheet
+	 * @param frameWidth
+	 *            width of one frame in the original spritesheet
+	 * @param frameHeight
+	 *            height of one frame in the original spritesheet
+	 * @param factor
+	 *            factor by which to scale the frames
+	 * @return a scaled sheet or null if something fails
+	 */
+	final protected static SpriteSheet loadScaledSpriteSheet(final String path,
+			final int frameWidth, final int frameHeight, final float factor) {
 		SpriteSheet sheet = null;
 		try {
-			sheet = new SpriteSheet(new SpriteSheet(_path, _frameWidth,
-					_frameHeight, 0).getScaledCopy(_factor),
-					(int) (_factor * _frameWidth),
-					(int) (_factor * _frameHeight));
+			sheet = new SpriteSheet(new SpriteSheet(path, frameWidth,
+					frameHeight, 0).getScaledCopy(factor),
+					(int) (factor * frameWidth), (int) (factor * frameHeight));
 		} catch (final SlickException e) {
 			e.printStackTrace();
 		}

@@ -6,35 +6,42 @@ import environment.Movable;
 import game.Configuration;
 import game.MetalWarriors;
 
+/**
+ * Default keyboard controls. Mainly for testing (up, down, left, right are
+ * accepted)
+ * 
+ * @author Daniel
+ * 
+ */
 public class DefaultKeyboardController extends KeyboardController {
 
-	public DefaultKeyboardController(Movable _controllable,
-			Configuration _configuration) {
-		super(_controllable, _configuration);
+	public DefaultKeyboardController(final Movable controllable,
+			final Configuration configuration) {
+		super(controllable, configuration);
 	}
 
 	@Override
-	public void update(Input _input, int _delta) {
-		setInput(_input);
-		_input.addKeyListener(this);
+	public void update(final Input input, final int delta) {
+		setInput(input);
+		input.addKeyListener(this);
 		int deltaX = 0, deltaY = 0;
-		if (isKeyPressed(configuration.getInteger(Configuration.UP_KEY))) {
+		if (isKeyPressed(_configuration.getInteger(Configuration.UP_KEY))) {
 			deltaY -= 1;
 		}
-		if (isKeyPressed(configuration.getInteger(Configuration.LEFT_KEY))) {
+		if (isKeyPressed(_configuration.getInteger(Configuration.LEFT_KEY))) {
 			deltaX -= 1;
 		}
-		if (isKeyPressed(configuration.getInteger(Configuration.DOWN_KEY))) {
+		if (isKeyPressed(_configuration.getInteger(Configuration.DOWN_KEY))) {
 			deltaY += 1;
 		}
-		if (isKeyPressed(configuration.getInteger(Configuration.RIGHT_KEY))) {
+		if (isKeyPressed(_configuration.getInteger(Configuration.RIGHT_KEY))) {
 			deltaX += 1;
 		}
-		if (controllable.move(deltaX, deltaY)) {
+		if (_controllable.move(deltaX, deltaY)) {
 			MetalWarriors.instance.getViewPort().getPosition().x -= deltaX
-					* controllable.getXSpeed();
+					* _controllable.getXSpeed();
 			MetalWarriors.instance.getViewPort().getPosition().y -= deltaY
-					* controllable.getXSpeed();
+					* _controllable.getXSpeed();
 		}
 	}
 }

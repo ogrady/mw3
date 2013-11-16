@@ -8,55 +8,71 @@ import controller.IController;
 import environment.Movable;
 import game.Configuration;
 
+/**
+ * Keyboard input which listens for keypresses
+ * 
+ * @author Daniel
+ * 
+ */
 abstract public class KeyboardController implements IController, KeyListener {
-	protected boolean accepting;
-	protected Movable controllable;
-	protected Input input;
-	protected Configuration configuration;
-	
-	public KeyboardController(IControllable _controllable, Configuration _configuration) {
-		setControllable(_controllable);
-		configuration = _configuration;
+	protected boolean _accepting;
+	protected Movable _controllable;
+	protected Input _input;
+	protected Configuration _configuration;
+
+	public KeyboardController(final IControllable controllable,
+			final Configuration configuration) {
+		setControllable(controllable);
+		_configuration = configuration;
 	}
-	
+
 	@Override
-	public IControllable getControllable() { return controllable; }
+	public IControllable getControllable() {
+		return _controllable;
+	}
 
 	/**
-	 * @throws ClassCastException if the controllable is not a {@link Movable}
+	 * @throws ClassCastException
+	 *             if the controllable is not a {@link Movable}
 	 */
 	@Override
-	public void setControllable(IControllable _controllable) { 
-		controllable = (Movable)_controllable;
+	public void setControllable(final IControllable controllable) {
+		_controllable = (Movable) controllable;
 	}
 
 	@Override
-	public boolean isAcceptingInput() { return accepting; }
+	public boolean isAcceptingInput() {
+		return _accepting;
+	}
 
 	@Override
-	public void setInput(Input _input) {
-		if(!(input == _input)) {
-			if(input != null) {
-				input.removeKeyListener(this);
+	public void setInput(final Input input) {
+		if (!(_input == input)) {
+			if (_input != null) {
+				_input.removeKeyListener(this);
 			}
-			input = _input;
-			input.addKeyListener(this);
+			_input = input;
+			_input.addKeyListener(this);
 		}
 	}
-	
-	@Override
-	public void inputEnded() {}
 
 	@Override
-	public void inputStarted() {}
+	public void inputEnded() {
+	}
 
 	@Override
-	public void keyPressed(int _key, char _c) {}
+	public void inputStarted() {
+	}
 
 	@Override
-	public void keyReleased(int _key, char _c) {}
-	
-	public boolean isKeyPressed(int _key) {
-		return input.isKeyDown(_key);
+	public void keyPressed(final int key, final char c) {
+	}
+
+	@Override
+	public void keyReleased(final int key, final char c) {
+	}
+
+	public boolean isKeyPressed(final int key) {
+		return _input.isKeyDown(key);
 	}
 }

@@ -16,29 +16,44 @@ import environment.Movable;
 import environment.character.PlayerMechFactory;
 import exception.MapException;
 
+/**
+ * Main class for the game
+ * 
+ * @author Daniel
+ * 
+ */
 public class MetalWarriors extends BasicGame implements
 		IListenable<IGameListener> {
 	public static final String CONF_PATH = "rsc/conf.properties";
 
 	public static MetalWarriors instance;
+	private Movable _player;
+	private Map _map;
+	private Viewport _viewport;
+	private GameContainer _container;
+	private Configuration _configuration;
+	private ListenerSet<IGameListener> _listeners;
 
-	private Movable player;
-	private Map map;
-	private Viewport viewport;
-	private GameContainer container;
-	private Configuration configuration;
-	private ListenerSet<IGameListener> listeners;
-
+	/**
+	 * @return the viewport which determines which part of the playing field the
+	 *         player can see
+	 */
 	public Viewport getViewPort() {
-		return viewport;
+		return _viewport;
 	}
 
+	/**
+	 * @return the width of the window
+	 */
 	public int getWidth() {
-		return container.getWidth();
+		return _container.getWidth();
 	}
 
+	/**
+	 * @return the height of the window
+	 */
 	public int getHeight() {
-		return container.getHeight();
+		return _container.getHeight();
 	}
 
 	public MetalWarriors() {
@@ -47,37 +62,42 @@ public class MetalWarriors extends BasicGame implements
 	}
 
 	@Override
-	public void init(final GameContainer _container) throws SlickException {
-		try {
-			viewport = new Viewport(0, 0, _container);
-			listeners = new ListenerSet<IGameListener>();
-			configuration = new Configuration(CONF_PATH);
-			container = _container;
-			player = PlayerMechFactory.create(500, 480,
-					PlayerMechFactory.EMech.NITRO, configuration);
-			map = MapLoader.load("rsc/map/tm3.tmx");
-		} catch (final MapException e) {
-			e.printStackTrace();
-		}
+	public void init(final GameContainer container) throws SlickException {
+		_viewport = new Viewport(0, 0, container);
+		_listeners = new ListenerSet<IGameListener>();
+		_configuration = new Configuration(CONF_PATH);
+		_container = container;
+		_player = PlayerMechFactory.create(500, 480,
+				PlayerMechFactory.EMech.NITRO, _configuration);
+		_map = MapLoader.load("rsc/map/tm3.tmx");
 	}
 
+	/**
+	 * This method is called every iteration and causes all controllers to
+	 * consider updating their controlled objects
+	 */
 	@Override
 	public void update(final GameContainer container, final int delta)
 			throws SlickException {
-		player.getController().update(container.getInput(), delta);
-		player.getRenderer().getCurrentAnimation().update(delta);
-		viewport.centerAround(player);
+		_player.getController().update(container.getInput(), delta);
+		_player.getRenderer().getCurrentAnimation().update(delta);
 		for (final Movable mv : Movable.instances) {
 			mv.applyGravity(9.81f);
 		}
+		_viewport.centerAround(_player);
 	}
 
+	/**
+	 * This method is called every iteration after
+	 * {@link #update(GameContainer, int)} and causes all renderer to render
+	 * their held object
+	 */
 	@Override
 	public void render(final GameContainer container, final Graphics g)
 			throws SlickException {
-		g.translate(viewport.getPosition().x, viewport.getPosition().y);
-		map.getRenderer().render(g, viewport);
-		player.getRenderer().render(g, viewport);
+		g.translate(_viewport.getPosition().x, _viewport.getPosition().y);
+		_map.getRenderer().render(g, _viewport);
+		_player.getRenderer().render(g, _viewport);
 	}
 
 	public static void main(final String[] args) throws MapException {
@@ -95,6 +115,6 @@ public class MetalWarriors extends BasicGame implements
 
 	@Override
 	public ListenerSet<IGameListener> getListeners() {
-		return listeners;
+		return _listeners;
 	}
 }

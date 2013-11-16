@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import level.Block;
 
 import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
 
 import renderer.IRendereable;
@@ -12,45 +13,46 @@ import renderer.slick.Slick2DRenderer;
 
 /**
  * Object that can be positioned somewhere on the playing field and has a
- * certain width and height for collisions
+ * certain width and height for collisions which will be determined by the
+ * renderers current frame
  * 
  * @author Daniel
  */
 public abstract class Positionable implements IRendereable<Slick2DRenderer> {
 	public static final ArrayList<Positionable> instances = new ArrayList<Positionable>();
 
-	protected Vector2f position;
-	protected float width, height;
-	protected Slick2DRenderer renderer;
+	protected Vector2f _position;
+	protected float _width, _height;
+	protected Slick2DRenderer _renderer;
 
 	/**
 	 * @param _width
 	 *            new width of the object
 	 */
-	public void setWidth(final int _width) {
-		width = _width;
+	public void setWidth(final int width) {
+		_width = width;
 	}
 
 	/**
 	 * @param _height
 	 *            new height of the object
 	 */
-	public void setHeight(final int _height) {
-		height = _height;
+	public void setHeight(final int height) {
+		_height = height;
 	}
 
 	/**
 	 * @return the current width of the object
 	 */
 	public float getWidth() {
-		return width;
+		return _width;
 	}
 
 	/**
 	 * @return the current height of the object
 	 */
 	public float getHeight() {
-		return height;
+		return _height;
 	}
 
 	/**
@@ -58,41 +60,41 @@ public abstract class Positionable implements IRendereable<Slick2DRenderer> {
 	 *         the object!
 	 */
 	public Vector2f getPosition() {
-		return position;
+		return _position;
 	}
 
 	/**
 	 * @return hitbox for collisions
 	 */
-	public Rectangle getHitbox() {
-		return new Rectangle(position.x, position.y, width, height);
+	public Shape getHitbox() {
+		return new Rectangle(_position.x, _position.y, _width, _height);
 	}
 
 	@Override
 	public Slick2DRenderer getRenderer() {
-		return renderer;
+		return _renderer;
 	}
 
 	@Override
-	public void setRenderer(final Slick2DRenderer _renderer) {
-		renderer = _renderer;
+	public void setRenderer(final Slick2DRenderer renderer) {
+		_renderer = renderer;
 	}
 
 	/**
 	 * Constructor
 	 * 
-	 * @param _position
+	 * @param position
 	 *            initial position
-	 * @param _width
+	 * @param width
 	 *            width of the hitbox
-	 * @param _height
+	 * @param height
 	 *            height of the hitbox
 	 */
-	public Positionable(final Vector2f _position, final float _width,
-			final float _height) {
-		position = _position;
-		width = _width;
-		height = _height;
+	public Positionable(final Vector2f position, final float width,
+			final float height) {
+		_position = position;
+		_width = width;
+		_height = height;
 		Positionable.instances.add(this);
 		// hitbox = new Re
 		// new Rectangle(_position.x, _position.y, _width, _height);
@@ -122,16 +124,16 @@ public abstract class Positionable implements IRendereable<Slick2DRenderer> {
 	 * Checks whether we collide with another {@link Positionable}. That happens
 	 * whenever their hitboxes intersect
 	 * 
-	 * @param _other
+	 * @param other
 	 *            other {@link Positionable} to check against
 	 * @return true, if the hitboxes of the two objects intersect
 	 */
-	protected boolean collides(final Positionable _other) {
+	protected boolean collides(final Positionable other) {
 		// TODO currently only checking for blocked Blocks. this works fine for
 		// movement but not suited for other things like bullet-mech collision
-		return _other instanceof Block && ((Block) _other).isSolid()
-				&& getHitbox().intersects(_other.getHitbox());
+		return other instanceof Block && ((Block) other).isSolid()
+				&& getHitbox().intersects(other.getHitbox());
 	}
 
-	abstract public void onCollide(Positionable _collider);
+	abstract public void onCollide(Positionable collider);
 }

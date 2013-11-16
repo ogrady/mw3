@@ -10,5 +10,5 @@ package renderer;
  */
 public interface IRendereable<R extends IRenderer> {
 	R getRenderer();
-	void setRenderer(R _renderer);
+	void setRenderer(R renderer);
 }

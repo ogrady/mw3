@@ -15,14 +15,14 @@ public interface IController {
 	IControllable getControllable();
 	
 	/**
-	 * @param _controllable the new {@link IControllable}
+	 * @param controllable the new {@link IControllable}
 	 */
-	void setControllable(IControllable _controllable);
+	void setControllable(IControllable controllable);
 	
 	/**
 	 * Causes the controller to apply its control-rules to the controllable object
-	 * @param _input input for this tick
-	 * @param _delta milliseconds passed since the last tick
+	 * @param input input for this tick
+	 * @param delta milliseconds passed since the last tick
 	 */
-	void update(Input _input, int _delta);
+	void update(Input input, int delta);
 }

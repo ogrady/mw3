@@ -17,31 +17,31 @@ public class Configuration extends Properties {
 		ATTACK_KEY_2 = "attack_key_2"
 	;
 	
-	public char getChar(String _key) {
-		return getProperty(_key).charAt(0);
+	public char getChar(String key) {
+		return getProperty(key).charAt(0);
 	}
 
-	public int getInteger(String _key) {
-		return Integer.parseInt(getProperty(_key));
+	public int getInteger(String key) {
+		return Integer.parseInt(getProperty(key));
 	}
 	
-	public double getDouble(String _key) {
-		return Double.parseDouble(getProperty(_key));
+	public double getDouble(String key) {
+		return Double.parseDouble(getProperty(key));
 	}
 	
-	public boolean getBoolean(String _key) {
-		return Boolean.parseBoolean(getProperty(_key));
+	public boolean getBoolean(String key) {
+		return Boolean.parseBoolean(getProperty(key));
 	}
 	
-	public Configuration(String _path) {
+	public Configuration(String path) {
 		BufferedInputStream in = null;
 		try {
-			in = new BufferedInputStream(new FileInputStream(_path));
+			in = new BufferedInputStream(new FileInputStream(path));
 			load(in);
 			in.close();
 		} catch (IOException ioe) {
 			try {
-				System.err.println(String.format("error when attempting to load config from '%s': %s", _path, ioe.getMessage()));
+				System.err.println(String.format("error when attempting to load config from '%s': %s", path, ioe.getMessage()));
 				if(in != null) {
 					in.close();
 				}
