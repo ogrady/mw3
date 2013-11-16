@@ -2,28 +2,33 @@ package environment;
 
 import java.util.ArrayList;
 
-import level.Block;
-
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
 
 import renderer.IRendereable;
 import renderer.slick.Slick2DRenderer;
+import environment.collider.DefaultCollider;
+import environment.collider.ICollidable;
+import environment.collider.ICollider;
 
 /**
  * Object that can be positioned somewhere on the playing field and has a
  * certain width and height for collisions which will be determined by the
- * renderers current frame
+ * renderers current frame. Every positionable can collide with others and
+ * therefore has a {@link DefaultCollider} upon creation which can be exchanged
+ * for more fitting colliders in subclasses.
  * 
  * @author Daniel
  */
-public abstract class Positionable implements IRendereable<Slick2DRenderer> {
+public abstract class Positionable implements IRendereable<Slick2DRenderer>,
+		ICollidable {
 	public static final ArrayList<Positionable> instances = new ArrayList<Positionable>();
 
 	protected Vector2f _position;
 	protected float _width, _height;
 	protected Slick2DRenderer _renderer;
+	protected ICollider _collider;
 
 	/**
 	 * @param _width
@@ -95,45 +100,23 @@ public abstract class Positionable implements IRendereable<Slick2DRenderer> {
 		_position = position;
 		_width = width;
 		_height = height;
+		_collider = new DefaultCollider(this);
 		Positionable.instances.add(this);
-		// hitbox = new Re
-		// new Rectangle(_position.x, _position.y, _width, _height);
 	}
 
 	public void destruct() {
 		Positionable.instances.remove(this);
 	}
 
-	/**
-	 * Checks the whole list of {@link Positionable}s for collisions with the
-	 * object
-	 * 
-	 * @return a list of {@link Positionable}s we collide with
-	 */
-	public ArrayList<Positionable> getCollisions() {
-		final ArrayList<Positionable> collisions = new ArrayList<Positionable>();
-		for (final Positionable p : Positionable.instances) {
-			if (p != this && collides(p)) {
-				collisions.add(p);
-			}
-		}
-		return collisions;
-	}
-
-	/**
-	 * Checks whether we collide with another {@link Positionable}. That happens
-	 * whenever their hitboxes intersect
-	 * 
-	 * @param other
-	 *            other {@link Positionable} to check against
-	 * @return true, if the hitboxes of the two objects intersect
-	 */
-	protected boolean collides(final Positionable other) {
-		// TODO currently only checking for blocked Blocks. this works fine for
-		// movement but not suited for other things like bullet-mech collision
-		return other instanceof Block && ((Block) other).isSolid()
-				&& getHitbox().intersects(other.getHitbox());
-	}
-
 	abstract public void onCollide(Positionable collider);
+
+	@Override
+	public ICollider getCollider() {
+		return _collider;
+	}
+
+	@Override
+	public void setCollider(final ICollider newCollider) {
+		_collider = newCollider;
+	}
 }

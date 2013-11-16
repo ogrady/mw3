@@ -1,6 +1,7 @@
 package environment;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.newdawn.slick.geom.Vector2f;
 
@@ -86,8 +87,11 @@ public abstract class Movable extends Positionable implements IMassObject,
 		final float oldY = _position.y;
 		_position.x += moveFactorX * _xspeed;
 		_position.y += moveFactorY * _xspeed; // TODO yspeed
-		final ArrayList<Positionable> collisions = getCollisions();
+		final List<Positionable> collisions = _collider.getCollisions();
 		if (!collisions.isEmpty()) {
+			for (final Positionable p : collisions) {
+				p.getCollider().onPositionableCollide(this);
+			}
 			moved = false;
 			if (oldX != _position.x) {
 				/*final Positionable first = collisions.get(0);
@@ -109,9 +113,6 @@ public abstract class Movable extends Positionable implements IMassObject,
 					_position.y = first.getPosition().y + first.getHeight();
 				}
 			}
-			/*position.x = oldX;
-			position.y = oldY;
-			moved = false;*/
 		}
 		return moved;
 	}

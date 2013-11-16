@@ -3,6 +3,7 @@ package level;
 import org.newdawn.slick.geom.Vector2f;
 
 import environment.Positionable;
+import environment.collider.NeverCollider;
 
 /**
  * Block of which a map consists of. They hold information such as whether they
@@ -56,6 +57,10 @@ public class Block extends Positionable {
 	 */
 	public void setSolid(final boolean solid) {
 		_solid = solid;
+		// block is just an empty space
+		if (!solid) {
+			_collider = new NeverCollider(this);
+		}
 	}
 
 	/**
