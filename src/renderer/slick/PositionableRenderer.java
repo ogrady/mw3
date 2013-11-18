@@ -3,13 +3,18 @@ package renderer.slick;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.SlickException;
-import org.newdawn.slick.SpriteSheet;
 
 import environment.Positionable;
 import game.Viewport;
 
-public class PositionableRenderer extends Slick2DRenderer {
+/**
+ * Renderers for positionable objects that can not move should extend this
+ * class.
+ * 
+ * @author Daniel
+ * 
+ */
+abstract public class PositionableRenderer extends Slick2DRenderer {
 	protected Positionable _renderable;
 	/**
 	 * 1 means looking right, -1 looking left
@@ -53,31 +58,5 @@ public class PositionableRenderer extends Slick2DRenderer {
 		super.setCurrentAnimation(newCurrent);
 		_renderable.setWidth(newCurrent.getWidth());
 		_renderable.setHeight(newCurrent.getHeight());
-	}
-
-	/**
-	 * Loads a {@link SpriteSheet} in scaled form
-	 * 
-	 * @param path
-	 *            path to the spritesheet
-	 * @param frameWidth
-	 *            width of one frame in the original spritesheet
-	 * @param frameHeight
-	 *            height of one frame in the original spritesheet
-	 * @param factor
-	 *            factor by which to scale the frames
-	 * @return a scaled sheet or null if something fails
-	 */
-	final protected static SpriteSheet loadScaledSpriteSheet(final String path,
-			final int frameWidth, final int frameHeight, final float factor) {
-		SpriteSheet sheet = null;
-		try {
-			sheet = new SpriteSheet(new SpriteSheet(path, frameWidth,
-					frameHeight, 0).getScaledCopy(factor),
-					(int) (factor * frameWidth), (int) (factor * frameHeight));
-		} catch (final SlickException e) {
-			e.printStackTrace();
-		}
-		return sheet;
 	}
 }

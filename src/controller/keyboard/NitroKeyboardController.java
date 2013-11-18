@@ -34,7 +34,7 @@ public class NitroKeyboardController extends KeyboardController {
 		}
 		if (isKeyPressed(_configuration.getInteger(Configuration.LEFT_KEY))) {
 			deltaX -= 1;
-			_renderer.turnLeft();
+			_renderer.onLeftButton();
 			moving = true;
 		}
 		if (isKeyPressed(_configuration.getInteger(Configuration.DOWN_KEY))) {
@@ -42,12 +42,12 @@ public class NitroKeyboardController extends KeyboardController {
 		}
 		if (isKeyPressed(_configuration.getInteger(Configuration.RIGHT_KEY))) {
 			deltaX += 1;
-			_renderer.turnRight();
+			_renderer.onRightButton();
 			moving = true;
 		}
 		if (isKeyPressed(_configuration.getInteger(Configuration.JUMP_KEY))) {
 			deltaY -= 2;
-			_renderer.jump();
+			_renderer.onJumpButton();
 		}
 		if (_controllable.move(deltaX, deltaY)) {
 			_renderer.getCurrentAnimation().setAutoUpdate(moving);

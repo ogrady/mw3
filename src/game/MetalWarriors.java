@@ -4,6 +4,7 @@ import level.Map;
 import level.MapLoader;
 import listener.IGameListener;
 import listener.IListenable;
+import listener.INotifier;
 import listener.ListenerSet;
 
 import org.newdawn.slick.AppGameContainer;
@@ -79,8 +80,12 @@ public class MetalWarriors extends BasicGame implements
 	@Override
 	public void update(final GameContainer container, final int delta)
 			throws SlickException {
-		_player.getController().update(container.getInput(), delta);
-		_player.getRenderer().getCurrentAnimation().update(delta);
+		_listeners.notify(new INotifier<IGameListener>() {
+			@Override
+			public void notify(final IGameListener listener) {
+				listener.onTick(container.getInput(), delta);
+			}
+		});
 		for (final Movable mv : Movable.instances) {
 			mv.applyGravity(9.81f);
 		}

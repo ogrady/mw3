@@ -70,20 +70,29 @@ public class Block extends Positionable {
 		return _destructable;
 	}
 
+	/**
+	 * @param destructable
+	 *            set a block destructable or not
+	 */
 	public void setDestructable(final boolean destructable) {
 		_destructable = destructable;
 	}
 
+	/**
+	 * Constructor
+	 * 
+	 * @param x
+	 *            x-coordinate within the map-grid
+	 * @param y
+	 *            y-coordinate within the map-grid
+	 * @param map
+	 *            map in which the block is contained
+	 */
 	public Block(final int x, final int y, final Map map) {
 		super(new Vector2f(x * map.getBlockWidth(), y * map.getBlockHeight()),
 				map.getBlockWidth(), map.getBlockHeight());
 		_xIndex = x;
 		_yIndex = y;
 		_map = map;
-	}
-
-	@Override
-	public void onCollide(final Positionable _collider) {
-
 	}
 }

@@ -6,6 +6,7 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
 
+import renderer.DefaultRenderer;
 import renderer.IRendereable;
 import renderer.slick.Slick2DRenderer;
 import environment.collider.DefaultCollider;
@@ -101,14 +102,13 @@ public abstract class Positionable implements IRendereable<Slick2DRenderer>,
 		_width = width;
 		_height = height;
 		_collider = new DefaultCollider(this);
+		_renderer = new DefaultRenderer();
 		Positionable.instances.add(this);
 	}
 
 	public void destruct() {
 		Positionable.instances.remove(this);
 	}
-
-	abstract public void onCollide(Positionable collider);
 
 	@Override
 	public ICollider getCollider() {

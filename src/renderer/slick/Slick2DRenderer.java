@@ -2,6 +2,8 @@ package renderer.slick;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.SpriteSheet;
 
 import renderer.IRenderer;
 
@@ -53,6 +55,32 @@ abstract public class Slick2DRenderer implements IRenderer {
 	 */
 	public int getHeight() {
 		return _current.getHeight();
+	}
+
+	/**
+	 * Loads a {@link SpriteSheet} in scaled form
+	 * 
+	 * @param path
+	 *            path to the spritesheet
+	 * @param frameWidth
+	 *            width of one frame in the original spritesheet
+	 * @param frameHeight
+	 *            height of one frame in the original spritesheet
+	 * @param factor
+	 *            factor by which to scale the frames
+	 * @return a scaled sheet or null if something fails
+	 */
+	final protected static SpriteSheet loadScaledSpriteSheet(final String path,
+			final int frameWidth, final int frameHeight, final float factor) {
+		SpriteSheet sheet = null;
+		try {
+			sheet = new SpriteSheet(new SpriteSheet(path, frameWidth,
+					frameHeight, 0).getScaledCopy(factor),
+					(int) (factor * frameWidth), (int) (factor * frameHeight));
+		} catch (final SlickException e) {
+			e.printStackTrace();
+		}
+		return sheet;
 	}
 
 }

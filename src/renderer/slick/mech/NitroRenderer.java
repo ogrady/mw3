@@ -2,13 +2,13 @@ package renderer.slick.mech;
 
 import org.newdawn.slick.Animation;
 
-import renderer.slick.PositionableRenderer;
-import environment.Positionable;
+import renderer.slick.MovableRenderer;
+import environment.Movable;
 
-public class NitroRenderer extends PositionableRenderer {
+public class NitroRenderer extends MovableRenderer {
 	private final Animation walking, jumping;
 
-	public NitroRenderer(final Positionable pos) {
+	public NitroRenderer(final Movable pos) {
 		super(pos);
 		final float factor = 2;
 		walking = new Animation(loadScaledSpriteSheet("rsc/nitro/walking.png",
@@ -18,15 +18,64 @@ public class NitroRenderer extends PositionableRenderer {
 		setCurrentAnimation(walking);
 	}
 
-	public void turnLeft() {
+	@Override
+	public void onLeftButton() {
 		_direction = -1;
+
 	}
 
-	public void turnRight() {
+	@Override
+	public void onRightButton() {
 		_direction = 1;
+
 	}
 
-	public void jump() {
+	@Override
+	public void onUpButton() {
+
+	}
+
+	@Override
+	public void onDownButton() {
+
+	}
+
+	@Override
+	public void onItemButton() {
+
+	}
+
+	@Override
+	public void onBlockButton() {
+	}
+
+	@Override
+	public void onSecondaryAttackButton() {
+
+	}
+
+	@Override
+	public void onJumpButton() {
 		setCurrentAnimation(jumping);
+	}
+
+	@Override
+	public void onSpecialActionButton() {
+
+	}
+
+	@Override
+	public void onPrimaryAttackButton() {
+
+	}
+
+	@Override
+	public void onSelectButton() {
+
+	}
+
+	@Override
+	public void onStartButton() {
+
 	}
 }

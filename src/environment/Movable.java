@@ -1,8 +1,14 @@
 package environment;
 
+import game.Configuration;
+import game.MetalWarriors;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import listener.IGameListener;
+
+import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Vector2f;
 
 import controller.IControllable;
@@ -16,7 +22,7 @@ import controller.IController;
  * 
  */
 public abstract class Movable extends Positionable implements IMassObject,
-		IControllable {
+		IControllable, IGameListener {
 	public static final ArrayList<Movable> instances = new ArrayList<Movable>();
 	protected float _xspeed;
 	protected float _yspeed;
@@ -53,11 +59,13 @@ public abstract class Movable extends Positionable implements IMassObject,
 		super(position, width, height);
 		_xspeed = speed;
 		Movable.instances.add(this);
+		MetalWarriors.instance.getListeners().registerListener(this);
 	}
 
 	@Override
 	public void destruct() {
 		super.destruct();
+		MetalWarriors.instance.getListeners().unregisterListener(this);
 		Movable.instances.remove(this);
 	}
 
@@ -110,11 +118,25 @@ public abstract class Movable extends Positionable implements IMassObject,
 				}
 				// movement from below
 				else if (oldY > first.getPosition().y) {
-					_position.y = first.getPosition().y + first.getHeight();
+					System.out.println(first);
+					_position.y = first.getPosition().y
+							+ first.getRenderer().getHeight() - 1;
 				}
 			}
 		}
 		return moved;
+	}
+
+	@Override
+	public void onLoadConfig(final Configuration conf) {
+	}
+
+	@Override
+	public void onTick(final Input input, final int delta) {
+		_controller.update(input, delta);
+		if (_renderer != null) {
+			_renderer.getCurrentAnimation().update(delta);
+		}
 	}
 
 	@Override
