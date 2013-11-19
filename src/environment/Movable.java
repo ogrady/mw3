@@ -11,6 +11,7 @@ import listener.IGameListener;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Vector2f;
 
+import util.EnumBitmask;
 import controller.IControllable;
 import controller.IController;
 
@@ -27,6 +28,15 @@ public abstract class Movable extends Positionable implements IMassObject,
 	protected float _xspeed;
 	protected float _yspeed;
 	protected IController _controller;
+	protected EnumBitmask<MovableState> _state;
+
+	/**
+	 * @return a bitmask where the states of the object can be get or set. This
+	 *         map can be probed via {@link EnumBitmask#has(Enum)}
+	 */
+	public EnumBitmask<MovableState> getState() {
+		return _state;
+	}
 
 	/**
 	 * @return speed at which the object moves horizontally (walking)
@@ -58,6 +68,7 @@ public abstract class Movable extends Positionable implements IMassObject,
 			final float height, final float speed) {
 		super(position, width, height);
 		_xspeed = speed;
+		_state = new EnumBitmask<MovableState>();
 		Movable.instances.add(this);
 		MetalWarriors.instance.getListeners().registerListener(this);
 	}
