@@ -17,7 +17,8 @@ import controller.IController;
 
 /**
  * Object that may move over the playing field. It has a certain speed and can
- * be affected by gravity.
+ * be affected by gravity. Typical examples are parts of the map that move but
+ * do not interact in any other way (like platforms)
  * 
  * @author Daniel
  * 
@@ -104,72 +105,72 @@ public abstract class Movable extends Positionable implements IMassObject,
 	public boolean move(final float moveFactorX, final float moveFactorY) {
 		boolean collision = false;
 		final float oldPositionX = _currentPosition.x;
-		
+
 		_currentPosition.x += moveFactorX * _xspeed;
-		
+
 		final List<Positionable> xCollisions = _collider.getCollisions();
-		
+
 		// Move right.
-		if(moveFactorX > 0)
-		{
+		if (moveFactorX > 0) {
 			collision = true;
-			for(final Positionable p : xCollisions) {
+			for (final Positionable p : xCollisions) {
 				p.getCollider().onPositionableCollide(this);
-				float leftEdgeColider = p.getPosition().getX();
-				if(_currentPosition.x + _width > leftEdgeColider - 1) {
+				final float leftEdgeColider = p.getPosition().getX();
+				if (_currentPosition.x + _width > leftEdgeColider - 1) {
 					_currentPosition.x = leftEdgeColider - _width - 1;
 				}
 			}
 		}
-		
+
 		// Move left.
-		if(moveFactorX < 0)
-		{
+		if (moveFactorX < 0) {
 			collision = true;
-			for(final Positionable p : xCollisions) {
+			for (final Positionable p : xCollisions) {
 				p.getCollider().onPositionableCollide(this);
-				float rightEdgeColider = p.getPosition().getX() + p.getHeight();
-				if(_currentPosition.x < rightEdgeColider) {
+				final float rightEdgeColider = p.getPosition().getX()
+						+ p.getHeight();
+				if (_currentPosition.x < rightEdgeColider) {
 					_currentPosition.x = rightEdgeColider + 1;
 				}
 			}
 		}
-		
+
 		final float newPositionX = _currentPosition.x;
 		_currentPosition.x = oldPositionX;
 		_currentPosition.y += moveFactorY * _yspeed;
-		
+
 		final List<Positionable> yCollisions = _collider.getCollisions();
-		
+
 		// Moved up.
-		if(moveFactorY < 0) {
+		if (moveFactorY < 0) {
 			collision = true;
-			for(final Positionable p : yCollisions) {
+			for (final Positionable p : yCollisions) {
 				p.getCollider().onPositionableCollide(this);
-				float lowerEdgeColider = p.getPosition().getY() + p.getHeight();
-				if(_currentPosition.y < lowerEdgeColider) {
+				final float lowerEdgeColider = p.getPosition().getY()
+						+ p.getHeight();
+				if (_currentPosition.y < lowerEdgeColider) {
 					_currentPosition.y = lowerEdgeColider + 1;
 				}
 			}
 		}
-		
-		
+
 		// Moved down.
-		if(moveFactorY > 0) {
+		if (moveFactorY > 0) {
 			collision = true;
-			for(final Positionable p : yCollisions) {
+			for (final Positionable p : yCollisions) {
 				p.getCollider().onPositionableCollide(this);
-				float upperEdgeColider = p.getPosition().getY();
-				if(_currentPosition.y + _height > upperEdgeColider - 1) {
+				final float upperEdgeColider = p.getPosition().getY();
+				if (_currentPosition.y + _height > upperEdgeColider - 1) {
 					_currentPosition.y = upperEdgeColider - _height - 1;
 				}
 			}
 		}
-		
+
 		_currentPosition.x = newPositionX;
-		
-		System.out.println("MoveFactorX: " + moveFactorX + " MoveFactorY: " + moveFactorY + " Collision: " +  collision);
-		
+
+		System.out.println("MoveFactorX: " + moveFactorX + " MoveFactorY: "
+				+ moveFactorY + " Collision: " + collision);
+
 		return true;
 	}
 

@@ -24,7 +24,7 @@ public interface IEntityListener extends IListener {
 	/**
 	 * Thrown when the entity dies. Note that you will most likely receive
 	 * {@link IEntityListener#onTakeDamage(IDamageSource, int)} right before
-	 * receiving this event if the entitiy did not die from other means like
+	 * receiving this event if the entity did not die from other means like
 	 * admin-kills or such.
 	 */
 	void onDie();

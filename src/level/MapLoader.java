@@ -24,15 +24,15 @@ public class MapLoader {
 	 * @return a constructed map
 	 * @throws MapException
 	 */
-	public static Map load(final String mapPath) {
-		Map map = null;
+	public static World load(final String mapPath) {
+		World map = null;
 		TiledMap tm;
 		try {
 			tm = new TiledMap(mapPath, true);
 			final int destructableIndex = tm
 					.getLayerIndex(Const.MAP_LAYER_DESTRUCTABLE);
 			final int solidIndex = tm.getLayerIndex(Const.MAP_LAYER_SOLID);
-			map = new Map(tm);
+			map = new World(tm);
 			Block b;
 			for (int y = 0; y < tm.getHeight(); y++) {
 				for (int x = 0; x < tm.getWidth(); x++) {

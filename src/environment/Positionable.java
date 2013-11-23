@@ -18,7 +18,8 @@ import environment.collider.ICollider;
  * certain width and height for collisions which will be determined by the
  * renderers current frame. Every positionable can collide with others and
  * therefore has a {@link DefaultCollider} upon creation which can be exchanged
- * for more fitting colliders in subclasses.
+ * for more fitting colliders in subclasses. Typial instances are blocks for the
+ * map which are placed once but do not move afterwards.
  * 
  * @author Daniel
  */

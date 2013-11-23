@@ -5,13 +5,13 @@ import listener.IEntityListener;
 import org.newdawn.slick.Animation;
 
 import renderer.slick.MovableRenderer;
-import environment.Entity;
+import environment.Actor;
 import environment.IDamageSource;
 
 public class NitroRenderer extends MovableRenderer implements IEntityListener {
 	private final Animation walking, jumping;
 
-	public NitroRenderer(final Entity pos) {
+	public NitroRenderer(final Actor pos) {
 		super(pos);
 		final float factor = 2;
 		walking = new Animation(loadScaledSpriteSheet("rsc/nitro/walking.png",

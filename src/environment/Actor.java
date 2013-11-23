@@ -8,7 +8,7 @@ import listener.ListenerSet;
 import org.newdawn.slick.geom.Vector2f;
 
 /**
- * Entities are movable objects that can have an additional descriton string.<br>
+ * Actors are movable objects that can have an additional descriton string.<br>
  * As a fallback, the simple class name is used as description if null is
  * passed.<br>
  * They are the main actors in the game, such as the pilots and mechs and
@@ -17,13 +17,13 @@ import org.newdawn.slick.geom.Vector2f;
  * @author Daniel
  * 
  */
-abstract public class Entity extends Movable implements
+abstract public class Actor extends Movable implements
 		IListenable<IEntityListener> {
 	protected ListenerSet<IEntityListener> entityListeners;
 	protected String _description;
 	protected int maxLife, currentLife;
 
-	public Entity(final Vector2f position, final float width,
+	public Actor(final Vector2f position, final float width,
 			final float height, final float speed, final String description) {
 		super(position, width, height, speed);
 		entityListeners = new ListenerSet<IEntityListener>();
