@@ -73,7 +73,8 @@ public abstract class Positionable implements IRendereable<Slick2DRenderer>,
 	 * @return hitbox for collisions
 	 */
 	public Shape getHitbox() {
-		return new Rectangle(_currentPosition.x, _currentPosition.y, _width, _height);
+		return new Rectangle(_currentPosition.x, _currentPosition.y, _width,
+				_height);
 	}
 
 	@Override
