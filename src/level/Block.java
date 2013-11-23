@@ -95,4 +95,9 @@ public class Block extends Positionable {
 		_yIndex = y;
 		_map = map;
 	}
+
+	@Override
+	public String toString() {
+		return String.format("Block at (%d|%d)", _xIndex, _yIndex);
+	}
 }

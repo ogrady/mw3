@@ -28,3 +28,7 @@ Renderer
 
 Network
     - Not implemented yet.
+    
+IGameListener
+	- Makes an object receive ticks from the main-game. So whenever the game updates itself it calls all listeners
+	  to update themselves. You can register an object as gamelistener via the instance of MetalWarriors and getListeners.registerListener()
