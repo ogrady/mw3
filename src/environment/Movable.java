@@ -103,28 +103,17 @@ public abstract class Movable extends Positionable implements IMassObject,
 	// TODO abstract und inhalt in unterklasse //
 	public boolean move(final float moveFactorX, final float moveFactorY) {
 		boolean collision = false;
+		final float oldPositionX = _currentPosition.x;
+		
 		_currentPosition.x += moveFactorX * _xspeed;
-		_currentPosition.y += moveFactorY * _yspeed;
 		
-		final List<Positionable> collisions = _collider.getCollisions();
-		
-		// Moved up.
-		if(moveFactorY < 0 && moveFactorX == 0) {
-			collision = true;
-			for(final Positionable p : collisions) {
-				p.getCollider().onPositionableCollide(this);
-				float lowerEdgeColider = p.getPosition().getY() + p.getHeight();
-				if(_currentPosition.y < lowerEdgeColider) {
-					_currentPosition.y = lowerEdgeColider + 1;
-				}
-			}
-		}
+		final List<Positionable> xCollisions = _collider.getCollisions();
 		
 		// Move right.
-		if(moveFactorY >= 0 && moveFactorX > 0)
+		if(moveFactorX > 0)
 		{
 			collision = true;
-			for(final Positionable p : collisions) {
+			for(final Positionable p : xCollisions) {
 				p.getCollider().onPositionableCollide(this);
 				float leftEdgeColider = p.getPosition().getX();
 				if(_currentPosition.x + _width > leftEdgeColider - 1) {
@@ -134,10 +123,10 @@ public abstract class Movable extends Positionable implements IMassObject,
 		}
 		
 		// Move left.
-		if(moveFactorY >= 0 && moveFactorX < 0)
+		if(moveFactorX < 0)
 		{
 			collision = true;
-			for(final Positionable p : collisions) {
+			for(final Positionable p : xCollisions) {
 				p.getCollider().onPositionableCollide(this);
 				float rightEdgeColider = p.getPosition().getX() + p.getHeight();
 				if(_currentPosition.x < rightEdgeColider) {
@@ -146,10 +135,29 @@ public abstract class Movable extends Positionable implements IMassObject,
 			}
 		}
 		
-		// Moved down.
-		if(moveFactorY > 0 && moveFactorX == 0) {
+		final float newPositionX = _currentPosition.x;
+		_currentPosition.x = oldPositionX;
+		_currentPosition.y += moveFactorY * _yspeed;
+		
+		final List<Positionable> yCollisions = _collider.getCollisions();
+		
+		// Moved up.
+		if(moveFactorY < 0) {
 			collision = true;
-			for(final Positionable p : collisions) {
+			for(final Positionable p : yCollisions) {
+				p.getCollider().onPositionableCollide(this);
+				float lowerEdgeColider = p.getPosition().getY() + p.getHeight();
+				if(_currentPosition.y < lowerEdgeColider) {
+					_currentPosition.y = lowerEdgeColider + 1;
+				}
+			}
+		}
+		
+		
+		// Moved down.
+		if(moveFactorY > 0) {
+			collision = true;
+			for(final Positionable p : yCollisions) {
 				p.getCollider().onPositionableCollide(this);
 				float upperEdgeColider = p.getPosition().getY();
 				if(_currentPosition.y + _height > upperEdgeColider - 1) {
@@ -158,9 +166,11 @@ public abstract class Movable extends Positionable implements IMassObject,
 			}
 		}
 		
+		_currentPosition.x = newPositionX;
+		
 		System.out.println("MoveFactorX: " + moveFactorX + " MoveFactorY: " + moveFactorY + " Collision: " +  collision);
 		
-		return false;
+		return true;
 	}
 
 	@Override
