@@ -23,18 +23,17 @@ public class DefaultKeyboardController extends KeyboardController {
 	@Override
 	public void update(final Input input, final int delta) {
 		setInput(input);
-		input.addKeyListener(this);
 		int deltaX = 0, deltaY = 0;
-		if (isKeyPressed(_configuration.getInteger(Configuration.UP_KEY))) {
+		if (isKeyPressed(_configuration.getInteger(Configuration.UP))) {
 			deltaY -= 1;
 		}
-		if (isKeyPressed(_configuration.getInteger(Configuration.LEFT_KEY))) {
+		if (isKeyPressed(_configuration.getInteger(Configuration.LEFT))) {
 			deltaX -= 1;
 		}
-		if (isKeyPressed(_configuration.getInteger(Configuration.DOWN_KEY))) {
+		if (isKeyPressed(_configuration.getInteger(Configuration.DOWN))) {
 			deltaY += 1;
 		}
-		if (isKeyPressed(_configuration.getInteger(Configuration.RIGHT_KEY))) {
+		if (isKeyPressed(_configuration.getInteger(Configuration.RIGHT))) {
 			deltaX += 1;
 		}
 		if (_controllable.move(deltaX, deltaY)) {

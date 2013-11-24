@@ -3,6 +3,8 @@ package listener;
 import java.util.Iterator;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import listener.notifier.INotifier;
+
 /**
  * Listenersets hold the specific listeners for listenables
  * 

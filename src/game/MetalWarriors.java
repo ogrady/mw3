@@ -1,11 +1,13 @@
 package game;
 
-import level.World;
 import level.MapLoader;
+import level.World;
 import listener.IGameListener;
 import listener.IListenable;
-import listener.INotifier;
 import listener.ListenerSet;
+import listener.notifier.INotifier;
+import logger.LogMessageType;
+import logger.Logger;
 
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
@@ -28,12 +30,30 @@ public class MetalWarriors extends BasicGame implements
 	public static final String CONF_PATH = "rsc/conf.properties";
 
 	public static MetalWarriors instance;
+	public static final Logger logger = new Logger();
 	private Movable _player;
 	private World _map;
 	private Viewport _viewport;
 	private GameContainer _container;
 	private Configuration _configuration;
 	private ListenerSet<IGameListener> _listeners;
+
+	// change debugging flags here if needed
+	static {
+		logger.accept(
+		// LogMessageType.PHYSICS_DEBUG,
+		LogMessageType.INPUT_DEBUG);
+	}
+
+	/**
+	 * @return the current configuration. The object itself might be replaced
+	 *         when the game reloads the config. If your object is interested in
+	 *         such changes you should let it implement {@link IGameListener}
+	 *         and register as listener to wait for the onLoadConfig method
+	 */
+	public Configuration getConfiguration() {
+		return _configuration;
+	}
 
 	/**
 	 * @return the viewport which determines which part of the playing field the
@@ -62,12 +82,22 @@ public class MetalWarriors extends BasicGame implements
 		instance = this;
 	}
 
+	public void loadConfiguration(final String path) {
+		_configuration = new Configuration(CONF_PATH);
+		getListeners().notify(new INotifier<IGameListener>() {
+			@Override
+			public void notify(final IGameListener listener) {
+				listener.onLoadConfig(_configuration);
+			}
+		});
+	}
+
 	@Override
 	public void init(final GameContainer container) throws SlickException {
 		_viewport = new Viewport(0, 0, container);
 		_listeners = new ListenerSet<IGameListener>();
-		_configuration = new Configuration(CONF_PATH);
 		_container = container;
+		loadConfiguration(CONF_PATH);
 		_player = PlayerMechFactory.create(500, 480,
 				PlayerMechFactory.EMech.NITRO, _configuration);
 		_map = MapLoader.load("rsc/map/tm3.tmx");

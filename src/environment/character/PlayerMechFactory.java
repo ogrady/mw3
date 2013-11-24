@@ -57,6 +57,8 @@ public class PlayerMechFactory {
 			ren = new NitroRenderer(pl);
 			ctrl = new NitroKeyboardController(pl, conf, (NitroRenderer) ren);
 			pl.getListeners().registerListener((NitroRenderer) ren);
+			((NitroKeyboardController) ctrl).getListeners().registerListener(
+					(NitroRenderer) ren);
 			break;
 		}
 		pl.setController(ctrl);

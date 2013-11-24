@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import listener.IGameListener;
+import logger.LogMessageType;
 
 import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Vector2f;
@@ -168,8 +169,9 @@ public abstract class Movable extends Positionable implements IMassObject,
 
 		_currentPosition.x = newPositionX;
 
-		System.out.println("MoveFactorX: " + moveFactorX + " MoveFactorY: "
-				+ moveFactorY + " Collision: " + collision);
+		MetalWarriors.logger.print("MoveFactorX: " + moveFactorX
+				+ " MoveFactorY: " + moveFactorY + " Collision: " + collision,
+				LogMessageType.PHYSICS_DEBUG);
 
 		return true;
 	}
