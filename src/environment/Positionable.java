@@ -18,7 +18,8 @@ import environment.collider.ICollider;
  * certain width and height for collisions which will be determined by the
  * renderers current frame. Every positionable can collide with others and
  * therefore has a {@link DefaultCollider} upon creation which can be exchanged
- * for more fitting colliders in subclasses.
+ * for more fitting colliders in subclasses. Typial instances are blocks for the
+ * map which are placed once but do not move afterwards.
  * 
  * @author Daniel
  */
@@ -26,7 +27,7 @@ public abstract class Positionable implements IRendereable<Slick2DRenderer>,
 		ICollidable {
 	public static final ArrayList<Positionable> instances = new ArrayList<Positionable>();
 
-	protected Vector2f _position;
+	protected Vector2f _currentPosition;
 	protected float _width, _height;
 	protected Slick2DRenderer _renderer;
 	protected ICollider _collider;
@@ -66,14 +67,15 @@ public abstract class Positionable implements IRendereable<Slick2DRenderer>,
 	 *         the object!
 	 */
 	public Vector2f getPosition() {
-		return _position;
+		return _currentPosition;
 	}
 
 	/**
 	 * @return hitbox for collisions
 	 */
 	public Shape getHitbox() {
-		return new Rectangle(_position.x, _position.y, _width, _height);
+		return new Rectangle(_currentPosition.x, _currentPosition.y, _width,
+				_height);
 	}
 
 	@Override
@@ -98,7 +100,7 @@ public abstract class Positionable implements IRendereable<Slick2DRenderer>,
 	 */
 	public Positionable(final Vector2f position, final float width,
 			final float height) {
-		_position = position;
+		_currentPosition = position;
 		_width = width;
 		_height = height;
 		_collider = new DefaultCollider(this);

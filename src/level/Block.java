@@ -13,7 +13,7 @@ import environment.collider.NeverCollider;
  * 
  */
 public class Block extends Positionable {
-	private final Map _map;
+	private final World _map;
 	private boolean _solid, _destructable;
 	private final int _xIndex, _yIndex;
 
@@ -40,7 +40,7 @@ public class Block extends Positionable {
 	/**
 	 * @return the map this block resides in
 	 */
-	public Map getMap() {
+	public World getMap() {
 		return _map;
 	}
 
@@ -88,11 +88,16 @@ public class Block extends Positionable {
 	 * @param map
 	 *            map in which the block is contained
 	 */
-	public Block(final int x, final int y, final Map map) {
+	public Block(final int x, final int y, final World map) {
 		super(new Vector2f(x * map.getBlockWidth(), y * map.getBlockHeight()),
 				map.getBlockWidth(), map.getBlockHeight());
 		_xIndex = x;
 		_yIndex = y;
 		_map = map;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("Block at (%d|%d)", _xIndex, _yIndex);
 	}
 }

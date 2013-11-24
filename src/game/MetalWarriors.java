@@ -1,6 +1,6 @@
 package game;
 
-import level.Map;
+import level.World;
 import level.MapLoader;
 import listener.IGameListener;
 import listener.IListenable;
@@ -29,7 +29,7 @@ public class MetalWarriors extends BasicGame implements
 
 	public static MetalWarriors instance;
 	private Movable _player;
-	private Map _map;
+	private World _map;
 	private Viewport _viewport;
 	private GameContainer _container;
 	private Configuration _configuration;

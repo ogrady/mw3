@@ -13,7 +13,7 @@ import renderer.slick.MapRenderer;
  * @author Daniel
  * 
  */
-public class Map implements IRendereable<MapRenderer> {
+public class World implements IRendereable<MapRenderer> {
 	private final TiledMap _map;
 	private final Block[][] _blocks;
 	private MapRenderer _renderer;
@@ -89,7 +89,7 @@ public class Map implements IRendereable<MapRenderer> {
 	 * @param tiledMap
 	 *            the tiledmap to use
 	 */
-	public Map(final TiledMap tiledMap) {
+	public World(final TiledMap tiledMap) {
 		_map = tiledMap;
 		_blocks = new Block[_map.getWidth()][_map.getHeight()];
 		_renderer = new MapRenderer(this);
