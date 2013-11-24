@@ -6,7 +6,7 @@ import renderer.slick.MovableRenderer;
 import environment.Movable;
 
 public class NitroRenderer extends MovableRenderer {
-	private final Animation walking, jumping;
+	private final Animation walking, jumping, broken;
 
 	public NitroRenderer(final Movable pos) {
 		super(pos);
@@ -16,18 +16,20 @@ public class NitroRenderer extends MovableRenderer {
 		jumping = new Animation(loadScaledSpriteSheet("rsc/nitro/flying.png",
 				56, 47, factor), 100);
 		setCurrentAnimation(walking);
+		broken = new Animation(loadScaledSpriteSheet("rsc/nitro/broken.png",
+				47,48, factor), 100);
 	}
 
 	@Override
 	public void onLeftButton() {
+		setCurrentAnimation(walking);
 		_direction = -1;
-
 	}
 
 	@Override
 	public void onRightButton() {
+		setCurrentAnimation(walking);
 		_direction = 1;
-
 	}
 
 	@Override
