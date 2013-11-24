@@ -1,5 +1,6 @@
 package renderer.slick;
 
+import listener.IInputListener;
 import environment.Movable;
 
 /**
@@ -9,7 +10,7 @@ import environment.Movable;
  * 
  */
 abstract public class MovableRenderer extends PositionableRenderer implements
-		IControllableRenderer {
+		IInputListener {
 
 	public MovableRenderer(final Movable renderable) {
 		super(renderable);

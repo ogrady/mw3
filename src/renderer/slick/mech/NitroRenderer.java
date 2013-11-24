@@ -22,62 +22,61 @@ public class NitroRenderer extends MovableRenderer implements IEntityListener {
 	}
 
 	@Override
-	public void onLeftButton() {
+	public void onLeftButton(final boolean down) {
 		_direction = -1;
 
 	}
 
 	@Override
-	public void onRightButton() {
+	public void onRightButton(final boolean down) {
 		_direction = 1;
 	}
 
 	@Override
-	public void onUpButton() {
+	public void onUpButton(final boolean down) {
+	}
+
+	@Override
+	public void onDownButton(final boolean down) {
 
 	}
 
 	@Override
-	public void onDownButton() {
+	public void onItemButton(final boolean down) {
 
 	}
 
 	@Override
-	public void onItemButton() {
+	public void onBlockButton(final boolean down) {
+	}
+
+	@Override
+	public void onSecondaryAttackButton(final boolean down) {
 
 	}
 
 	@Override
-	public void onBlockButton() {
-	}
-
-	@Override
-	public void onSecondaryAttackButton() {
-
-	}
-
-	@Override
-	public void onJumpButton() {
+	public void onJumpButton(final boolean down) {
 		setCurrentAnimation(jumping);
 	}
 
 	@Override
-	public void onSpecialActionButton() {
+	public void onSpecialActionButton(final boolean down) {
 
 	}
 
 	@Override
-	public void onPrimaryAttackButton() {
+	public void onPrimaryAttackButton(final boolean down) {
 
 	}
 
 	@Override
-	public void onSelectButton() {
+	public void onSelectButton(final boolean down) {
 
 	}
 
 	@Override
-	public void onStartButton() {
+	public void onStartButton(final boolean down) {
 
 	}
 

@@ -1,4 +1,4 @@
-package renderer.slick;
+package listener;
 
 /**
  * This interface references to the button assignment of the original game.<br>
@@ -44,65 +44,113 @@ package renderer.slick;
  * @author Daniel
  * 
  */
-public interface IControllableRenderer {
+public interface IInputListener extends IListener {
 	/**
 	 * called when the controller receives LEFT keypress
+	 * 
+	 * @param down
+	 *            whether the key is pressed or not (true = pressed, false =
+	 *            released)
 	 */
-	void onLeftButton();
+	void onLeftButton(boolean down);
 
 	/**
 	 * called when the controller receives RIGHT keypress
+	 * 
+	 * @param down
+	 *            whether the key is pressed or not (true = pressed, false =
+	 *            released)
 	 */
-	void onRightButton();
+	void onRightButton(boolean down);
 
 	/**
 	 * called when the controller receives UP keypress
+	 * 
+	 * @param down
+	 *            whether the key is pressed or not (true = pressed, false =
+	 *            released)
 	 */
-	void onUpButton();
+	void onUpButton(boolean down);
 
 	/**
 	 * called when the controller receives DOWN keypress
+	 * 
+	 * @param down
+	 *            whether the key is pressed or not (true = pressed, false =
+	 *            released)
 	 */
-	void onDownButton();
+	void onDownButton(boolean down);
 
 	/**
 	 * called when the controller receives L keypress (use equipped item)
+	 * 
+	 * @param down
+	 *            whether the key is pressed or not (true = pressed, false =
+	 *            released)
 	 */
-	void onItemButton();
+	void onItemButton(boolean down);
 
 	/**
 	 * called when the controller receives R keypress (block)
+	 * 
+	 * @param down
+	 *            whether the key is pressed or not (true = pressed, false =
+	 *            released)
 	 */
-	void onBlockButton();
+	void onBlockButton(boolean down);
 
 	/**
 	 * called when the controller receives A keypress (secondary attack)
+	 * 
+	 * @param down
+	 *            whether the key is pressed or not (true = pressed, false =
+	 *            released)
 	 */
-	void onSecondaryAttackButton();
+	void onSecondaryAttackButton(boolean down);
 
 	/**
 	 * called when the controller receives B keypress (jump)
+	 * 
+	 * @param down
+	 *            whether the key is pressed or not (true = pressed, false =
+	 *            released)
 	 */
-	void onJumpButton();
+	void onJumpButton(boolean down);
 
 	/**
 	 * called when the controller receives X keypress (special action)
+	 * 
+	 * @param down
+	 *            whether the key is pressed or not (true = pressed, false =
+	 *            released)
 	 */
-	void onSpecialActionButton();
+	void onSpecialActionButton(boolean down);
 
 	/**
 	 * called when the controller receives Y keypress (primary attack)
+	 * 
+	 * @param down
+	 *            whether the key is pressed or not (true = pressed, false =
+	 *            released)
 	 */
-	void onPrimaryAttackButton();
+	void onPrimaryAttackButton(boolean down);
 
 	/**
 	 * called when the controller receives SELECT keypress (eject pilot / enter
 	 * mech)
+	 * 
+	 * @param down
+	 *            whether the key is pressed or not (true = pressed, false =
+	 *            released)
 	 */
-	void onSelectButton();
+	void onSelectButton(boolean down);
 
 	/**
 	 * called when the controller receives START keypress
+	 * 
+	 * @param down
+	 *            whether the key is pressed or not (true = pressed, false =
+	 *            released)
 	 */
-	void onStartButton();
+	void onStartButton(boolean down);
 }
