@@ -2,8 +2,8 @@ package environment;
 
 import listener.IEntityListener;
 import listener.IListenable;
-import listener.INotifier;
 import listener.ListenerSet;
+import listener.notifier.INotifier;
 
 import org.newdawn.slick.geom.Vector2f;
 

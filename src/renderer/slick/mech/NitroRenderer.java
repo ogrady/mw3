@@ -5,13 +5,13 @@ import listener.IEntityListener;
 import org.newdawn.slick.Animation;
 
 import renderer.slick.MovableRenderer;
+import environment.Actor;
 import environment.IDamageSource;
-import environment.Movable;
 
 public class NitroRenderer extends MovableRenderer implements IEntityListener {
-	private final Animation walking, jumping, broken, shielded;
+	private final Animation walking, jumping, broken, shielded, idle;
 
-	public NitroRenderer(final Movable pos) {
+	public NitroRenderer(final Actor pos) {
 		super(pos);
 		final float factor = 2;
 		walking = new Animation(loadScaledSpriteSheet("rsc/nitro/walking.png",
@@ -21,70 +21,95 @@ public class NitroRenderer extends MovableRenderer implements IEntityListener {
 		broken = new Animation(loadScaledSpriteSheet("rsc/nitro/broken.png",
 				47, 48, factor), 100);
 		shielded = new Animation(loadScaledSpriteSheet(
-				"rsc/nitro/shielded.png", 53, 48, factor), 100);
-		setCurrentAnimation(walking);
+				"rsc/nitro/shielded.png", 48, 48, factor), 100);
+		shielded.setLooping(false);
+		idle = new Animation(loadScaledSpriteSheet("rsc/nitro/idle.png", 41,
+				48, factor), 100);
+		setIdle();
+	}
+
+	protected void setIdle() {
+		setCurrentAnimation(idle);
 	}
 
 	@Override
-	public void onLeftButton() {
-		setCurrentAnimation(walking);
-		_direction = -1;
-
+	public void onLeftButton(final boolean down) {
+		if (!down) {
+			setIdle();
+		} else {
+			setCurrentAnimation(walking);
+			_direction = -1;
+		}
 	}
 
 	@Override
-	public void onRightButton() {
-		setCurrentAnimation(walking);
-		_direction = 1;
-
+	public void onRightButton(final boolean down) {
+		if (!down) {
+			setIdle();
+		} else {
+			setCurrentAnimation(walking);
+			_direction = 1;
+		}
 	}
 
 	@Override
-	public void onUpButton() {
-
+	public void onUpButton(final boolean down) {
 	}
 
 	@Override
-	public void onDownButton() {
-
-	}
-
-	@Override
-	public void onItemButton() {
-
-	}
-
-	@Override
-	public void onBlockButton() {
-	}
-
-	@Override
-	public void onSecondaryAttackButton() {
-
-	}
-
-	@Override
-	public void onJumpButton() {
-		setCurrentAnimation(jumping);
-	}
-
-	@Override
-	public void onSpecialActionButton() {
-		setCurrentAnimation(shielded);
-	}
-
-	@Override
-	public void onPrimaryAttackButton() {
+	public void onDownButton(final boolean down) {
 
 	}
 
 	@Override
-	public void onSelectButton() {
+	public void onItemButton(final boolean down) {
 
 	}
 
 	@Override
-	public void onStartButton() {
+	public void onBlockButton(final boolean down) {
+	}
+
+	@Override
+	public void onSecondaryAttackButton(final boolean down) {
+
+	}
+
+	@Override
+	public void onJumpButton(final boolean down) {
+		if (!down) {
+			setIdle();
+		} else {
+			setCurrentAnimation(jumping);
+		}
+	}
+
+	@Override
+	public void onSpecialActionButton(final boolean down) {
+		if (!down) {
+			setIdle();
+		} else {
+			setCurrentAnimation(shielded);
+		}
+	}
+
+	@Override
+	public void onPrimaryAttackButton(final boolean down) {
+
+	}
+
+	@Override
+	public void onSelectButton(final boolean down) {
+
+	}
+
+	@Override
+	public void onStartButton(final boolean down) {
+
+	}
+
+	@Override
+	public void onTakeDamage(final IDamageSource src, final int amount) {
 
 	}
 
@@ -100,10 +125,5 @@ public class NitroRenderer extends MovableRenderer implements IEntityListener {
 
 	@Override
 	public void onFullHeal() {
-	}
-
-	@Override
-	public void onTakeDamage(IDamageSource src, int amount) {
-		// TODO Auto-generated method stub
 	}
 }
