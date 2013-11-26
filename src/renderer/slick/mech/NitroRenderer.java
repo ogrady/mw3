@@ -1,12 +1,15 @@
 package renderer.slick.mech;
 
+import listener.IEntityListener;
+
 import org.newdawn.slick.Animation;
 
 import renderer.slick.MovableRenderer;
+import environment.IDamageSource;
 import environment.Movable;
 
-public class NitroRenderer extends MovableRenderer {
-	private final Animation walking, jumping, broken;
+public class NitroRenderer extends MovableRenderer implements IEntityListener {
+	private final Animation walking, jumping, broken, shielded;
 
 	public NitroRenderer(final Movable pos) {
 		super(pos);
@@ -15,6 +18,10 @@ public class NitroRenderer extends MovableRenderer {
 				43, 48, factor), 100);
 		jumping = new Animation(loadScaledSpriteSheet("rsc/nitro/flying.png",
 				56, 47, factor), 100);
+		broken = new Animation(loadScaledSpriteSheet("rsc/nitro/broken.png",
+				47, 48, factor), 100);
+		shielded = new Animation(loadScaledSpriteSheet(
+				"rsc/nitro/shielded.png", 53, 48, factor), 100);
 		setCurrentAnimation(walking);
 	}
 
@@ -63,7 +70,7 @@ public class NitroRenderer extends MovableRenderer {
 
 	@Override
 	public void onSpecialActionButton() {
-
+		setCurrentAnimation(shielded);
 	}
 
 	@Override
@@ -82,13 +89,8 @@ public class NitroRenderer extends MovableRenderer {
 	}
 
 	@Override
-	public void onTakeDamage(final IDamageSource src, final int amount) {
-
-	}
-
-	@Override
 	public void onDie() {
-
+		setCurrentAnimation(broken);
 	}
 
 	@Override
@@ -98,5 +100,10 @@ public class NitroRenderer extends MovableRenderer {
 
 	@Override
 	public void onFullHeal() {
+	}
+
+	@Override
+	public void onTakeDamage(IDamageSource src, int amount) {
+		// TODO Auto-generated method stub
 	}
 }
