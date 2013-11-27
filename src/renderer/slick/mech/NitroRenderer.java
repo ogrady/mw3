@@ -9,35 +9,38 @@ import environment.Actor;
 import environment.IDamageSource;
 
 public class NitroRenderer extends MovableRenderer implements IEntityListener {
-	private final Animation walking, jumping, broken, shielded, idle;
+	private final Animation walking, jumping, broken, shielded;
 
 	public NitroRenderer(final Actor pos) {
 		super(pos);
 		final float factor = 2;
 		walking = new Animation(loadScaledSpriteSheet("rsc/nitro/walking.png",
-				43, 48, factor), 100);
+				36, 45, factor), 60);
 		jumping = new Animation(loadScaledSpriteSheet("rsc/nitro/flying.png",
-				56, 47, factor), 100);
+				40, 47, factor), 60);
 		broken = new Animation(loadScaledSpriteSheet("rsc/nitro/broken.png",
-				47, 48, factor), 100);
+				47, 48, factor), 60);
 		shielded = new Animation(loadScaledSpriteSheet(
-				"rsc/nitro/shielded.png", 48, 48, factor), 100);
+				"rsc/nitro/shielded.png", 40, 46, factor), 60);
 		shielded.setLooping(false);
-		idle = new Animation(loadScaledSpriteSheet("rsc/nitro/idle.png", 41,
-				48, factor), 100);
-		setIdle();
+		this.setIdle();
 	}
 
 	protected void setIdle() {
-		setCurrentAnimation(idle);
+		this.setCurrentAnimation(walking);
+		walking.stop();
 	}
 
 	@Override
 	public void onLeftButton(final boolean down) {
 		if (!down) {
-			setIdle();
+			this.setIdle();
 		} else {
-			setCurrentAnimation(walking);
+			if (this._current == walking) {
+				walking.start();
+			} else {
+				setCurrentAnimation(walking);
+			}
 			_direction = -1;
 		}
 	}
@@ -45,9 +48,13 @@ public class NitroRenderer extends MovableRenderer implements IEntityListener {
 	@Override
 	public void onRightButton(final boolean down) {
 		if (!down) {
-			setIdle();
+			this.setIdle();
 		} else {
-			setCurrentAnimation(walking);
+			if (this._current == walking) {
+				walking.start();
+			} else {
+				setCurrentAnimation(walking);
+			}
 			_direction = 1;
 		}
 	}
