@@ -9,10 +9,10 @@ import environment.Movable;
  * @author Daniel
  * 
  */
-abstract public class MovableRenderer extends PositionableRenderer implements
-		IInputListener {
+abstract public class MovableRenderer<M extends Movable> extends
+		PositionableRenderer<M> implements IInputListener {
 
-	public MovableRenderer(final Movable renderable) {
+	public MovableRenderer(final M renderable) {
 		super(renderable);
 	}
 }

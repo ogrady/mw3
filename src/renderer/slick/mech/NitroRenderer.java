@@ -49,8 +49,8 @@ public class NitroRenderer extends MovableRenderer implements IEntityListener {
 					setCurrentAnimation(walking);
 				}
 			}
+			_direction = -1;
 		}
-		_direction = -1;
 	}
 
 	@Override
@@ -65,8 +65,8 @@ public class NitroRenderer extends MovableRenderer implements IEntityListener {
 					setCurrentAnimation(walking);
 				}
 			}
+			_direction = 1;
 		}
-		_direction = 1;
 	}
 
 	@Override

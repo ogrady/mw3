@@ -14,8 +14,9 @@ import game.Viewport;
  * @author Daniel
  * 
  */
-abstract public class PositionableRenderer extends Slick2DRenderer {
-	protected Positionable _renderable;
+abstract public class PositionableRenderer<P extends Positionable> extends
+		Slick2DRenderer {
+	protected P _renderable;
 	/**
 	 * 1 means looking right, -1 looking left
 	 */
@@ -27,7 +28,7 @@ abstract public class PositionableRenderer extends Slick2DRenderer {
 	 * 
 	 * @param renderable
 	 */
-	public PositionableRenderer(final Positionable renderable) {
+	public PositionableRenderer(final P renderable) {
 		_renderable = renderable;
 		_direction = 1;
 	}
