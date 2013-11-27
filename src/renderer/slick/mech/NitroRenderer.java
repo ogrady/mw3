@@ -8,7 +8,8 @@ import renderer.slick.MovableRenderer;
 import environment.Actor;
 import environment.IDamageSource;
 
-public class NitroRenderer extends MovableRenderer implements IEntityListener {
+public class NitroRenderer extends MovableRenderer<Actor> implements
+		IEntityListener {
 	private final Animation walking, jumping, broken, shielded;
 
 	public NitroRenderer(final Actor pos) {

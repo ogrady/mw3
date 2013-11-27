@@ -7,7 +7,7 @@ import util.EnumBitmask;
 /**
  * When it comes to putting output to the console it can be annoying to have
  * remainders of debug-messages from other portions of the code (e.g. debugging
- * the physics and being confronted with a trackload of debug-messages from the
+ * the physics and being confronted with a truckload of debug-messages from the
  * input-handling). Therefore instead of using System.out.println() a logger
  * should be issued.<br>
  * Loggers can be sensitive to several kinds of messages that can be activated
