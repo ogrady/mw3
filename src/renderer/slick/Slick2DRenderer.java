@@ -15,13 +15,13 @@ import renderer.IRenderer;
  * 
  */
 abstract public class Slick2DRenderer implements IRenderer {
-	protected Animation _current;
+	protected ObservableAnimation _current;
 
 	/**
 	 * @return the currently looped animation. Whenever the renderer receives an
 	 *         update it will loop this animation a bit further
 	 */
-	public Animation getCurrentAnimation() {
+	public ObservableAnimation getCurrentAnimation() {
 		return _current;
 	}
 
@@ -33,7 +33,7 @@ abstract public class Slick2DRenderer implements IRenderer {
 	 * @param newCurrent
 	 *            new current animation
 	 */
-	protected void setCurrentAnimation(final Animation newCurrent) {
+	protected void setCurrentAnimation(final ObservableAnimation newCurrent) {
 		final Animation old = newCurrent;
 		_current = newCurrent;
 		if (_current != old && old != null) {
