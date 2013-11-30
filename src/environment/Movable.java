@@ -104,7 +104,10 @@ public abstract class Movable extends Positionable implements IMassObject,
 	 */
 	// TODO abstract und inhalt in unterklasse //
 	public boolean move(final float moveFactorX, final float moveFactorY) {
-		boolean collision = false;
+		boolean rightCollision = false;
+		boolean leftCollision = false;
+		boolean upCollision = false;
+		boolean downCollision = false;
 		final float oldPositionX = _currentPosition.x;
 
 		_currentPosition.x += moveFactorX * _xspeed;
@@ -113,8 +116,8 @@ public abstract class Movable extends Positionable implements IMassObject,
 
 		// Move right.
 		if (moveFactorX > 0) {
-			collision = true;
 			for (final Positionable p : xCollisions) {
+				rightCollision = true;
 				p.getCollider().onPositionableCollide(this);
 				final float leftEdgeColider = p.getPosition().getX();
 				if (_currentPosition.x + _width > leftEdgeColider - 1) {
@@ -125,12 +128,11 @@ public abstract class Movable extends Positionable implements IMassObject,
 
 		// Move left.
 		if (moveFactorX < 0) {
-			collision = true;
 			for (final Positionable p : xCollisions) {
+				leftCollision = true;
 				p.getCollider().onPositionableCollide(this);
-				final float rightEdgeColider = p.getPosition().getX()
-						+ p.getHeight();
-				if (_currentPosition.x < rightEdgeColider) {
+				final float rightEdgeColider = p.getPosition().getX() + p.getWidth();
+				if (_currentPosition.x <= rightEdgeColider) {
 					_currentPosition.x = rightEdgeColider + 1;
 				}
 			}
@@ -144,12 +146,11 @@ public abstract class Movable extends Positionable implements IMassObject,
 
 		// Moved up.
 		if (moveFactorY < 0) {
-			collision = true;
 			for (final Positionable p : yCollisions) {
+				upCollision = true;
 				p.getCollider().onPositionableCollide(this);
-				final float lowerEdgeColider = p.getPosition().getY()
-						+ p.getHeight();
-				if (_currentPosition.y < lowerEdgeColider) {
+				final float lowerEdgeColider = p.getPosition().getY() + p.getHeight();
+				if (_currentPosition.y <= lowerEdgeColider) {
 					_currentPosition.y = lowerEdgeColider + 1;
 				}
 			}
@@ -157,8 +158,8 @@ public abstract class Movable extends Positionable implements IMassObject,
 
 		// Moved down.
 		if (moveFactorY > 0) {
-			collision = true;
 			for (final Positionable p : yCollisions) {
+			    downCollision = true;
 				p.getCollider().onPositionableCollide(this);
 				final float upperEdgeColider = p.getPosition().getY();
 				if (_currentPosition.y + _height > upperEdgeColider - 1) {
@@ -168,10 +169,15 @@ public abstract class Movable extends Positionable implements IMassObject,
 		}
 
 		_currentPosition.x = newPositionX;
-
-		MetalWarriors.logger.print("MoveFactorX: " + moveFactorX
-				+ " MoveFactorY: " + moveFactorY + " Collision: " + collision,
-				LogMessageType.PHYSICS_DEBUG);
+		
+		if(leftCollision || rightCollision || upCollision || downCollision) {
+			MetalWarriors.logger.print("MoveFactorX: " + moveFactorX + " MoveFactorY: " + moveFactorY + 
+			         (leftCollision ? " Left" : "") +
+			         (rightCollision ? " Right" : "") +
+			         (upCollision ? " Up" : "") +
+			         (downCollision ? " Down" : "") +
+			         " Collision happened!",LogMessageType.PHYSICS_DEBUG);
+		}
 
 		return true;
 	}
