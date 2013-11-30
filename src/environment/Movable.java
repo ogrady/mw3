@@ -119,9 +119,9 @@ public abstract class Movable extends Positionable implements IMassObject,
 			for (final Positionable p : xCollisions) {
 				rightCollision = true;
 				p.getCollider().onPositionableCollide(this);
-				final float leftEdgeColider = p.getPosition().getX();
-				if (_currentPosition.x + _width > leftEdgeColider - 1) {
-					_currentPosition.x = leftEdgeColider - _width - 1;
+				final float leftEdgeColider = p.getHitbox().getX();
+				if (_currentPosition.x + _width > leftEdgeColider) {
+					_currentPosition.x = leftEdgeColider - _width;
 				}
 			}
 		}
@@ -131,7 +131,7 @@ public abstract class Movable extends Positionable implements IMassObject,
 			for (final Positionable p : xCollisions) {
 				leftCollision = true;
 				p.getCollider().onPositionableCollide(this);
-				final float rightEdgeColider = p.getPosition().getX() + p.getWidth();
+				final float rightEdgeColider = p.getHitbox().getX() + p.getHitbox().getWidth();
 				if (_currentPosition.x <= rightEdgeColider) {
 					_currentPosition.x = rightEdgeColider + 1;
 				}
@@ -149,7 +149,7 @@ public abstract class Movable extends Positionable implements IMassObject,
 			for (final Positionable p : yCollisions) {
 				upCollision = true;
 				p.getCollider().onPositionableCollide(this);
-				final float lowerEdgeColider = p.getPosition().getY() + p.getHeight();
+				final float lowerEdgeColider = p.getHitbox().getY() + p.getHitbox().getHeight();
 				if (_currentPosition.y <= lowerEdgeColider) {
 					_currentPosition.y = lowerEdgeColider + 1;
 				}
@@ -161,9 +161,9 @@ public abstract class Movable extends Positionable implements IMassObject,
 			for (final Positionable p : yCollisions) {
 			    downCollision = true;
 				p.getCollider().onPositionableCollide(this);
-				final float upperEdgeColider = p.getPosition().getY();
-				if (_currentPosition.y + _height > upperEdgeColider - 1) {
-					_currentPosition.y = upperEdgeColider - _height - 1;
+				final float upperEdgeColider = p.getHitbox().getY();
+				if (_currentPosition.y + _height > upperEdgeColider) {
+					_currentPosition.y = upperEdgeColider - _height;
 				}
 			}
 		}
