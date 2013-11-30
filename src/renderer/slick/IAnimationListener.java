@@ -2,6 +2,6 @@ package renderer.slick;
 
 import listener.IListener;
 
-public interface IAnimationListener extends IListener{
-	public void ended();
+public interface IAnimationListener extends IListener {
+	public void onEnded();
 }

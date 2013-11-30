@@ -47,7 +47,10 @@ public class ListenerSet<L extends IListener> extends CopyOnWriteArrayList<L> {
 	}
 
 	/**
-	 * Notifies all registered listeners via a certain notificator
+	 * Notifies all registered listeners via a certain notificator. This is
+	 * preferable over a for-each-loop as it makes use of iterators. That makes
+	 * it possible for the listener-set to be modified while being iterated
+	 * (removing listeners when a certain event occures)
 	 * 
 	 * @param notificator
 	 *            notificator to use
