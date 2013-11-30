@@ -118,15 +118,15 @@ public class MetalWarriors extends BasicGame implements
 	@Override
 	public void update(final GameContainer container, final int delta)
 			throws SlickException {
+		for (final Movable mv : Movable.instances) {
+			mv.applyGravity(9.81f);
+		}
 		_listeners.notify(new INotifier<IGameListener>() {
 			@Override
 			public void notify(final IGameListener listener) {
 				listener.onTick(container.getInput(), delta);
 			}
 		});
-		for (final Movable mv : Movable.instances) {
-			mv.applyGravity(9.81f);
-		}
 		_viewport.centerAround(_player);
 	}
 
