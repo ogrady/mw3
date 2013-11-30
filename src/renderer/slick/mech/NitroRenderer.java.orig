@@ -10,9 +10,15 @@ import renderer.slick.ObservableAnimation;
 import environment.Actor;
 import environment.IDamageSource;
 
+<<<<<<< HEAD
 public class NitroRenderer extends MovableRenderer implements IEntityListener {
 	private final ObservableAnimation walking, jumping, broken, shielded,
 			flyingPrelude;
+=======
+public class NitroRenderer extends MovableRenderer<Actor> implements
+		IEntityListener {
+	private final Animation walking, jumping, broken, shielded;
+>>>>>>> 7ed6de7ca831dadc8365d0ebafb99b03e4e7bdf8
 
 	public NitroRenderer(final Actor pos) {
 		super(pos);
