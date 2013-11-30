@@ -1,9 +1,9 @@
-mw3
-===
 
 Metal Warriors 3
+===
 
-Setup Eclipse:
+Eclipse Setup
+---
 1. Open existing project in mw3/. (There should be a .project file already)
 2. Add all mw3/lib/slick/*.jar files to the Libraries in the Build Path of the project.
 3. Choose your native-*.jar for your OS from the Libraries in the Build Path of the project and unroll it to select "Native library location: ..."
@@ -11,7 +11,7 @@ Setup Eclipse:
 5. Add rsc/ and src/ to the Source in the Build Path of the project.
 
 Coding Guidelines
-===
+---
 * Generally all variables and methods should be written in camelCase
 * Class-variables **must** start with an underscore (static variables aside)
 * Class-variables **must** either be final or have getters and setter if that makes sense
