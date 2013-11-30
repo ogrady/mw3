@@ -187,7 +187,7 @@ public class MetalWarriors extends BasicGame implements
 			logger.print(
 					String.format(
 							"Could not find file '%s' to parse debug flags from. Falling back to default flags.",
-							file), LogMessageType.GENERAL_ERROR);
+							file), LogMessageType.GENERAL_INFO);
 		} catch (final IOException e) {
 			logger.print(
 					String.format(

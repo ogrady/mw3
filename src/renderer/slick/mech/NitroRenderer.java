@@ -103,7 +103,7 @@ public class NitroRenderer extends MovableRenderer<Movable> implements
 			if (!flying) {
 				flyingPrelude.addListener(new IAnimationListener() {
 					@Override
-					public void ended() {
+					public void onEnded() {
 						jumping.setLooping(true);
 						setCurrentAnimation(jumping);
 					}
