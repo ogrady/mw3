@@ -1,5 +1,13 @@
 package game;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import level.MapLoader;
 import level.World;
 import listener.IGameListener;
@@ -27,6 +35,7 @@ import exception.MapException;
  */
 public class MetalWarriors extends BasicGame implements
 		IListenable<IGameListener> {
+	private static final boolean DEBUG = true;
 	public static final String CONF_PATH = "rsc/conf.properties";
 
 	public static MetalWarriors instance;
@@ -38,11 +47,10 @@ public class MetalWarriors extends BasicGame implements
 	private Configuration _configuration;
 	private ListenerSet<IGameListener> _listeners;
 
-	// change debugging flags here if needed
 	static {
-		logger.accept(
-		// LogMessageType.PHYSICS_DEBUG,
-		LogMessageType.INPUT_DEBUG);
+		if (DEBUG) {
+			reloadDebugFlags("debugflags");
+		}
 	}
 
 	/**
@@ -151,5 +159,51 @@ public class MetalWarriors extends BasicGame implements
 	@Override
 	public ListenerSet<IGameListener> getListeners() {
 		return _listeners;
+	}
+
+	/**
+	 * Reloads the flags for the logger from the specified file
+	 * 
+	 * @param file
+	 *            file to load the flags from line by line
+	 */
+	private static void reloadDebugFlags(final String file) {
+		final List<LogMessageType> flags = new ArrayList<LogMessageType>();
+		BufferedReader in = null;
+		try {
+			in = new BufferedReader(new FileReader(new File(file)));
+			String line;
+			while ((line = in.readLine()) != null) {
+				try {
+					flags.add(LogMessageType.valueOf(line));
+				} catch (final IllegalArgumentException iae) {
+					logger.print(
+							String.format(
+									"Could not parse debug flag '%s' from '%s'. Discarding.",
+									line, file), LogMessageType.GENERAL_ERROR);
+				}
+			}
+		} catch (final FileNotFoundException e) {
+			logger.print(
+					String.format(
+							"Could not find file '%s' to parse debug flags from. Falling back to default flags.",
+							file), LogMessageType.GENERAL_ERROR);
+		} catch (final IOException e) {
+			logger.print(
+					String.format(
+							"Error when attempting to read debug flags from '%s': '%s'. Falling back to default flags.",
+							file, e.getMessage()), LogMessageType.GENERAL_ERROR);
+		} finally {
+			if (in != null) {
+				try {
+					in.close();
+				} catch (final IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		for (final LogMessageType flag : flags) {
+			logger.accept(flag);
+		}
 	}
 }
