@@ -1,16 +1,15 @@
 package renderer.slick.mech;
 
 import listener.IEntityListener;
-
-import org.newdawn.slick.Animation;
-
 import renderer.slick.IAnimationListener;
 import renderer.slick.MovableRenderer;
 import renderer.slick.ObservableAnimation;
 import environment.Actor;
 import environment.IDamageSource;
+import environment.Movable;
 
-public class NitroRenderer extends MovableRenderer implements IEntityListener {
+public class NitroRenderer extends MovableRenderer<Movable> implements
+		IEntityListener {
 	private final ObservableAnimation walking, jumping, broken, shielded,
 			flyingPrelude;
 
