@@ -35,6 +35,12 @@ IGameListener
 	  
 Printing debug-messages to the console
 	- instead of using System.out, use _logger.print(MESSAGE, TYPE) from the running instance of MetalWarriors (which is a singleton and can be accessed as such)
-	- you can add / remove flags in the static-block of MetalWarriors right at the top to match you own needs for you debug-session
 	- when you start a new task that doesn't fit any flag you may add one to the LogMessageType-enum which is located at logger/LogMessageType.java
-	- to specify the flags you want to use create a file in the root directory of your project named "debugflags" and write the flags down line by line. Please do not commit this file! General flags will be activated by default.
+	- to specify the flags you want to use create a file in the root directory of your project named "debugflags" and write the flags down line by line (as specified in logger/LogMessageType). Please do not commit this file! General flags will be activated by default. Note that the file is only loaded when the DEBUG variable in MetalWarriors is active
+	- example file:
+	
+	PHYSICS_DEBUG
+	INPUT_DEBUG
+	GFX_DEBUG
+	
+	Will add the flags for physics, input and graphics messages. 
