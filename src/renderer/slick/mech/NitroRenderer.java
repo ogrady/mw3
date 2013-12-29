@@ -33,6 +33,8 @@ public class NitroRenderer extends MovableRenderer<Movable> implements
 
 	protected void setIdle() {
 		this.setCurrentAnimation(walking);
+		_renderable.setWidth(walking.getWidth());
+		_renderable.setHeight(walking.getHeight());
 		walking.stop();
 	}
 

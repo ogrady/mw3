@@ -57,7 +57,5 @@ abstract public class PositionableRenderer<P extends Positionable> extends
 	@Override
 	public void setCurrentAnimation(final ObservableAnimation newCurrent) {
 		super.setCurrentAnimation(newCurrent);
-		_renderable.setWidth(newCurrent.getWidth());
-		_renderable.setHeight(newCurrent.getHeight());
 	}
 }
