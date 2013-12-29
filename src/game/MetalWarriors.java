@@ -144,6 +144,18 @@ public class MetalWarriors extends BasicGame implements
 	}
 
 	public static void main(final String[] args) throws MapException {
+//		try {
+//			String message = new String("Hello, Server!");
+//			Socket clientSocket = new Socket("localhost", MetalWarriorsServer.MW3_PORT);
+//			DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
+//			outToServer.write(message.getBytes());
+//			clientSocket.close();
+//		} catch (UnknownHostException e1) {
+//			e1.printStackTrace();
+//		} catch (IOException e1) {
+//			e1.printStackTrace();
+//		}
+				
 		try {
 			final AppGameContainer app = new AppGameContainer(
 					new MetalWarriors());
