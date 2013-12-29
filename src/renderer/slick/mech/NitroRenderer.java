@@ -1,5 +1,8 @@
 package renderer.slick.mech;
 
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
+
 import listener.IEntityListener;
 import renderer.slick.IAnimationListener;
 import renderer.slick.MovableRenderer;
@@ -7,15 +10,16 @@ import renderer.slick.ObservableAnimation;
 import environment.Actor;
 import environment.IDamageSource;
 import environment.Movable;
+import game.Viewport;
 
 public class NitroRenderer extends MovableRenderer<Movable> implements
 		IEntityListener {
 	private final ObservableAnimation walking, jumping, broken, shielded,
-			flyingPrelude;
+			flyingPrelude, arm;
+	final float factor = 2;
 
 	public NitroRenderer(final Actor pos) {
 		super(pos);
-		final float factor = 2;
 		walking = new ObservableAnimation(loadScaledSpriteSheet(
 				"rsc/nitro/walking.png", 36, 45, factor), 60);
 		jumping = new ObservableAnimation(loadScaledSpriteSheet(
@@ -25,6 +29,9 @@ public class NitroRenderer extends MovableRenderer<Movable> implements
 		shielded = new ObservableAnimation(loadScaledSpriteSheet(
 				"rsc/nitro/shielded.png", 40, 46, factor), 60);
 		shielded.setLooping(false);
+		arm = new ObservableAnimation(loadScaledSpriteSheet(
+				"rsc/nitro/arm.png", 29, 46, factor), 60);
+		arm.setCurrentFrame(arm.getFrameCount()/2);
 		flyingPrelude = new ObservableAnimation(loadScaledSpriteSheet(
 				"rsc/nitro/start_flying.png", 45, 50, factor), 100);
 		flyingPrelude.setLooping(true);
@@ -72,11 +79,16 @@ public class NitroRenderer extends MovableRenderer<Movable> implements
 
 	@Override
 	public void onUpButton(final boolean down) {
+		if(arm.getFrame()<arm.getFrameCount()-1){
+			arm.setCurrentFrame(arm.getFrame()+1);
+		}
 	}
 
 	@Override
 	public void onDownButton(final boolean down) {
-
+		if(arm.getFrame()>0){
+			arm.setCurrentFrame(arm.getFrame()-1);
+		}
 	}
 
 	@Override
@@ -160,5 +172,18 @@ public class NitroRenderer extends MovableRenderer<Movable> implements
 
 	@Override
 	public void onFullHeal() {
+		
+	}
+	
+	@Override
+	public void render(final Graphics g, final Viewport vp){
+		super.render(g, vp);
+		final Image frame = arm.getCurrentFrame();
+		final float adjustedCenter = (_renderable.getWidth()-frame.getWidth())/2;
+		final float adjustedX = adjustedCenter+(_direction*11*factor);
+		final float adjustedY = 7*factor;
+		frame.draw(_renderable.getPosition().x+adjustedX, _renderable.getPosition().y-adjustedY,
+				(_direction - 1) * -frame.getWidth() / 2, 0, (_direction + 1)
+						* frame.getWidth() / 2, frame.getHeight());
 	}
 }
