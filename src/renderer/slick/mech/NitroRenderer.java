@@ -3,7 +3,7 @@ package renderer.slick.mech;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
-import listener.IEntityListener;
+import listener.IActorListener;
 import renderer.slick.IAnimationListener;
 import renderer.slick.MovableRenderer;
 import renderer.slick.ObservableAnimation;
@@ -13,7 +13,7 @@ import environment.Movable;
 import game.Viewport;
 
 public class NitroRenderer extends MovableRenderer<Movable> implements
-		IEntityListener {
+		IActorListener {
 	private final ObservableAnimation walking, jumping, broken, shielded,
 			flyingPrelude, arm;
 	final float factor = 2;

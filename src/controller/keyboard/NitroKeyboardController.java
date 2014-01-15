@@ -1,9 +1,11 @@
 package controller.keyboard;
 
+import environment.projectile.Bullet;
 import game.Configuration;
 import game.MetalWarriors;
 
 import org.newdawn.slick.Input;
+import org.newdawn.slick.geom.Vector2f;
 
 import renderer.slick.mech.NitroRenderer;
 import controller.IControllable;
@@ -29,7 +31,8 @@ public class NitroKeyboardController extends KeyboardController {
 		boolean moving = false;
 		int deltaX = 0, deltaY = 0;
 		if (isKeyPressed(_configuration.getInteger(Configuration.UP))) {
-			deltaY -= 1;
+			// deltaY -= 1;
+			_renderer.onUpButton(true);
 		}
 		if (isKeyPressed(_configuration.getInteger(Configuration.LEFT))) {
 			deltaX -= 1;
@@ -38,6 +41,7 @@ public class NitroKeyboardController extends KeyboardController {
 		}
 		if (isKeyPressed(_configuration.getInteger(Configuration.DOWN))) {
 			deltaY += 1;
+			_renderer.onDownButton(true);
 		}
 		if (isKeyPressed(_configuration.getInteger(Configuration.RIGHT))) {
 			deltaX += 1;
@@ -53,6 +57,14 @@ public class NitroKeyboardController extends KeyboardController {
 			_renderer.onSpecialActionButton(true);
 			moving = false;
 		}
+		if (isKeyPressed(_configuration.getInteger(Configuration.ATTACK_1))) {
+			_renderer.onPrimaryAttackButton(true);
+			// TODO replace spawning-position with actual bullet-exit-point as
+			// soon as available
+			new Bullet(_controllable.getPosition().copy()
+					.add(new Vector2f(_controllable.getWidth() + 10, 0)),
+					new Vector2f(2, 0));
+		}
 		if (_controllable.move(deltaX, deltaY)) {
 			_renderer.getCurrentAnimation().setAutoUpdate(moving);
 			MetalWarriors.instance.getViewPort().getPosition().x -= deltaX
@@ -61,5 +73,4 @@ public class NitroKeyboardController extends KeyboardController {
 					* _controllable.getXSpeed();
 		}
 	}
-
 }

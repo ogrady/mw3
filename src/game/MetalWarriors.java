@@ -140,22 +140,30 @@ public class MetalWarriors extends BasicGame implements
 			throws SlickException {
 		g.translate(_viewport.getPosition().x, _viewport.getPosition().y);
 		_map.getRenderer().render(g, _viewport);
-		_player.getRenderer().render(g, _viewport);
+		_listeners.notify(new INotifier<IGameListener>() {
+			@Override
+			public void notify(final IGameListener listener) {
+				listener.onRender(g, _viewport);
+			}
+		});
+
 	}
 
 	public static void main(final String[] args) throws MapException {
-//		try {
-//			String message = new String("Hello, Server!");
-//			Socket clientSocket = new Socket("localhost", MetalWarriorsServer.MW3_PORT);
-//			DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
-//			outToServer.write(message.getBytes());
-//			clientSocket.close();
-//		} catch (UnknownHostException e1) {
-//			e1.printStackTrace();
-//		} catch (IOException e1) {
-//			e1.printStackTrace();
-//		}
-				
+		// try {
+		// String message = new String("Hello, Server!");
+		// Socket clientSocket = new Socket("localhost",
+		// MetalWarriorsServer.MW3_PORT);
+		// DataOutputStream outToServer = new
+		// DataOutputStream(clientSocket.getOutputStream());
+		// outToServer.write(message.getBytes());
+		// clientSocket.close();
+		// } catch (UnknownHostException e1) {
+		// e1.printStackTrace();
+		// } catch (IOException e1) {
+		// e1.printStackTrace();
+		// }
+
 		try {
 			final AppGameContainer app = new AppGameContainer(
 					new MetalWarriors());

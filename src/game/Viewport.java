@@ -1,6 +1,7 @@
 package game;
 
 import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 
 import environment.Positionable;
@@ -36,6 +37,14 @@ public class Viewport {
 	 */
 	public int getHeight() {
 		return _container.getHeight();
+	}
+
+	/**
+	 * @return a {@link Rectangle} that can be used for collision-check (only
+	 *         draw entities whose hitboxes intercept with the viewport)
+	 */
+	public Rectangle getViewportRect() {
+		return new Rectangle(_position.x, _position.y, getWidth(), getHeight());
 	}
 
 	/**

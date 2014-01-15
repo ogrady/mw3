@@ -9,6 +9,7 @@ import listener.IListenable;
 import listener.ListenerSet;
 import listener.notifier.ParametrizedNotifier;
 
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.KeyListener;
 
@@ -16,6 +17,7 @@ import controller.IControllable;
 import controller.IController;
 import environment.Movable;
 import game.Configuration;
+import game.Viewport;
 
 /**
  * Keyboard input which listens for keypresses
@@ -244,5 +246,11 @@ abstract public class KeyboardController implements
 				notifier.notify(it.next(), false);
 			}
 		}
+	}
+
+	// not interesting for controllers
+	@Override
+	public void onRender(final Graphics g, final Viewport vp) {
+
 	}
 }

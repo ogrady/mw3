@@ -2,6 +2,7 @@ package environment;
 
 import game.Configuration;
 import game.MetalWarriors;
+import game.Viewport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.List;
 import listener.IGameListener;
 import logger.LogMessageType;
 
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Vector2f;
 
@@ -131,7 +133,8 @@ public abstract class Movable extends Positionable implements IMassObject,
 			for (final Positionable p : xCollisions) {
 				leftCollision = true;
 				p.getCollider().onPositionableCollide(this);
-				final float rightEdgeColider = p.getHitbox().getX() + p.getHitbox().getWidth();
+				final float rightEdgeColider = p.getHitbox().getX()
+						+ p.getHitbox().getWidth();
 				if (_currentPosition.x <= rightEdgeColider) {
 					_currentPosition.x = rightEdgeColider + 1;
 				}
@@ -149,7 +152,8 @@ public abstract class Movable extends Positionable implements IMassObject,
 			for (final Positionable p : yCollisions) {
 				upCollision = true;
 				p.getCollider().onPositionableCollide(this);
-				final float lowerEdgeColider = p.getHitbox().getY() + p.getHitbox().getHeight();
+				final float lowerEdgeColider = p.getHitbox().getY()
+						+ p.getHitbox().getHeight();
 				if (_currentPosition.y <= lowerEdgeColider) {
 					_currentPosition.y = lowerEdgeColider + 1;
 				}
@@ -159,7 +163,7 @@ public abstract class Movable extends Positionable implements IMassObject,
 		// Moved down.
 		if (moveFactorY > 0) {
 			for (final Positionable p : yCollisions) {
-			    downCollision = true;
+				downCollision = true;
 				p.getCollider().onPositionableCollide(this);
 				final float upperEdgeColider = p.getHitbox().getY();
 				if (_currentPosition.y + _height > upperEdgeColider) {
@@ -169,14 +173,15 @@ public abstract class Movable extends Positionable implements IMassObject,
 		}
 
 		_currentPosition.x = newPositionX;
-		
-		if(leftCollision || rightCollision || upCollision || downCollision) {
-			MetalWarriors.logger.print("MoveFactorX: " + moveFactorX + " MoveFactorY: " + moveFactorY + 
-			         (leftCollision ? " Left" : "") +
-			         (rightCollision ? " Right" : "") +
-			         (upCollision ? " Up" : "") +
-			         (downCollision ? " Down" : "") +
-			         " Collision happened!",LogMessageType.PHYSICS_DEBUG);
+
+		if (leftCollision || rightCollision || upCollision || downCollision) {
+			MetalWarriors.logger.print("MoveFactorX: " + moveFactorX
+					+ " MoveFactorY: " + moveFactorY
+					+ (leftCollision ? " Left" : "")
+					+ (rightCollision ? " Right" : "")
+					+ (upCollision ? " Up" : "")
+					+ (downCollision ? " Down" : "") + " Collision happened!",
+					LogMessageType.PHYSICS_DEBUG);
 		}
 
 		return true;
@@ -192,6 +197,11 @@ public abstract class Movable extends Positionable implements IMassObject,
 		if (_renderer != null) {
 			_renderer.getCurrentAnimation().update(delta);
 		}
+	}
+
+	@Override
+	public void onRender(final Graphics g, final Viewport vp) {
+		_renderer.render(g, vp);
 	}
 
 	@Override

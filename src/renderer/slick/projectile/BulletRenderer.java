@@ -5,13 +5,11 @@ import renderer.slick.PositionableRenderer;
 import environment.Movable;
 
 public class BulletRenderer extends PositionableRenderer<Movable> {
-	private final ObservableAnimation bullet;
+	private static final ObservableAnimation BULLET = new ObservableAnimation(
+			loadScaledSpriteSheet("rsc/nitro/bullet.png", 5, 5, 1.5f), 1000);
 
 	public BulletRenderer(final Movable renderable) {
 		super(renderable);
-		bullet = new ObservableAnimation(loadScaledSpriteSheet(
-				"rsc/nitro/bullet.png", 5, 5, 1), 1000);
-		setCurrentAnimation(bullet);
+		setCurrentAnimation(BULLET);
 	}
-
 }

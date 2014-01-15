@@ -1,8 +1,12 @@
 package listener;
 
 import game.Configuration;
+import game.Viewport;
 
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
+
+import renderer.IRenderer;
 
 /**
  * Should be implemented by classes that wish to listen for game-events
@@ -34,4 +38,16 @@ public interface IGameListener extends IListener {
 	 *            the milliseconds passed since the last time
 	 */
 	public void onTick(Input input, int delta);
+
+	/**
+	 * Called from the game whenever another render-cycle begins.<br>
+	 * It passes the rendering-plane to all entities for them to draw themselves
+	 * (probably via their {@link IRenderer}) on that plane.
+	 * 
+	 * @param g
+	 *            the plane to draw on
+	 * @param vp
+	 *            the viewport the player currently sees
+	 */
+	public void onRender(Graphics g, Viewport vp);
 }

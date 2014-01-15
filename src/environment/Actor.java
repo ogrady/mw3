@@ -1,6 +1,6 @@
 package environment;
 
-import listener.IEntityListener;
+import listener.IActorListener;
 import listener.IListenable;
 import listener.ListenerSet;
 import listener.notifier.INotifier;
@@ -18,33 +18,33 @@ import org.newdawn.slick.geom.Vector2f;
  * 
  */
 abstract public class Actor extends Movable implements
-		IListenable<IEntityListener> {
-	protected ListenerSet<IEntityListener> entityListeners;
+		IListenable<IActorListener> {
+	protected ListenerSet<IActorListener> _entityListeners;
 	protected String _description;
-	protected int maxLife, currentLife;
+	protected int _maxLife, _currentLife;
 
 	public Actor(final Vector2f position, final float width,
 			final float height, final float speed, final String description) {
 		super(position, width, height, speed);
-		entityListeners = new ListenerSet<IEntityListener>();
+		_entityListeners = new ListenerSet<IActorListener>();
 		_description = description != null ? description : getClass()
 				.getSimpleName();
 	}
 
 	public void takeDamage(final IDamageSource src, final int amount) {
-		currentLife = Math.max(0, currentLife - amount);
-		entityListeners.notify(new INotifier<IEntityListener>() {
+		_currentLife = Math.max(0, _currentLife - amount);
+		_entityListeners.notify(new INotifier<IActorListener>() {
 
 			@Override
-			public void notify(final IEntityListener listener) {
+			public void notify(final IActorListener listener) {
 				listener.onTakeDamage(src, amount);
 			}
 		});
-		if (currentLife == 0) {
-			entityListeners.notify(new INotifier<IEntityListener>() {
+		if (_currentLife == 0) {
+			_entityListeners.notify(new INotifier<IActorListener>() {
 
 				@Override
-				public void notify(final IEntityListener listener) {
+				public void notify(final IActorListener listener) {
 					listener.onDie();
 				}
 			});
@@ -54,11 +54,11 @@ abstract public class Actor extends Movable implements
 	@Override
 	public void destruct() {
 		super.destruct();
-		entityListeners.unregisterAll();
+		_entityListeners.unregisterAll();
 	}
 
 	@Override
-	public ListenerSet<IEntityListener> getListeners() {
-		return entityListeners;
+	public ListenerSet<IActorListener> getListeners() {
+		return _entityListeners;
 	}
 }
