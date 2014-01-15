@@ -66,8 +66,9 @@ public class NitroKeyboardController extends KeyboardController {
 			// soon as available
 			if (_smgDelayAccu <= 0) {
 				new Bullet(_controllable.getPosition().copy()
-						.add(new Vector2f(_controllable.getWidth() + 10, 0)),
-						new Vector2f(2.5f, 0), _controllable);
+						.add(new Vector2f(_controllable.getWidth(), 0)),
+						new Vector2f(2.5f * _controllable.getDirection(), 0),
+						_controllable);
 				_smgDelayAccu = SMG_DELAY;
 			}
 		}

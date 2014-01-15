@@ -31,6 +31,27 @@ public abstract class Positionable implements IRendereable<Slick2DRenderer>,
 	protected float _width, _height;
 	protected Slick2DRenderer _renderer;
 	protected ICollider _collider;
+	protected int _direction;
+
+	/**
+	 * @return direction the {@link Positionable} is currently facing to. -1 is
+	 *         left, 1 is right
+	 */
+	public int getDirection() {
+		return _direction;
+	}
+
+	/**
+	 * @param direction
+	 *            the new direction the {@link Positionable} is facing. 0 will
+	 *            be ignored, positive values will be defaulted to 1, negative
+	 *            values to -1
+	 */
+	public void setDirection(final int direction) {
+		if (direction != 0) {
+			_direction = direction / Math.abs(direction);
+		}
+	}
 
 	/**
 	 * @param _width
@@ -74,8 +95,8 @@ public abstract class Positionable implements IRendereable<Slick2DRenderer>,
 	 * @return hitbox for collisions
 	 */
 	public Shape getHitbox() {
-		return new Rectangle(_currentPosition.x, _currentPosition.y, _width-1,
-				_height-1);
+		return new Rectangle(_currentPosition.x, _currentPosition.y,
+				_width - 1, _height - 1);
 	}
 
 	@Override
@@ -103,6 +124,7 @@ public abstract class Positionable implements IRendereable<Slick2DRenderer>,
 		_currentPosition = position;
 		_width = width;
 		_height = height;
+		_direction = 1;
 		_collider = new DefaultCollider(this);
 		_renderer = new DefaultRenderer();
 		Positionable.instances.add(this);

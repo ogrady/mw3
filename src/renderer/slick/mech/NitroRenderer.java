@@ -1,9 +1,10 @@
 package renderer.slick.mech;
 
+import listener.IActorListener;
+
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
-import listener.IActorListener;
 import renderer.slick.IAnimationListener;
 import renderer.slick.MovableRenderer;
 import renderer.slick.ObservableAnimation;
@@ -31,7 +32,7 @@ public class NitroRenderer extends MovableRenderer<Movable> implements
 		shielded.setLooping(false);
 		arm = new ObservableAnimation(loadScaledSpriteSheet(
 				"rsc/nitro/arm.png", 29, 46, factor), 60);
-		arm.setCurrentFrame(arm.getFrameCount()/2);
+		arm.setCurrentFrame(arm.getFrameCount() / 2);
 		flyingPrelude = new ObservableAnimation(loadScaledSpriteSheet(
 				"rsc/nitro/start_flying.png", 45, 50, factor), 100);
 		flyingPrelude.setLooping(true);
@@ -58,7 +59,7 @@ public class NitroRenderer extends MovableRenderer<Movable> implements
 				}
 			}
 		}
-		_direction = -1;
+		_renderable.setDirection(-1);
 	}
 
 	@Override
@@ -74,20 +75,20 @@ public class NitroRenderer extends MovableRenderer<Movable> implements
 				}
 			}
 		}
-		_direction = 1;
+		_renderable.setDirection(1);
 	}
 
 	@Override
 	public void onUpButton(final boolean down) {
-		if(arm.getFrame()<arm.getFrameCount()-1){
-			arm.setCurrentFrame(arm.getFrame()+1);
+		if (arm.getFrame() < arm.getFrameCount() - 1) {
+			arm.setCurrentFrame(arm.getFrame() + 1);
 		}
 	}
 
 	@Override
 	public void onDownButton(final boolean down) {
-		if(arm.getFrame()>0){
-			arm.setCurrentFrame(arm.getFrame()-1);
+		if (arm.getFrame() > 0) {
+			arm.setCurrentFrame(arm.getFrame() - 1);
 		}
 	}
 
@@ -172,18 +173,21 @@ public class NitroRenderer extends MovableRenderer<Movable> implements
 
 	@Override
 	public void onFullHeal() {
-		
+
 	}
-	
+
 	@Override
-	public void render(final Graphics g, final Viewport vp){
+	public void render(final Graphics g, final Viewport vp) {
 		super.render(g, vp);
 		final Image frame = arm.getCurrentFrame();
-		final float adjustedCenter = (_renderable.getWidth()-frame.getWidth())/2;
-		final float adjustedX = adjustedCenter+(_direction*11*factor);
-		final float adjustedY = 7*factor;
-		frame.draw(_renderable.getPosition().x+adjustedX, _renderable.getPosition().y-adjustedY,
-				(_direction - 1) * -frame.getWidth() / 2, 0, (_direction + 1)
-						* frame.getWidth() / 2, frame.getHeight());
+		final float adjustedCenter = (_renderable.getWidth() - frame.getWidth()) / 2;
+		final float adjustedX = adjustedCenter + _renderable.getDirection()
+				* 11 * factor;
+		final float adjustedY = 7 * factor;
+		frame.draw(_renderable.getPosition().x + adjustedX,
+				_renderable.getPosition().y - adjustedY,
+				(_renderable.getDirection() - 1) * -frame.getWidth() / 2, 0,
+				(_renderable.getDirection() + 1) * frame.getWidth() / 2,
+				frame.getHeight());
 	}
 }
