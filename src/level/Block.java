@@ -1,7 +1,11 @@
 package level;
 
+import java.util.ArrayList;
+
 import org.newdawn.slick.geom.Vector2f;
 
+import renderer.DefaultRenderer;
+import util.Const;
 import environment.Positionable;
 import environment.collider.NeverCollider;
 
@@ -13,6 +17,7 @@ import environment.collider.NeverCollider;
  * 
  */
 public class Block extends Positionable {
+	public static final ArrayList<Block> instances = new ArrayList<Block>();
 	private final World _map;
 	private boolean _solid, _destructable;
 	private final int _xIndex, _yIndex;
@@ -94,6 +99,26 @@ public class Block extends Positionable {
 		_xIndex = x;
 		_yIndex = y;
 		_map = map;
+		instances.add(this);
+	}
+
+	public void destroy() {
+		if (_destructable) {
+			setDestructable(false);
+			setSolid(false);
+			setRenderer(new DefaultRenderer());
+			_map.getTiledMap().setTileId(
+					_xIndex,
+					_yIndex,
+					_map.getTiledMap()
+							.getLayerIndex(Const.MAP_LAYER_BACKGROUND), 1);
+		}
+	}
+
+	@Override
+	public void destruct() {
+		super.destruct();
+		instances.remove(this);
 	}
 
 	@Override

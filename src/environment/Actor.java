@@ -1,5 +1,7 @@
 package environment;
 
+import java.util.ArrayList;
+
 import listener.IActorListener;
 import listener.IListenable;
 import listener.ListenerSet;
@@ -19,6 +21,7 @@ import org.newdawn.slick.geom.Vector2f;
  */
 abstract public class Actor extends Movable implements
 		IListenable<IActorListener> {
+	public static final ArrayList<Actor> instances = new ArrayList<Actor>();
 	protected ListenerSet<IActorListener> _entityListeners;
 	protected String _description;
 	protected int _maxLife, _currentLife;
@@ -29,6 +32,7 @@ abstract public class Actor extends Movable implements
 		_entityListeners = new ListenerSet<IActorListener>();
 		_description = description != null ? description : getClass()
 				.getSimpleName();
+		instances.add(this);
 	}
 
 	public void takeDamage(final IDamageSource src, final int amount) {
@@ -54,6 +58,7 @@ abstract public class Actor extends Movable implements
 	@Override
 	public void destruct() {
 		super.destruct();
+		instances.remove(this);
 		_entityListeners.unregisterAll();
 	}
 

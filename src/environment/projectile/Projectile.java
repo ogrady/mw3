@@ -4,6 +4,7 @@ import org.newdawn.slick.geom.Vector2f;
 
 import controller.IController;
 import environment.Actor;
+import environment.IDamageSource;
 import environment.Movable;
 
 /**
@@ -17,10 +18,30 @@ import environment.Movable;
  * @author Daniel
  * 
  */
-public class Projectile extends Movable {
+public class Projectile extends Movable implements IDamageSource {
 	protected Vector2f _deltaVector;
 	protected float _traveledDistance, _maxTravelDistance;
+	protected Movable _source;
+	protected float _baseDamage;
 
+	@Override
+	public float getBaseDamage() {
+		return _baseDamage;
+	}
+
+	/**
+	 * @return the object that spawned the {@link Projectile}. Useful to
+	 *         determine checks for friendly fire and such.
+	 */
+	public Movable getSource() {
+		return _source;
+	}
+
+	/**
+	 * @return the remaining distance to live, which is a convenience-method for
+	 *         building the difference between {@link #getMaxTravelDistance()}
+	 *         and {@link #getTraveledDistance()}
+	 */
 	public float getDistanceToLive() {
 		return _maxTravelDistance - _traveledDistance;
 	}
@@ -98,12 +119,14 @@ public class Projectile extends Movable {
 	 * @param deltaVector
 	 *            delta-vector that specifies direction and magnitude of the
 	 *            movement
+	 * @param source
+	 *            the {@link Movable} that created the bullet
 	 */
 	public Projectile(final Vector2f position, final Vector2f deltaVector,
-			final float maxTravelDistance) {
+			final float maxTravelDistance, final Movable source) {
 		super(position.copy(), 5, 5, deltaVector.length());
 		_deltaVector = deltaVector;
 		_maxTravelDistance = maxTravelDistance;
+		_source = source;
 	}
-
 }

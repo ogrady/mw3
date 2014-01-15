@@ -7,22 +7,14 @@ import level.Block;
 import environment.Actor;
 import environment.IDamageSource;
 import environment.Positionable;
+import environment.projectile.Projectile;
 
-/**
- * The defaultcollider does basic checking whether he collids with something or
- * not:<br>
- * whenever his collidables hitbox intersects with the hitbox of another
- * collidable they collide.<br>
- * All other methods are empty and can be overridden by subclasses.
- * 
- * @author Daniel
- * 
- */
-public class DefaultCollider implements ICollider {
-	protected Positionable _collidable;
+public class ProjectileCollider extends DefaultCollider {
+	private final Projectile _projectile;
 
-	public DefaultCollider(final Positionable positionable) {
-		_collidable = positionable;
+	public ProjectileCollider(final Projectile projectile) {
+		super(projectile);
+		_projectile = projectile;
 	}
 
 	@Override
@@ -31,10 +23,11 @@ public class DefaultCollider implements ICollider {
 		for (final Block b : Block.instances) {
 			if (b.isSolid() && collides(b)) {
 				collisions.add(b);
+				b.destroy();
 			}
 		}
 		for (final Actor a : Actor.instances) {
-			if (a != _collidable && collides(a)) {
+			if (a != _projectile.getSource() && collides(a)) {
 				collisions.add(a);
 			}
 		}
@@ -42,25 +35,21 @@ public class DefaultCollider implements ICollider {
 	}
 
 	@Override
-	public ICollidable getCollidable() {
-		return _collidable;
-	}
-
-	@Override
-	public boolean collides(final Positionable other) {
-		return _collidable.getHitbox().intersects(other.getHitbox());
-	}
-
-	@Override
 	public void onPositionableCollide(final Positionable positionable) {
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override
 	public void onDamageSourceCollide(final IDamageSource dmgsrc) {
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override
 	public void onBlockCollide(final Block block) {
+		// TODO Auto-generated method stub
 
 	}
+
 }

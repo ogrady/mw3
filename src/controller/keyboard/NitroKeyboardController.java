@@ -63,7 +63,7 @@ public class NitroKeyboardController extends KeyboardController {
 			// soon as available
 			new Bullet(_controllable.getPosition().copy()
 					.add(new Vector2f(_controllable.getWidth() + 10, 0)),
-					new Vector2f(2, 0));
+					new Vector2f(2, 0), _controllable);
 		}
 		if (_controllable.move(deltaX, deltaY)) {
 			_renderer.getCurrentAnimation().setAutoUpdate(moving);
