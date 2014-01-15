@@ -102,6 +102,14 @@ public class Block extends Positionable {
 		instances.add(this);
 	}
 
+	/**
+	 * Destroying a {@link Block} is NOT equal to calling it's destructor!<br>
+	 * It just removes the image and makes if undestructable and unblocking.<br>
+	 * Destroyed {@link Block}s will have a {@link DefaultRenderer}.<br>
+	 * The tile-id on the corresponding layer must be invisible on the
+	 * {@value Const#MAP_LAYER_DESTRUCTABLE}, or else whatever image on that
+	 * position will be used for destroyed {@link Block}s.
+	 */
 	public void destroy() {
 		if (_destructable) {
 			setDestructable(false);
@@ -110,8 +118,8 @@ public class Block extends Positionable {
 			_map.getTiledMap().setTileId(
 					_xIndex,
 					_yIndex,
-					_map.getTiledMap()
-							.getLayerIndex(Const.MAP_LAYER_BACKGROUND), 1);
+					_map.getTiledMap().getLayerIndex(
+							Const.MAP_LAYER_DESTRUCTABLE), 0);
 		}
 	}
 
