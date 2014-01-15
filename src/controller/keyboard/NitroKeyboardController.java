@@ -17,7 +17,9 @@ import controller.IControllable;
  * 
  */
 public class NitroKeyboardController extends KeyboardController {
+	private final static int SMG_DELAY = 100;
 	private final NitroRenderer _renderer;
+	private int _smgDelayAccu;
 
 	public NitroKeyboardController(final IControllable controllable,
 			final Configuration configuration, final NitroRenderer renderer) {
@@ -28,6 +30,7 @@ public class NitroKeyboardController extends KeyboardController {
 	@Override
 	public void update(final Input input, final int delta) {
 		setInput(input);
+		_smgDelayAccu -= delta;
 		boolean moving = false;
 		int deltaX = 0, deltaY = 0;
 		if (isKeyPressed(_configuration.getInteger(Configuration.UP))) {
@@ -61,9 +64,12 @@ public class NitroKeyboardController extends KeyboardController {
 			_renderer.onPrimaryAttackButton(true);
 			// TODO replace spawning-position with actual bullet-exit-point as
 			// soon as available
-			new Bullet(_controllable.getPosition().copy()
-					.add(new Vector2f(_controllable.getWidth() + 10, 0)),
-					new Vector2f(2, 0), _controllable);
+			if (_smgDelayAccu <= 0) {
+				new Bullet(_controllable.getPosition().copy()
+						.add(new Vector2f(_controllable.getWidth() + 10, 0)),
+						new Vector2f(2.5f, 0), _controllable);
+				_smgDelayAccu = SMG_DELAY;
+			}
 		}
 		if (_controllable.move(deltaX, deltaY)) {
 			_renderer.getCurrentAnimation().setAutoUpdate(moving);
