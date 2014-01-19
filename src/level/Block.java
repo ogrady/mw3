@@ -7,6 +7,8 @@ import org.newdawn.slick.geom.Vector2f;
 import renderer.DefaultRenderer;
 import util.Const;
 import environment.Positionable;
+import environment.collider.DefaultCollider;
+import environment.collider.DestructableBlockCollider;
 import environment.collider.NeverCollider;
 
 /**
@@ -62,7 +64,8 @@ public class Block extends Positionable {
 	 */
 	public void setSolid(final boolean solid) {
 		_solid = solid;
-		// block is just an empty space
+		// block is just an empty space. We assume that it won't be set back to
+		// solid once it is gone -> no else-branch
 		if (!solid) {
 			_collider = new NeverCollider(this);
 		}
@@ -76,11 +79,16 @@ public class Block extends Positionable {
 	}
 
 	/**
+	 * Sets whether a block is destructed upon receiving damage. The collider
+	 * will be replaced accordingly
+	 * 
 	 * @param destructable
 	 *            set a block destructable or not
 	 */
 	public void setDestructable(final boolean destructable) {
 		_destructable = destructable;
+		setCollider(_destructable ? new DestructableBlockCollider(this)
+				: new DefaultCollider<Block>(this));
 	}
 
 	/**

@@ -125,7 +125,9 @@ public abstract class Positionable implements IRendereable<Slick2DRenderer>,
 		_width = width;
 		_height = height;
 		_direction = 1;
-		_collider = new DefaultCollider(this);
+		// just to make sure we don't have null pointers for colliders and
+		// renderers
+		_collider = new DefaultCollider<Positionable>(this);
 		_renderer = new DefaultRenderer();
 		Positionable.instances.add(this);
 	}

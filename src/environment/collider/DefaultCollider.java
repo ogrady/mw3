@@ -18,10 +18,10 @@ import environment.Positionable;
  * @author Daniel
  * 
  */
-public class DefaultCollider implements ICollider {
-	protected Positionable _collidable;
+public class DefaultCollider<P extends Positionable> implements ICollider {
+	protected P _collidable;
 
-	public DefaultCollider(final Positionable positionable) {
+	public DefaultCollider(final P positionable) {
 		_collidable = positionable;
 	}
 

@@ -9,12 +9,10 @@ import environment.IDamageSource;
 import environment.Positionable;
 import environment.projectile.Projectile;
 
-public class ProjectileCollider extends DefaultCollider {
-	private final Projectile _projectile;
+public class ProjectileCollider extends DefaultCollider<Projectile> {
 
 	public ProjectileCollider(final Projectile projectile) {
 		super(projectile);
-		_projectile = projectile;
 	}
 
 	@Override
@@ -27,9 +25,17 @@ public class ProjectileCollider extends DefaultCollider {
 			}
 		}
 		for (final Actor a : Actor.instances) {
-			if (a != _projectile.getSource() && collides(a)) {
+			if (a != _collidable.getSource() && collides(a)) {
 				collisions.add(a);
 			}
+		}
+		if (collisions.size() > 0) {
+			for (final Positionable collided : collisions) {
+				collided.getCollider().onDamageSourceCollide(_collidable);
+			}
+			// bullets deal damage to all entities it collided with and then
+			// vanishes
+			_collidable.destruct();
 		}
 		return collisions;
 	}
@@ -42,13 +48,13 @@ public class ProjectileCollider extends DefaultCollider {
 
 	@Override
 	public void onDamageSourceCollide(final IDamageSource dmgsrc) {
-		// TODO Auto-generated method stub
+		// bullets are by default immune to other damage-sources
 
 	}
 
 	@Override
 	public void onBlockCollide(final Block block) {
-		// TODO Auto-generated method stub
+		// blocks don't shift into bullets
 
 	}
 

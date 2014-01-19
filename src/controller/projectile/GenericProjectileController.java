@@ -51,11 +51,6 @@ public class GenericProjectileController implements IController {
 	@Override
 	public void update(final Input input, final int delta) {
 		_projectile.moveOn();
-		/*if (_projectile.getTraveledDistance() > _projectile
-				.getMaxTravelDistance()) {
-			MetalWarriors.instance.getListeners().unregisterListener(
-					_projectile);
-		}*/
 		if (_projectile.getTraveledDistance() > _projectile
 				.getMaxTravelDistance()) {
 			_projectile.destruct();
