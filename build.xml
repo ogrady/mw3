@@ -1,0 +1,62 @@
+<!--  Ant script to compile project and generate jar
+      Works for linux already; needs refining to respect backslashes in windows paths
+      -> TODO: use pathconvert
+
+      Should compile, pack jar and start game by calling "ant run" once
+-->
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+   <!-- Set definitions, afterwards use variables only -->
+   <property name="lib.dir" value="lib/slick" />
+   <property name="build.dir" value="build" />
+   <property name="classes.dir" value="classes" />
+   <property name="jar.dir" value="jar" />
+   <property name="jar.name" value="mw3.jar" />
+
+   <!-- Explicitly list all referenced external jars here -->
+   <path id="classpath">
+      <pathelement location="lib/slick/slick.jar" />
+      <pathelement location="lib/slick/lwjgl.jar" />
+   </path>
+
+   <!-- Use different runtime libs depending on OS -->
+   <condition property="native-libs" value="natives-windows">
+      <os family="windows" />
+   </condition>
+   <condition property="native-libs" value="natives-linux">
+      <os family="unix" />
+   </condition>
+
+   <!-- Detect changes to later compile only if we have to -->
+   <uptodate property="nochanges" targetfile="${build.dir}/${jar.dir}/${jar.name}">
+      <srcfiles dir="src" includes="**/*.java" />
+   </uptodate>
+
+   <target name="clean">
+      <delete dir="${build.dir}" />
+   </target>
+
+   <target name="compile" unless="nochanges">
+      <mkdir dir="${build.dir}/${classes.dir}" />
+      <javac srcdir="src" destdir="${build.dir}/${classes.dir}" classpathref="classpath" includeantruntime="false"/>
+   </target>
+
+   <target name="jar" depends="compile">
+      <mkdir dir="${build.dir}/${jar.dir}" />
+      <manifestclasspath property="jar.classpath" jarfile="${build.dir}/${jar.dir}/${jar.name}">
+         <classpath refid="classpath" />
+      </manifestclasspath>
+      <jar destfile="${build.dir}/${jar.dir}/${jar.name}" basedir="${build.dir}/${classes.dir}">
+         <manifest>
+            <attribute name="Main-Class" value="game.MetalWarriors" />
+            <attribute name="Class-Path" value="${jar.classpath}" />
+         </manifest>
+      </jar>
+   </target>
+
+   <target name="run" depends="jar">
+      <java jar="${build.dir}/${jar.dir}/${jar.name}" fork="true">
+         <sysproperty key="java.library.path" path="${lib.dir}/${native-libs}"/>
+      </java>
+   </target>
+</project>
