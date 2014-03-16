@@ -42,7 +42,6 @@ public class ProjectileCollider extends DefaultCollider<Projectile> {
 
 	@Override
 	public void onPositionableCollide(final Positionable positionable) {
-		// TODO Auto-generated method stub
 
 	}
 
