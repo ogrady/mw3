@@ -100,6 +100,16 @@ public abstract class Positionable implements IRendereable<Slick2DRenderer>,
 	}
 
 	@Override
+	public ICollider getCollider() {
+		return _collider;
+	}
+
+	@Override
+	public void setCollider(final ICollider newCollider) {
+		_collider = newCollider;
+	}
+
+	@Override
 	public Slick2DRenderer getRenderer() {
 		return _renderer;
 	}
@@ -134,15 +144,5 @@ public abstract class Positionable implements IRendereable<Slick2DRenderer>,
 
 	public void destruct() {
 		Positionable.instances.remove(this);
-	}
-
-	@Override
-	public ICollider getCollider() {
-		return _collider;
-	}
-
-	@Override
-	public void setCollider(final ICollider newCollider) {
-		_collider = newCollider;
 	}
 }

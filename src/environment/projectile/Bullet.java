@@ -3,6 +3,7 @@ package environment.projectile;
 import org.newdawn.slick.geom.Vector2f;
 
 import renderer.slick.projectile.BulletRenderer;
+import util.Const;
 import controller.projectile.GenericProjectileController;
 import environment.Movable;
 import environment.collider.ProjectileCollider;
@@ -17,11 +18,11 @@ import game.MetalWarriors;
  * 
  */
 public class Bullet extends Projectile {
-	private static final int DISTANCE = 100;
 
 	public Bullet(final Vector2f position, final Vector2f deltaVector,
 			final Movable source) {
-		super(position, deltaVector, DISTANCE, source);
+		super(position, deltaVector, Const.NITRO_SMG_DMG,
+				Const.NITRO_SMG_DISTANCE, source);
 		setRenderer(new BulletRenderer(this));
 		setController(new GenericProjectileController(this));
 		setCollider(new ProjectileCollider(this));

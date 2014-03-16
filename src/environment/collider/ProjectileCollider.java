@@ -7,6 +7,7 @@ import level.Block;
 import environment.Actor;
 import environment.IDamageSource;
 import environment.Positionable;
+import environment.character.StationaryShield;
 import environment.projectile.Projectile;
 
 public class ProjectileCollider extends DefaultCollider<Projectile> {
@@ -27,6 +28,11 @@ public class ProjectileCollider extends DefaultCollider<Projectile> {
 		for (final Actor a : Actor.instances) {
 			if (a != _collidable.getSource() && collides(a)) {
 				collisions.add(a);
+			}
+		}
+		for (final StationaryShield s : StationaryShield.instances) {
+			if (collides(s)) {
+				collisions.add(s);
 			}
 		}
 		if (collisions.size() > 0) {

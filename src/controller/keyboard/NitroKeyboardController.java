@@ -1,5 +1,6 @@
 package controller.keyboard;
 
+import environment.character.StationaryShield;
 import environment.projectile.Bullet;
 import game.Configuration;
 import game.MetalWarriors;
@@ -8,6 +9,7 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Vector2f;
 
 import renderer.slick.mech.NitroRenderer;
+import util.Const;
 import controller.IControllable;
 
 /**
@@ -17,9 +19,8 @@ import controller.IControllable;
  * 
  */
 public class NitroKeyboardController extends KeyboardController {
-	private final static int SMG_DELAY = 100;
 	private final NitroRenderer _renderer;
-	private int _smgDelayAccu;
+	private long _smgDelayAccu, _stationaryShieldDelayAccu;
 
 	public NitroKeyboardController(final IControllable controllable,
 			final Configuration configuration, final NitroRenderer renderer) {
@@ -31,6 +32,7 @@ public class NitroKeyboardController extends KeyboardController {
 	public void update(final Input input, final int delta) {
 		setInput(input);
 		_smgDelayAccu -= delta;
+		_stationaryShieldDelayAccu -= delta;
 		boolean moving = false;
 		int deltaX = 0, deltaY = 0;
 		if (isKeyPressed(_configuration.getInteger(Configuration.UP))) {
@@ -59,6 +61,14 @@ public class NitroKeyboardController extends KeyboardController {
 			deltaX = 0;
 			_renderer.onSpecialActionButton(true);
 			moving = false;
+			// TODO this goes into the NitroMech class as soon as we merge the
+			// redesign-branch into the master
+			if (_stationaryShieldDelayAccu <= 0) {
+				final StationaryShield s = new StationaryShield(
+						_controllable.getPosition());
+				MetalWarriors.instance.getListeners().registerListener(s);
+				_stationaryShieldDelayAccu = Const.NITRO_SHIELD_DELAY;
+			}
 		}
 		if (isKeyPressed(_configuration.getInteger(Configuration.ATTACK_1))) {
 			_renderer.onPrimaryAttackButton(true);
@@ -69,7 +79,7 @@ public class NitroKeyboardController extends KeyboardController {
 						.add(new Vector2f(_controllable.getWidth(), 0)),
 						new Vector2f(2.5f * _controllable.getDirection(), 0),
 						_controllable);
-				_smgDelayAccu = SMG_DELAY;
+				_smgDelayAccu = Const.NITRO_SMG_DELAY;
 			}
 		}
 		if (_controllable.move(deltaX, deltaY)) {
