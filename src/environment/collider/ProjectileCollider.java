@@ -10,8 +10,21 @@ import environment.Positionable;
 import environment.character.StationaryShield;
 import environment.projectile.Projectile;
 
+/**
+ * Collider for {@link Projectile}s. Destroys blocks and
+ * {@link StationaryShield}s from Nitro and damages {@link Actor}s.
+ * 
+ * @author Daniel
+ * 
+ */
 public class ProjectileCollider extends DefaultCollider<Projectile> {
 
+	/**
+	 * Constructor
+	 * 
+	 * @param projectile
+	 *            the {@link Projectile} to handle
+	 */
 	public ProjectileCollider(final Projectile projectile) {
 		super(projectile);
 	}
@@ -48,7 +61,8 @@ public class ProjectileCollider extends DefaultCollider<Projectile> {
 
 	@Override
 	public void onPositionableCollide(final Positionable positionable) {
-
+		// TODO apply damage when an interesting positionable walks into the
+		// bullet
 	}
 
 	@Override
@@ -60,7 +74,6 @@ public class ProjectileCollider extends DefaultCollider<Projectile> {
 	@Override
 	public void onBlockCollide(final Block block) {
 		// blocks don't shift into bullets
-
 	}
 
 }

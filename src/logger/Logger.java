@@ -5,19 +5,21 @@ import java.io.PrintStream;
 import util.EnumBitmask;
 
 /**
- * When it comes to putting output to the console it can be annoying to have
+ * When it comes to putting output to the console, it can be annoying to have
  * remainders of debug-messages from other portions of the code (e.g. debugging
  * the physics and being confronted with a truckload of debug-messages from the
- * input-handling). Therefore instead of using System.out.println() a logger
+ * input-handling). Therefore instead of using System.out.println(), a logger
  * should be issued.<br>
  * Loggers can be sensitive to several kinds of messages that can be activated
  * or deactived on the fly.<br>
  * When printing something to the logger it will check whether the given flag is
- * activated and print the message to stream if so or discard it otherwise. So
- * when it comes to debugging messages from other code-portions can simply be
- * turned off.<br>
+ * activated and print the message to stream if so, or discard it otherwise. So
+ * when it comes to debugging, messages from other code-portions can simply be
+ * turned off.
+ * <p>
  * Per default the logger prints to the default output-stream (System.out) but
  * can be reconfigured to put all output to a logfile.
+ * </p>
  * 
  * @author Daniel
  * 

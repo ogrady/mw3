@@ -1,7 +1,7 @@
 package controller.keyboard;
 
 import environment.character.StationaryShield;
-import environment.projectile.Bullet;
+import environment.projectile.SMGBullet;
 import game.Configuration;
 import game.MetalWarriors;
 
@@ -75,7 +75,7 @@ public class NitroKeyboardController extends KeyboardController {
 			// TODO replace spawning-position with actual bullet-exit-point as
 			// soon as available
 			if (_smgDelayAccu <= 0) {
-				new Bullet(_controllable.getPosition().copy()
+				new SMGBullet(_controllable.getPosition().copy()
 						.add(new Vector2f(_controllable.getWidth(), 0)),
 						new Vector2f(2.5f * _controllable.getDirection(), 0),
 						_controllable);

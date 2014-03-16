@@ -7,10 +7,23 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
+/**
+ * Renderer for the world. Renders the {@link World} and an image in the
+ * background.
+ * 
+ * @author Daniel
+ * 
+ */
 public class MapRenderer extends Slick2DRenderer {
 	private final World _renderable;
 	private Image _backgroundImage;
 
+	/**
+	 * Contructor
+	 * 
+	 * @param renderable
+	 *            the world to render
+	 */
 	public MapRenderer(final World renderable) {
 		_renderable = renderable;
 		try {

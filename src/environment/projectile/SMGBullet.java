@@ -10,16 +10,18 @@ import environment.collider.ProjectileCollider;
 import game.MetalWarriors;
 
 /**
- * The projectile Nitro fires from his SMG. Has a smooth ballistics and range of
- * {@value #DISTANCE} before it despawns.<br>
- * Collides with solid walls, mechs and players.
+ * The projectile Nitro fires from his SMG. Has a smooth ballistics and a range
+ * of {@value Const#NITRO_SMG_DISTANCE} {@value #Const #NITRO_SMG_DISTANCE}
+ * before it despawns.<br>
+ * Collides with solid walls, mechs and players and deals
+ * {@value Const#NITRO_SMG_DMG} damage.
  * 
  * @author Daniel
  * 
  */
-public class Bullet extends Projectile {
+public class SMGBullet extends Projectile {
 
-	public Bullet(final Vector2f position, final Vector2f deltaVector,
+	public SMGBullet(final Vector2f position, final Vector2f deltaVector,
 			final Movable source) {
 		super(position, deltaVector, Const.NITRO_SMG_DMG,
 				Const.NITRO_SMG_DISTANCE, source);

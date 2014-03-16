@@ -7,6 +7,13 @@ import java.util.Properties;
 
 import logger.LogMessageType;
 
+/**
+ * Configuration for player-manipulatable values, such as the key-configuration,
+ * sound-volume, graphics-resolution and so on.
+ * 
+ * @author Daniel
+ * 
+ */
 public class Configuration extends Properties {
 	private static final long serialVersionUID = 1L;
 	public static final String
@@ -53,6 +60,18 @@ public class Configuration extends Properties {
 		return Boolean.parseBoolean(getProperty(key));
 	}
 
+	/**
+	 * Constructor<br>
+	 * Attempts to load the configuration from a file. This file has to have the
+	 * form of:
+	 * <p>
+	 * key = value
+	 * </p>
+	 * With one key/value-pair per line.
+	 * 
+	 * @param path
+	 *            the path to the file the configuration should be loaded from
+	 */
 	public Configuration(final String path) {
 		BufferedInputStream in = null;
 		try {
