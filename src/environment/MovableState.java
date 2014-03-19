@@ -11,5 +11,5 @@ import util.EnumBitmask;
  * 
  */
 public enum MovableState {
-	STANDING, MOVING, FALLING, FLYING, JUMPING
+	STANDING, MOVING, FALLING, FLYING, JUMPING, BLOCKING
 }

@@ -14,7 +14,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Vector2f;
 
-import util.EnumBitmask;
+import util.ListenableEnumBitmask;
 import controller.IControllable;
 import controller.IController;
 
@@ -32,13 +32,13 @@ public abstract class Movable extends Positionable implements IMassObject,
 	protected float _xspeed;
 	protected float _yspeed;
 	protected IController _controller;
-	protected EnumBitmask<MovableState> _state;
+	protected ListenableEnumBitmask<MovableState> _state;
 
 	/**
 	 * @return a bitmask where the states of the object can be get or set. This
-	 *         map can be probed via {@link EnumBitmask#has(Enum)}
+	 *         map can be probed via {@link ListenableEnumBitmask#has(Enum)}
 	 */
-	public EnumBitmask<MovableState> getState() {
+	public ListenableEnumBitmask<MovableState> getState() {
 		return _state;
 	}
 
@@ -73,7 +73,7 @@ public abstract class Movable extends Positionable implements IMassObject,
 		super(position, width, height);
 		_xspeed = speed;
 		_yspeed = speed;
-		_state = new EnumBitmask<MovableState>();
+		_state = new ListenableEnumBitmask<MovableState>();
 		Movable.instances.add(this);
 		MetalWarriors.instance.getListeners().registerListener(this);
 	}
@@ -183,7 +183,6 @@ public abstract class Movable extends Positionable implements IMassObject,
 					+ (downCollision ? " Down" : "") + " Collision happened!",
 					LogMessageType.PHYSICS_DEBUG);
 		}
-
 		return true;
 	}
 

@@ -1,6 +1,7 @@
 package renderer.slick.mech;
 
 import listener.IActorListener;
+import listener.IEnumBitmaskListener;
 
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -8,18 +9,19 @@ import org.newdawn.slick.Image;
 import renderer.slick.IAnimationListener;
 import renderer.slick.MovableRenderer;
 import renderer.slick.ObservableAnimation;
-import environment.Actor;
+import util.Bitmask;
 import environment.IDamageSource;
 import environment.Movable;
+import environment.character.mech.Nitro;
 import game.Viewport;
 
 public class NitroRenderer extends MovableRenderer<Movable> implements
-		IActorListener {
+		IActorListener, IEnumBitmaskListener {
 	private final ObservableAnimation walking, jumping, broken, shielded,
 			flyingPrelude, arm;
 	final float factor = 2;
 
-	public NitroRenderer(final Actor pos) {
+	public NitroRenderer(final Nitro pos) {
 		super(pos);
 		walking = new ObservableAnimation(loadScaledSpriteSheet(
 				"rsc/nitro/walking.png", 36, 45, factor), 60);
@@ -189,5 +191,10 @@ public class NitroRenderer extends MovableRenderer<Movable> implements
 				(_renderable.getDirection() - 1) * -frame.getWidth() / 2, 0,
 				(_renderable.getDirection() + 1) * frame.getWidth() / 2,
 				frame.getHeight());
+	}
+
+	@Override
+	public void onChange(final Bitmask mask) {
+		System.out.println("bitmask changed");
 	}
 }

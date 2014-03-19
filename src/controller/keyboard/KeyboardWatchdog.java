@@ -1,42 +1,38 @@
 package controller.keyboard;
 
+import game.Configuration;
+import game.MetalWarriors;
+
 import java.util.HashMap;
 import java.util.Iterator;
 
-import listener.IGameListener;
 import listener.IInputListener;
 import listener.IListenable;
 import listener.ListenerSet;
 import listener.notifier.ParametrizedNotifier;
+import logger.LogMessageType;
 
-import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.KeyListener;
 
-import controller.IControllable;
-import controller.IController;
-import environment.Movable;
-import game.Configuration;
-import game.Viewport;
-
 /**
- * Keyboard input which listens for keypresses
+ * Watchdog that listenes for keystrokes on the keyboard.<br>
+ * Keyup- and keydown-events will be forwarded to all {@link KeyListener} that
+ * have registered themselves as listener for this watchdog.
  * 
  * @author Daniel
  * 
  */
-abstract public class KeyboardController implements
-		IListenable<IInputListener>, IGameListener, IController, KeyListener {
+public class KeyboardWatchdog implements IListenable<IInputListener>,
+		KeyListener {
+
 	protected ListenerSet<IInputListener> _listeners;
 	protected boolean _accepting;
-	protected Movable _controllable;
 	protected Input _input;
 	protected Configuration _configuration;
 	protected final HashMap<Integer, ParametrizedNotifier<Boolean, IInputListener>> _notifiers;
 
-	public KeyboardController(final IControllable controllable,
-			final Configuration configuration) {
-		setControllable(controllable);
+	public KeyboardWatchdog(final Configuration configuration) {
 		_listeners = new ListenerSet<IInputListener>();
 		_configuration = configuration;
 		_accepting = true;
@@ -165,20 +161,6 @@ abstract public class KeyboardController implements
 	}
 
 	@Override
-	public IControllable getControllable() {
-		return _controllable;
-	}
-
-	/**
-	 * @throws ClassCastException
-	 *             if the controllable is not a {@link Movable}
-	 */
-	@Override
-	public void setControllable(final IControllable controllable) {
-		_controllable = (Movable) controllable;
-	}
-
-	@Override
 	public boolean isAcceptingInput() {
 		return _accepting;
 	}
@@ -202,23 +184,6 @@ abstract public class KeyboardController implements
 	public void inputStarted() {
 	}
 
-	public boolean isKeyPressed(final int key) {
-		return _input.isKeyDown(key);
-	}
-
-	@Override
-	public void update(final Input input, final int delta) {
-	}
-
-	@Override
-	public void onLoadConfig(final Configuration conf) {
-
-	}
-
-	@Override
-	public void onTick(final Input input, final int delta) {
-	}
-
 	@Override
 	public ListenerSet<IInputListener> getListeners() {
 		return _listeners;
@@ -228,7 +193,11 @@ abstract public class KeyboardController implements
 	public void keyPressed(final int key, final char c) {
 		final ParametrizedNotifier<Boolean, IInputListener> notifier = _notifiers
 				.get(key);
+		MetalWarriors.logger.print(
+				"KeyboardWatchdog received keystroke " + key,
+				LogMessageType.INPUT_DEBUG);
 		if (notifier != null) {
+
 			final Iterator<IInputListener> it = _listeners.iterator();
 			while (it.hasNext()) {
 				notifier.notify(it.next(), true);
@@ -246,11 +215,5 @@ abstract public class KeyboardController implements
 				notifier.notify(it.next(), false);
 			}
 		}
-	}
-
-	// not interesting for controllers
-	@Override
-	public void onRender(final Graphics g, final Viewport vp) {
-
 	}
 }
