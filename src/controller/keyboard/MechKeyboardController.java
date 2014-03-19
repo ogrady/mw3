@@ -28,6 +28,8 @@ public class MechKeyboardController implements IController {
 	@Override
 	public void update(final Input input, final int delta) {
 		_mech.tick(delta);
+
+		int deltaX = 0, deltaY = 0;
 		if (input.isKeyDown(_configuration.getInteger(Configuration.UP))) {
 
 		}
@@ -35,13 +37,13 @@ public class MechKeyboardController implements IController {
 
 		}
 		if (input.isKeyDown(_configuration.getInteger(Configuration.LEFT))) {
-			_mech.move(-1, 0);
+			deltaX = -1;
 		}
 		if (input.isKeyDown(_configuration.getInteger(Configuration.RIGHT))) {
-			_mech.move(1, 0);
+			deltaX = 1;
 		}
 		if (input.isKeyDown(_configuration.getInteger(Configuration.JUMP))) {
-			_mech.move(0, -2);
+			deltaY = -2;
 		}
 		if (input.isKeyDown(_configuration.getInteger(Configuration.SPECIAL))) {
 			_mech.specialAttack();
@@ -57,6 +59,7 @@ public class MechKeyboardController implements IController {
 		} else {
 			_mech.unblock();
 		}
+		_mech.move(deltaX, deltaY);
 	}
 
 	@Override

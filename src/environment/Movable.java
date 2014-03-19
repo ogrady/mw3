@@ -112,6 +112,13 @@ public abstract class Movable extends Positionable implements IMassObject,
 		boolean downCollision = false;
 		final float oldPositionX = _currentPosition.x;
 
+		if (moveFactorX != 0 || moveFactorY != 0) {
+			_state.add(MovableState.MOVING);
+		} else {
+			_state.remove(MovableState.MOVING);
+		}
+		setDirection((int) moveFactorX);
+
 		_currentPosition.x += moveFactorX * _xspeed;
 
 		final List<Positionable> xCollisions = _collider.getCollisions();
