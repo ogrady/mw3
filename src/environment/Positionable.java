@@ -92,6 +92,15 @@ public abstract class Positionable implements IRendereable<Slick2DRenderer>,
 	}
 
 	/**
+	 * @return center point of the entity. That's the middle of the current
+	 *         frame of the current animation.
+	 */
+	public Vector2f getCenter() {
+		return new Vector2f(_currentPosition.x + getWidth() / 2,
+				_currentPosition.y + getHeight() / 2);
+	}
+
+	/**
 	 * @return hitbox for collisions
 	 */
 	public Shape getHitbox() {

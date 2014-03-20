@@ -42,8 +42,8 @@ public class Nitro extends Mech {
 				// as
 				// soon as available
 				new SMGBullet(_currentPosition.copy().add(
-						new Vector2f(getWidth(), 0)), new Vector2f(
-						2.5f * getDirection(), 0), Nitro.this);
+						new Vector2f(getWidth(), 0)), Nitro.this.getFireline()
+						.normalise().scale(Const.NITRO_SMG_SPEED), Nitro.this);
 			}
 		};
 	}

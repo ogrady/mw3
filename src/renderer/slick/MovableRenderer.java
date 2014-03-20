@@ -1,6 +1,6 @@
 package renderer.slick;
 
-import listener.IInputListener;
+import listener.IEnumBitmaskListener;
 import environment.Movable;
 
 /**
@@ -10,7 +10,7 @@ import environment.Movable;
  * 
  */
 abstract public class MovableRenderer<M extends Movable> extends
-		PositionableRenderer<M> implements IInputListener {
+		PositionableRenderer<M> implements IEnumBitmaskListener {
 
 	public MovableRenderer(final M renderable) {
 		super(renderable);

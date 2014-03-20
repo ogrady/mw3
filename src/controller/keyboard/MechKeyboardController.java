@@ -31,10 +31,10 @@ public class MechKeyboardController implements IController {
 
 		int deltaX = 0, deltaY = 0;
 		if (input.isKeyDown(_configuration.getInteger(Configuration.UP))) {
-
+			_mech.armUp();
 		}
 		if (input.isKeyDown(_configuration.getInteger(Configuration.DOWN))) {
-
+			_mech.armDown();
 		}
 		if (input.isKeyDown(_configuration.getInteger(Configuration.LEFT))) {
 			deltaX = -1;

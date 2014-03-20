@@ -20,6 +20,10 @@ public class Const {
 	public static final String MAP_LAYER_SOLID = "solid";
 
 	/**
+	 * Delay between two rotations of a Mechs arm.
+	 */
+	public static final long MECH_ARM_ROTATION_DELAY = 200;
+	/**
 	 * Time in ms to live until Nitros stationary shield disappears on its own.
 	 */
 	public static final long NITRO_SHIELD_TTL = 100000;
@@ -35,7 +39,7 @@ public class Const {
 	/**
 	 * Time in ms until Nitro can fire his SMG again.
 	 */
-	public static final long NITRO_SMG_DELAY = 100;
+	public static final long NITRO_SMG_DELAY = 150;
 	/**
 	 * Distance in pixels a bullet from Nitros SMG travels without hitting
 	 * anything before despawning.
@@ -45,6 +49,10 @@ public class Const {
 	 * Base damage one bullet from Nitros SMG inflicts.
 	 */
 	public static float NITRO_SMG_DMG = 1;
+	/**
+	 * Speed at which the bullets from Nitros SMG fly
+	 */
+	public static float NITRO_SMG_SPEED = 3.5f;
 
 	private Const() {
 	}
