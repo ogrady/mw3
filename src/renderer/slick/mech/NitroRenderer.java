@@ -4,21 +4,17 @@ import listener.IActorListener;
 
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.geom.Vector2f;
 
 import renderer.slick.IAnimationListener;
-import renderer.slick.MovableRenderer;
 import renderer.slick.ObservableAnimation;
 import util.Bitmask;
 import environment.IDamageSource;
-import environment.Movable;
 import environment.MovableState;
 import environment.character.mech.Nitro;
 import game.Viewport;
 
-public class NitroRenderer extends MovableRenderer<Movable> implements
-		IActorListener {
-	private final ObservableAnimation _walking, _jumping, _broken, _shielded,
-			_flyingPrelude, _arm;
+public class NitroRenderer extends MechRenderer implements IActorListener {
 	final float _factor = 2;
 
 	public NitroRenderer(final Nitro pos) {
@@ -118,5 +114,16 @@ public class NitroRenderer extends MovableRenderer<Movable> implements
 		} else {
 			setIdle();
 		}
+	}
+
+	@Override
+	public Vector2f getArmJoint() {
+		return _renderable.getPosition().copy()
+				.add(new Vector2f(16 * _factor, 13 * _factor));
+	}
+
+	@Override
+	public int getArmLength() {
+		return (int) (28 * _factor);
 	}
 }

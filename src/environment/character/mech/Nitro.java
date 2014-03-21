@@ -38,12 +38,11 @@ public class Nitro extends Mech {
 		_primaryAttack = new CharacterAction(Const.NITRO_SMG_DELAY) {
 			@Override
 			protected void execute() {
-				// TODO replace spawning-position with actual bullet-exit-point
-				// as
-				// soon as available
-				new SMGBullet(_currentPosition.copy().add(
-						new Vector2f(getWidth(), 0)), Nitro.this.getFireline()
-						.normalise().scale(Const.NITRO_SMG_SPEED), Nitro.this);
+				final NitroRenderer r = (NitroRenderer) _renderer;
+				final Vector2f exitPoint = r.getArmJoint().add(
+						getFireline().scale(r.getArmLength()));
+				new SMGBullet(exitPoint, Nitro.this.getFireline().scale(
+						Const.NITRO_SMG_SPEED), Nitro.this);
 			}
 		};
 	}
