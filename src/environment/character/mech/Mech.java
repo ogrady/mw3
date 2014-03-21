@@ -28,7 +28,7 @@ import environment.projectile.Projectile;
  */
 public abstract class Mech extends Actor {
 	protected CharacterAction _specialAttack, _primaryAttack, _secondaryAttack,
-			_jump, _block, _itemUse, _armUp, _armDown;
+			_jump, _block, _unblock, _itemUse, _armUp, _armDown;
 	protected int _armPosition;
 
 	/**
@@ -105,6 +105,7 @@ public abstract class Mech extends Actor {
 		_jump = new EmptyCharacterAction();
 		_itemUse = new EmptyCharacterAction();
 		_block = new EmptyCharacterAction();
+		_unblock = new EmptyCharacterAction();
 		_armUp = new CharacterAction(Const.MECH_ARM_ROTATION_DELAY) {
 
 			@Override
@@ -127,6 +128,7 @@ public abstract class Mech extends Actor {
 		_secondaryAttack.getDelay().tick(delta);
 		_specialAttack.getDelay().tick(delta);
 		_block.getDelay().tick(delta);
+		_unblock.getDelay().tick(delta);
 		_jump.getDelay().tick(delta);
 		_itemUse.getDelay().tick(delta);
 		_armUp.getDelay().tick(delta);
@@ -151,6 +153,7 @@ public abstract class Mech extends Actor {
 	}
 
 	public void unblock() {
+		_unblock.perform();
 		_state.remove(MovableState.BLOCKING);
 	}
 

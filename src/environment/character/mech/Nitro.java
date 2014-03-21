@@ -4,6 +4,7 @@ import org.newdawn.slick.geom.Vector2f;
 
 import renderer.slick.mech.NitroRenderer;
 import util.Const;
+import environment.MovableState;
 import environment.character.CharacterAction;
 import environment.character.StationaryShield;
 import environment.projectile.SMGBullet;
@@ -30,19 +31,23 @@ public class Nitro extends Mech {
 		_specialAttack = new CharacterAction(Const.NITRO_SHIELD_DELAY) {
 			@Override
 			protected void execute() {
-				final StationaryShield s = new StationaryShield(
-						_currentPosition);
-				MetalWarriors.instance.getListeners().registerListener(s);
+				if (!_state.has(MovableState.BLOCKING)) {
+					final StationaryShield s = new StationaryShield(
+							_currentPosition);
+					MetalWarriors.instance.getListeners().registerListener(s);
+				}
 			}
 		};
 		_primaryAttack = new CharacterAction(Const.NITRO_SMG_DELAY) {
 			@Override
 			protected void execute() {
-				final NitroRenderer r = (NitroRenderer) _renderer;
-				final Vector2f exitPoint = r.getArmJoint().add(
-						getFireline().scale(r.getArmLength()));
-				new SMGBullet(exitPoint, Nitro.this.getFireline().scale(
-						Const.NITRO_SMG_SPEED), Nitro.this);
+				if (!_state.has(MovableState.BLOCKING)) {
+					final NitroRenderer r = (NitroRenderer) _renderer;
+					final Vector2f exitPoint = r.getArmJoint().add(
+							getFireline().scale(r.getArmLength()));
+					new SMGBullet(exitPoint, Nitro.this.getFireline().scale(
+							Const.NITRO_SMG_SPEED), Nitro.this);
+				}
 			}
 		};
 	}
