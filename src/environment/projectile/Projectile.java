@@ -118,6 +118,8 @@ public class Projectile extends Movable implements IDamageSource {
 	 *            movement
 	 * @param damage
 	 *            damage the {@link Projectile} inflicts upon hitting
+	 * @param maxTravelDistance
+	 *            distance in pixel after which the projectile despawns
 	 * @param source
 	 *            the {@link Movable} that created the bullet
 	 */

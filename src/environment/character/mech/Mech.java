@@ -30,19 +30,23 @@ public abstract class Mech extends Actor {
 	protected CharacterAction _specialAttack, _primaryAttack, _secondaryAttack,
 			_jump, _block, _unblock, _itemUse, _armUp, _armDown;
 	protected int _armPosition;
+	/*private static final float[] angles = { 0, 30, 50, 68, 90, 128, 138, 150,
+			180 };*/
+	private static final float[] angles = { 0, 30, 50, 68, 90, 112, 130, 150,
+			180 };
 
 	/**
 	 * Mechs can rotate their arms to determine the direction they shoot in.<br>
-	 * The arm can have nine different states.
+	 * The arm can have eight different states.
 	 * <p>
 	 * 0 - being vertically up<br>
 	 * 4 - being straight forward<br>
-	 * 9 - being vertically down<br>
+	 * 8 - being vertically down<br>
 	 * </p>
 	 * Having 3 states in between each.<br>
 	 * So between each arm-position lies an angle of 20 degrees.<br>
 	 * The state of the arm says nothing about the direction the mech is facing
-	 * into. So having an arm-state of 8 could mean having the arm lifted by 20°
+	 * into. So having an arm-state of 7 could mean having the arm lifted by 20°
 	 * from the ground and facing left or right. The direction can still be
 	 * obtained from {@link #getDirection()}
 	 * 
@@ -79,7 +83,7 @@ public abstract class Mech extends Actor {
 	 *         {@link Projectile}
 	 */
 	public Vector2f getFireline() {
-		final double angle = Math.toRadians(getArmPosition() * 20);
+		final double angle = Math.toRadians(angles[getArmPosition()]);
 		return new Vector2f((float) Math.sin(angle) * getDirection(),
 				(float) -Math.cos(angle));
 	}
@@ -117,7 +121,7 @@ public abstract class Mech extends Actor {
 
 			@Override
 			protected void execute() {
-				_armPosition = Math.min(_armPosition + 1, 9);
+				_armPosition = Math.min(_armPosition + 1, 8);
 
 			}
 		};
