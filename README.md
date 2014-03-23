@@ -23,6 +23,10 @@ Metal Warriors 3
 * Code **should** be structured whenever **feasible**. Don't waste hours to force your code to be structured but try to avoid switch-case-return and such
 * Only push code that is working
 
+### Howto
+
+More information on where to start when you want to implement stuff or how to achieve certain things can be found in the file "HOWTO".
+
 So Features.
 
         Very Mech.
