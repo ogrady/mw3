@@ -134,15 +134,17 @@ public abstract class Movable extends Positionable implements IMassObject,
 		final float oldPositionX = _currentPosition.x;
 		final float oldPositionY = _currentPosition.y;
 
-		if (!ignoreBlocking && _state.has(MovableState.BLOCKING) ||
-			moveFactorX == 0 && moveFactorY == 0) {
-			MetalWarriors.logger.print(MovableState.bitMaskToString(_state.get()), LogMessageType.INPUT_DEBUG);
+		if (!ignoreBlocking && _state.has(MovableState.BLOCKING)
+				|| moveFactorX == 0 && moveFactorY == 0) {
+			MetalWarriors.logger.print(
+					MovableState.bitMaskToString(_state.get()),
+					LogMessageType.INPUT_DEBUG);
 			_state.set(MovableState.STANDING);
 			return false;
 		}
-		
+
 		_state.set(MovableState.MOVING);
-		
+
 		setDirection((int) moveFactorX);
 
 		_currentPosition.x += moveFactorX * _xspeed;
@@ -155,8 +157,9 @@ public abstract class Movable extends Positionable implements IMassObject,
 				rightCollision = true;
 				p.getCollider().onPositionableCollide(this);
 				final float leftEdgeColider = p.getHitbox().getX();
-				// If the right edge of the object is inside the colliding object, move it back to the left.
-				if (_currentPosition.x + _width > leftEdgeColider) { 
+				// If the right edge of the object is inside the colliding
+				// object, move it back to the left.
+				if (_currentPosition.x + _width > leftEdgeColider) {
 					_currentPosition.x = leftEdgeColider - _width;
 				}
 			}
@@ -169,7 +172,8 @@ public abstract class Movable extends Positionable implements IMassObject,
 				p.getCollider().onPositionableCollide(this);
 				final float rightEdgeColider = p.getHitbox().getX()
 						+ p.getHitbox().getWidth();
-				// If the left edge of the object is inside the colliding object, move it back to the right.
+				// If the left edge of the object is inside the colliding
+				// object, move it back to the right.
 				if (_currentPosition.x <= rightEdgeColider) {
 					_currentPosition.x = rightEdgeColider + 1;
 				}
@@ -189,12 +193,13 @@ public abstract class Movable extends Positionable implements IMassObject,
 				p.getCollider().onPositionableCollide(this);
 				final float lowerEdgeColider = p.getHitbox().getY()
 						+ p.getHitbox().getHeight();
-				// If the upper edge of the object is inside the colliding object, move it back down.
+				// If the upper edge of the object is inside the colliding
+				// object, move it back down.
 				if (_currentPosition.y <= lowerEdgeColider) {
 					_currentPosition.y = lowerEdgeColider + 1;
 				}
 			}
-			_state.add(MovableState.FLYING);			
+			_state.add(MovableState.FLYING);
 		}
 
 		// Moved down.
@@ -203,7 +208,8 @@ public abstract class Movable extends Positionable implements IMassObject,
 				downCollision = true;
 				p.getCollider().onPositionableCollide(this);
 				final float upperEdgeColider = p.getHitbox().getY();
-				// If the lower edge of the object is inside the colliding object, move it back up.
+				// If the lower edge of the object is inside the colliding
+				// object, move it back up.
 				if (_currentPosition.y + _height > upperEdgeColider) {
 					_currentPosition.y = upperEdgeColider - _height;
 				}
@@ -219,12 +225,14 @@ public abstract class Movable extends Positionable implements IMassObject,
 					+ (leftCollision ? " Left" : "")
 					+ (rightCollision ? " Right" : "")
 					+ (upCollision ? " Up" : "")
-					+ (downCollision ? " Down" : "")
-					+ " Collision happened!", LogMessageType.PHYSICS_DEBUG);
+					+ (downCollision ? " Down" : "") + " Collision happened!",
+					LogMessageType.PHYSICS_DEBUG);
 		}
-		
-		MetalWarriors.logger.print(MovableState.bitMaskToString(_state.get()), LogMessageType.INPUT_DEBUG);
-		return _currentPosition.x != oldPositionX || _currentPosition.y != oldPositionY;
+
+		MetalWarriors.logger.print(MovableState.bitMaskToString(_state.get()),
+				LogMessageType.INPUT_DEBUG);
+		return _currentPosition.x != oldPositionX
+				|| _currentPosition.y != oldPositionY;
 	}
 
 	@Override
@@ -235,7 +243,7 @@ public abstract class Movable extends Positionable implements IMassObject,
 	public void onTick(final Input input, final int delta) {
 		_controller.update(input, delta);
 		if (_renderer != null) {
-			_renderer.getCurrentAnimation().update(delta);
+			_renderer.update(delta);
 		}
 	}
 
