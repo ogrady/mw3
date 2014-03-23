@@ -22,4 +22,12 @@ public class EnumBitmask<E extends Enum<?>> extends Bitmask {
 	public boolean has(final E value) {
 		return has((int) Math.pow(2, value.ordinal()));
 	}
+
+	public boolean hasNot(final E value) {
+		return !has(value);
+	}
+
+	public void set(final E value) {
+		set((int) Math.pow(2, value.ordinal()));
+	}
 }
