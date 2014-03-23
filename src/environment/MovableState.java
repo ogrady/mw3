@@ -33,15 +33,17 @@ public enum MovableState {
 	 */
 	public static String bitMaskToString(final int enumBitMask) {
 		int bitMask = enumBitMask;
-		
+		boolean firstEntry = true;
 		MovableState[] states = MovableState.values();
+		String result = new String();
 		
-		String result = states[states.length-1].toString();
-		bitMask = bitMask >> 1;
-		
-		for(int i = states.length-2; i >= 0; --i) {
+		for(int i = 0; i < states.length; ++i) {
 			if((bitMask & 1) == 1) {
-				result += ", " + states[i].toString();
+				if(!firstEntry) {
+					result += ", ";
+				}
+				firstEntry = false;
+				result += states[i].toString();
 			}
 			
 			bitMask = bitMask >> 1;

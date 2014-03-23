@@ -136,14 +136,8 @@ public abstract class Movable extends Positionable implements IMassObject,
 
 		if (!ignoreBlocking && _state.has(MovableState.BLOCKING)
 				|| moveFactorX == 0 && moveFactorY == 0) {
-			MetalWarriors.logger.print(
-					MovableState.bitMaskToString(_state.get()),
-					LogMessageType.INPUT_DEBUG);
-			_state.set(MovableState.STANDING);
 			return false;
 		}
-
-		_state.set(MovableState.MOVING);
 
 		setDirection((int) moveFactorX);
 
@@ -163,6 +157,10 @@ public abstract class Movable extends Positionable implements IMassObject,
 					_currentPosition.x = leftEdgeColider - _width;
 				}
 			}
+			
+			if(_currentPosition.x != oldPositionX) {
+				_state.set(MovableState.MOVING);
+			}
 		}
 
 		// Move left.
@@ -177,6 +175,10 @@ public abstract class Movable extends Positionable implements IMassObject,
 				if (_currentPosition.x <= rightEdgeColider) {
 					_currentPosition.x = rightEdgeColider + 1;
 				}
+			}
+
+			if(_currentPosition.x != oldPositionX) {
+				_state.set(MovableState.MOVING);
 			}
 		}
 
@@ -199,7 +201,11 @@ public abstract class Movable extends Positionable implements IMassObject,
 					_currentPosition.y = lowerEdgeColider + 1;
 				}
 			}
-			_state.add(MovableState.FLYING);
+			
+			if(_currentPosition.y != oldPositionY) {
+				_state.set(MovableState.FLYING);
+				_state.add(MovableState.MOVING);
+			}
 		}
 
 		// Moved down.
@@ -214,7 +220,11 @@ public abstract class Movable extends Positionable implements IMassObject,
 					_currentPosition.y = upperEdgeColider - _height;
 				}
 			}
-			_state.add(MovableState.FALLING);
+
+			if(_currentPosition.y != oldPositionY) {
+				_state.set(MovableState.FALLING);
+				_state.add(MovableState.MOVING);
+			}
 		}
 
 		_currentPosition.x = newPositionX;
@@ -228,11 +238,17 @@ public abstract class Movable extends Positionable implements IMassObject,
 					+ (downCollision ? " Down" : "") + " Collision happened!",
 					LogMessageType.PHYSICS_DEBUG);
 		}
-
+		
+		boolean isMoving = _currentPosition.x != oldPositionX || _currentPosition.y != oldPositionY;
+		
+		if(!isMoving) {
+			_state.set(MovableState.STANDING);
+		}
+		
 		MetalWarriors.logger.print(MovableState.bitMaskToString(_state.get()),
 				LogMessageType.INPUT_DEBUG);
-		return _currentPosition.x != oldPositionX
-				|| _currentPosition.y != oldPositionY;
+		
+		return isMoving;
 	}
 
 	@Override
