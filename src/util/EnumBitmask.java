@@ -31,9 +31,7 @@ public class EnumBitmask<E extends Enum<?>> extends Bitmask {
 		set((int) Math.pow(2, value.ordinal()));
 	}
 
-	@Override
-	public String toString() {
-		// bits are in reverse order!
-		return Integer.toBinaryString(_bits);
+	public int get() {
+		return _bits;
 	}
 }

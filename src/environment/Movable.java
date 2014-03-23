@@ -62,7 +62,7 @@ public abstract class Movable extends Positionable implements IMassObject,
 	 * @param position
 	 *            initial position
 	 * @param width
-	 *            initial width
+	 *            initial widthrigtCo
 	 * @param height
 	 *            initial height
 	 * @param speed
@@ -123,10 +123,8 @@ public abstract class Movable extends Positionable implements IMassObject,
 	 *            blocking-state. This will be done for gravity-related movement
 	 *            within {@link #applyGravity(float)} and can not be called from
 	 *            outside the class
-	 * @return whether or not the movement was successful (true, if no
-	 *         collisions occurred)
+	 * @return returns true, if a movement (change of placement) occurred.
 	 */
-	// TODO abstract und inhalt in unterklasse //
 	private boolean move(final float moveFactorX, final float moveFactorY,
 			final boolean ignoreBlocking) {
 		boolean rightCollision = false;
@@ -134,89 +132,99 @@ public abstract class Movable extends Positionable implements IMassObject,
 		boolean upCollision = false;
 		boolean downCollision = false;
 		final float oldPositionX = _currentPosition.x;
+		final float oldPositionY = _currentPosition.y;
 
-		if (ignoreBlocking || !_state.has(MovableState.BLOCKING)) {
+		if (!ignoreBlocking && _state.has(MovableState.BLOCKING) ||
+			moveFactorX == 0 && moveFactorY == 0) {
+			MetalWarriors.logger.print(MovableState.bitMaskToString(_state.get()), LogMessageType.INPUT_DEBUG);
+			_state.set(MovableState.STANDING);
+			return false;
+		}
+		
+		_state.set(MovableState.MOVING);
+		
+		setDirection((int) moveFactorX);
 
-			if (moveFactorX != 0 || moveFactorY != 0) {
-				_state.add(MovableState.MOVING);
-			} else {
-				_state.remove(MovableState.MOVING);
-			}
-			setDirection((int) moveFactorX);
+		_currentPosition.x += moveFactorX * _xspeed;
 
-			_currentPosition.x += moveFactorX * _xspeed;
+		final List<Positionable> xCollisions = _collider.getCollisions();
 
-			final List<Positionable> xCollisions = _collider.getCollisions();
-
-			// Move right.
-			if (moveFactorX > 0) {
-				for (final Positionable p : xCollisions) {
-					rightCollision = true;
-					p.getCollider().onPositionableCollide(this);
-					final float leftEdgeColider = p.getHitbox().getX();
-					if (_currentPosition.x + _width > leftEdgeColider) {
-						_currentPosition.x = leftEdgeColider - _width;
-					}
+		// Move right.
+		if (moveFactorX > 0) {
+			for (final Positionable p : xCollisions) {
+				rightCollision = true;
+				p.getCollider().onPositionableCollide(this);
+				final float leftEdgeColider = p.getHitbox().getX();
+				// If the right edge of the object is inside the colliding object, move it back to the left.
+				if (_currentPosition.x + _width > leftEdgeColider) { 
+					_currentPosition.x = leftEdgeColider - _width;
 				}
-			}
-
-			// Move left.
-			if (moveFactorX < 0) {
-				for (final Positionable p : xCollisions) {
-					leftCollision = true;
-					p.getCollider().onPositionableCollide(this);
-					final float rightEdgeColider = p.getHitbox().getX()
-							+ p.getHitbox().getWidth();
-					if (_currentPosition.x <= rightEdgeColider) {
-						_currentPosition.x = rightEdgeColider + 1;
-					}
-				}
-			}
-
-			final float newPositionX = _currentPosition.x;
-			_currentPosition.x = oldPositionX;
-			_currentPosition.y += moveFactorY * _yspeed;
-
-			final List<Positionable> yCollisions = _collider.getCollisions();
-
-			// Moved up.
-			if (moveFactorY < 0) {
-				for (final Positionable p : yCollisions) {
-					upCollision = true;
-					p.getCollider().onPositionableCollide(this);
-					final float lowerEdgeColider = p.getHitbox().getY()
-							+ p.getHitbox().getHeight();
-					if (_currentPosition.y <= lowerEdgeColider) {
-						_currentPosition.y = lowerEdgeColider + 1;
-					}
-				}
-			}
-
-			// Moved down.
-			if (moveFactorY > 0) {
-				for (final Positionable p : yCollisions) {
-					downCollision = true;
-					p.getCollider().onPositionableCollide(this);
-					final float upperEdgeColider = p.getHitbox().getY();
-					if (_currentPosition.y + _height > upperEdgeColider) {
-						_currentPosition.y = upperEdgeColider - _height;
-					}
-				}
-			}
-
-			_currentPosition.x = newPositionX;
-
-			if (leftCollision || rightCollision || upCollision || downCollision) {
-				MetalWarriors.logger.print("MoveFactorX: " + moveFactorX
-						+ " MoveFactorY: " + moveFactorY
-						+ (leftCollision ? " Left" : "")
-						+ (rightCollision ? " Right" : "")
-						+ (upCollision ? " Up" : "")
-						+ (downCollision ? " Down" : "")
-						+ " Collision happened!", LogMessageType.PHYSICS_DEBUG);
 			}
 		}
-		return true;
+
+		// Move left.
+		if (moveFactorX < 0) {
+			for (final Positionable p : xCollisions) {
+				leftCollision = true;
+				p.getCollider().onPositionableCollide(this);
+				final float rightEdgeColider = p.getHitbox().getX()
+						+ p.getHitbox().getWidth();
+				// If the left edge of the object is inside the colliding object, move it back to the right.
+				if (_currentPosition.x <= rightEdgeColider) {
+					_currentPosition.x = rightEdgeColider + 1;
+				}
+			}
+		}
+
+		final float newPositionX = _currentPosition.x;
+		_currentPosition.x = oldPositionX;
+		_currentPosition.y += moveFactorY * _yspeed;
+
+		final List<Positionable> yCollisions = _collider.getCollisions();
+
+		// Moved up.
+		if (moveFactorY < 0) {
+			for (final Positionable p : yCollisions) {
+				upCollision = true;
+				p.getCollider().onPositionableCollide(this);
+				final float lowerEdgeColider = p.getHitbox().getY()
+						+ p.getHitbox().getHeight();
+				// If the upper edge of the object is inside the colliding object, move it back down.
+				if (_currentPosition.y <= lowerEdgeColider) {
+					_currentPosition.y = lowerEdgeColider + 1;
+				}
+			}
+			_state.add(MovableState.FLYING);			
+		}
+
+		// Moved down.
+		if (moveFactorY > 0) {
+			for (final Positionable p : yCollisions) {
+				downCollision = true;
+				p.getCollider().onPositionableCollide(this);
+				final float upperEdgeColider = p.getHitbox().getY();
+				// If the lower edge of the object is inside the colliding object, move it back up.
+				if (_currentPosition.y + _height > upperEdgeColider) {
+					_currentPosition.y = upperEdgeColider - _height;
+				}
+			}
+			_state.add(MovableState.FALLING);
+		}
+
+		_currentPosition.x = newPositionX;
+
+		if (leftCollision || rightCollision || upCollision || downCollision) {
+			MetalWarriors.logger.print("MoveFactorX: " + moveFactorX
+					+ " MoveFactorY: " + moveFactorY
+					+ (leftCollision ? " Left" : "")
+					+ (rightCollision ? " Right" : "")
+					+ (upCollision ? " Up" : "")
+					+ (downCollision ? " Down" : "")
+					+ " Collision happened!", LogMessageType.PHYSICS_DEBUG);
+		}
+		
+		MetalWarriors.logger.print(MovableState.bitMaskToString(_state.get()), LogMessageType.INPUT_DEBUG);
+		return _currentPosition.x != oldPositionX || _currentPosition.y != oldPositionY;
 	}
 
 	@Override
