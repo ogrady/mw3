@@ -83,4 +83,14 @@ abstract public class Slick2DRenderer implements IRenderer {
 		return sheet;
 	}
 
+	/**
+	 * Updates the currently running animation by some milliseconds
+	 * 
+	 * @param delta
+	 *            the milliseconds passed since the last tick
+	 */
+	public void update(final long delta) {
+		getCurrentAnimation().update(delta);
+	}
+
 }
