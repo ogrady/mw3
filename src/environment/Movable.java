@@ -14,7 +14,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Vector2f;
 
-import util.EnumBitmask;
+import util.ListenableEnumBitmask;
 import controller.IControllable;
 import controller.IController;
 
@@ -32,13 +32,13 @@ public abstract class Movable extends Positionable implements IMassObject,
 	protected float _xspeed;
 	protected float _yspeed;
 	protected IController _controller;
-	protected EnumBitmask<MovableState> _state;
+	protected ListenableEnumBitmask<MovableState> _state;
 
 	/**
 	 * @return a bitmask where the states of the object can be get or set. This
-	 *         map can be probed via {@link EnumBitmask#has(Enum)}
+	 *         map can be probed via {@link ListenableEnumBitmask#has(Enum)}
 	 */
-	public EnumBitmask<MovableState> getState() {
+	public ListenableEnumBitmask<MovableState> getState() {
 		return _state;
 	}
 
@@ -73,7 +73,7 @@ public abstract class Movable extends Positionable implements IMassObject,
 		super(position, width, height);
 		_xspeed = speed;
 		_yspeed = speed;
-		_state = new EnumBitmask<MovableState>();
+		_state = new ListenableEnumBitmask<MovableState>();
 		Movable.instances.add(this);
 		MetalWarriors.instance.getListeners().registerListener(this);
 	}
@@ -88,7 +88,7 @@ public abstract class Movable extends Positionable implements IMassObject,
 	@Override
 	public void applyGravity(final float g) {
 		// yspeed += _g;
-		move(0, 1);
+		move(0, 1, true);
 	}
 
 	/**
@@ -104,86 +104,118 @@ public abstract class Movable extends Positionable implements IMassObject,
 	 * @return whether or not the movement was successful (true, if no
 	 *         collisions occurred)
 	 */
-	// TODO abstract und inhalt in unterklasse //
 	public boolean move(final float moveFactorX, final float moveFactorY) {
+		return this.move(moveFactorX, moveFactorY, false);
+	}
+
+	/**
+	 * Moves into a direction by a certain magnitude.<br>
+	 * The final movement is determined by the parameters times the speed in the
+	 * direction.<br>
+	 * Fails when collisions occur.
+	 * 
+	 * @param moveFactorX
+	 *            times the x-speed
+	 * @param moveFactorY
+	 *            times the y-speed
+	 * @param ignoreBlocking
+	 *            if true, the {@link Movable} will move, even if it is in
+	 *            blocking-state. This will be done for gravity-related movement
+	 *            within {@link #applyGravity(float)} and can not be called from
+	 *            outside the class
+	 * @return whether or not the movement was successful (true, if no
+	 *         collisions occurred)
+	 */
+	// TODO abstract und inhalt in unterklasse //
+	private boolean move(final float moveFactorX, final float moveFactorY,
+			final boolean ignoreBlocking) {
 		boolean rightCollision = false;
 		boolean leftCollision = false;
 		boolean upCollision = false;
 		boolean downCollision = false;
 		final float oldPositionX = _currentPosition.x;
 
-		_currentPosition.x += moveFactorX * _xspeed;
+		if (ignoreBlocking || !_state.has(MovableState.BLOCKING)) {
 
-		final List<Positionable> xCollisions = _collider.getCollisions();
+			if (moveFactorX != 0 || moveFactorY != 0) {
+				_state.add(MovableState.MOVING);
+			} else {
+				_state.remove(MovableState.MOVING);
+			}
+			setDirection((int) moveFactorX);
 
-		// Move right.
-		if (moveFactorX > 0) {
-			for (final Positionable p : xCollisions) {
-				rightCollision = true;
-				p.getCollider().onPositionableCollide(this);
-				final float leftEdgeColider = p.getHitbox().getX();
-				if (_currentPosition.x + _width > leftEdgeColider) {
-					_currentPosition.x = leftEdgeColider - _width;
+			_currentPosition.x += moveFactorX * _xspeed;
+
+			final List<Positionable> xCollisions = _collider.getCollisions();
+
+			// Move right.
+			if (moveFactorX > 0) {
+				for (final Positionable p : xCollisions) {
+					rightCollision = true;
+					p.getCollider().onPositionableCollide(this);
+					final float leftEdgeColider = p.getHitbox().getX();
+					if (_currentPosition.x + _width > leftEdgeColider) {
+						_currentPosition.x = leftEdgeColider - _width;
+					}
 				}
 			}
-		}
 
-		// Move left.
-		if (moveFactorX < 0) {
-			for (final Positionable p : xCollisions) {
-				leftCollision = true;
-				p.getCollider().onPositionableCollide(this);
-				final float rightEdgeColider = p.getHitbox().getX()
-						+ p.getHitbox().getWidth();
-				if (_currentPosition.x <= rightEdgeColider) {
-					_currentPosition.x = rightEdgeColider + 1;
+			// Move left.
+			if (moveFactorX < 0) {
+				for (final Positionable p : xCollisions) {
+					leftCollision = true;
+					p.getCollider().onPositionableCollide(this);
+					final float rightEdgeColider = p.getHitbox().getX()
+							+ p.getHitbox().getWidth();
+					if (_currentPosition.x <= rightEdgeColider) {
+						_currentPosition.x = rightEdgeColider + 1;
+					}
 				}
 			}
-		}
 
-		final float newPositionX = _currentPosition.x;
-		_currentPosition.x = oldPositionX;
-		_currentPosition.y += moveFactorY * _yspeed;
+			final float newPositionX = _currentPosition.x;
+			_currentPosition.x = oldPositionX;
+			_currentPosition.y += moveFactorY * _yspeed;
 
-		final List<Positionable> yCollisions = _collider.getCollisions();
+			final List<Positionable> yCollisions = _collider.getCollisions();
 
-		// Moved up.
-		if (moveFactorY < 0) {
-			for (final Positionable p : yCollisions) {
-				upCollision = true;
-				p.getCollider().onPositionableCollide(this);
-				final float lowerEdgeColider = p.getHitbox().getY()
-						+ p.getHitbox().getHeight();
-				if (_currentPosition.y <= lowerEdgeColider) {
-					_currentPosition.y = lowerEdgeColider + 1;
+			// Moved up.
+			if (moveFactorY < 0) {
+				for (final Positionable p : yCollisions) {
+					upCollision = true;
+					p.getCollider().onPositionableCollide(this);
+					final float lowerEdgeColider = p.getHitbox().getY()
+							+ p.getHitbox().getHeight();
+					if (_currentPosition.y <= lowerEdgeColider) {
+						_currentPosition.y = lowerEdgeColider + 1;
+					}
 				}
 			}
-		}
 
-		// Moved down.
-		if (moveFactorY > 0) {
-			for (final Positionable p : yCollisions) {
-				downCollision = true;
-				p.getCollider().onPositionableCollide(this);
-				final float upperEdgeColider = p.getHitbox().getY();
-				if (_currentPosition.y + _height > upperEdgeColider) {
-					_currentPosition.y = upperEdgeColider - _height;
+			// Moved down.
+			if (moveFactorY > 0) {
+				for (final Positionable p : yCollisions) {
+					downCollision = true;
+					p.getCollider().onPositionableCollide(this);
+					final float upperEdgeColider = p.getHitbox().getY();
+					if (_currentPosition.y + _height > upperEdgeColider) {
+						_currentPosition.y = upperEdgeColider - _height;
+					}
 				}
 			}
+
+			_currentPosition.x = newPositionX;
+
+			if (leftCollision || rightCollision || upCollision || downCollision) {
+				MetalWarriors.logger.print("MoveFactorX: " + moveFactorX
+						+ " MoveFactorY: " + moveFactorY
+						+ (leftCollision ? " Left" : "")
+						+ (rightCollision ? " Right" : "")
+						+ (upCollision ? " Up" : "")
+						+ (downCollision ? " Down" : "")
+						+ " Collision happened!", LogMessageType.PHYSICS_DEBUG);
+			}
 		}
-
-		_currentPosition.x = newPositionX;
-
-		if (leftCollision || rightCollision || upCollision || downCollision) {
-			MetalWarriors.logger.print("MoveFactorX: " + moveFactorX
-					+ " MoveFactorY: " + moveFactorY
-					+ (leftCollision ? " Left" : "")
-					+ (rightCollision ? " Right" : "")
-					+ (upCollision ? " Up" : "")
-					+ (downCollision ? " Down" : "") + " Collision happened!",
-					LogMessageType.PHYSICS_DEBUG);
-		}
-
 		return true;
 	}
 

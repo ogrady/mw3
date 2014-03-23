@@ -113,18 +113,21 @@ public class Projectile extends Movable implements IDamageSource {
 	 *            will be copied and therefore has no connection to
 	 *            {@link Actor}s when their position is directly passed through
 	 *            {@link Actor#getPosition()}
-	 * @param speed
-	 *            speed by which the bullet moves into the specified direction
-	 *            at each tick
 	 * @param deltaVector
 	 *            delta-vector that specifies direction and magnitude of the
 	 *            movement
+	 * @param damage
+	 *            damage the {@link Projectile} inflicts upon hitting
+	 * @param maxTravelDistance
+	 *            distance in pixel after which the projectile despawns
 	 * @param source
 	 *            the {@link Movable} that created the bullet
 	 */
 	public Projectile(final Vector2f position, final Vector2f deltaVector,
-			final float maxTravelDistance, final Movable source) {
+			final float damage, final float maxTravelDistance,
+			final Movable source) {
 		super(position.copy(), 5, 5, deltaVector.length());
+		_baseDamage = damage;
 		_deltaVector = deltaVector;
 		_maxTravelDistance = maxTravelDistance;
 		_source = source;

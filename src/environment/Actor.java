@@ -26,6 +26,20 @@ abstract public class Actor extends Movable implements
 	protected String _description;
 	protected int _maxLife, _currentLife;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param position
+	 *            initial position
+	 * @param width
+	 *            width in pixels
+	 * @param height
+	 *            height in pixels
+	 * @param speed
+	 *            movement speed
+	 * @param description
+	 *            description string
+	 */
 	public Actor(final Vector2f position, final float width,
 			final float height, final float speed, final String description) {
 		super(position, width, height, speed);
@@ -35,6 +49,16 @@ abstract public class Actor extends Movable implements
 		instances.add(this);
 	}
 
+	/**
+	 * Makes the {@link Actor} reduce its hitpoints by the incoming amount of
+	 * damage and notify its listeners of this event.<br>
+	 * When its hitpoints reach zero, he will also broadcast an onDie-event.
+	 * 
+	 * @param src
+	 *            the source of damage
+	 * @param amount
+	 *            the amount of damage
+	 */
 	public void takeDamage(final IDamageSource src, final int amount) {
 		_currentLife = Math.max(0, _currentLife - amount);
 		_entityListeners.notify(new INotifier<IActorListener>() {
