@@ -7,6 +7,7 @@ import util.Const;
 import environment.MovableState;
 import environment.character.CharacterAction;
 import environment.character.StationaryShield;
+import environment.projectile.ParticleSword;
 import environment.projectile.SMGBullet;
 import game.MetalWarriors;
 
@@ -48,6 +49,21 @@ public class Nitro extends Mech {
 					new SMGBullet(exitPoint, Nitro.this.getFireline().scale(
 							Const.NITRO_SMG_SPEED), Nitro.this);
 				}
+			}
+		};
+		_secondaryAttack = new CharacterAction(Const.NITRO_SWORD_DELAY) {
+
+			@Override
+			protected void execute() {
+				final Vector2f exitpoint = getPosition().copy();
+				if (getDirection() > 0) {
+					exitpoint.x += getWidth();
+				} else {
+					exitpoint.x -= ParticleSword.SWORDSIZE;
+				}
+				final NitroRenderer r = (NitroRenderer) _renderer;
+				r.getArmJoint().add(getFireline().scale(r.getArmLength()));
+				new ParticleSword(exitpoint, new Vector2f(0, 3), Nitro.this);
 			}
 		};
 	}

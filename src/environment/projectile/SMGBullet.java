@@ -7,7 +7,6 @@ import util.Const;
 import controller.projectile.GenericProjectileController;
 import environment.Movable;
 import environment.collider.ProjectileCollider;
-import game.MetalWarriors;
 
 /**
  * The projectile Nitro fires from his SMG. Has a smooth ballistics and a range
@@ -35,7 +34,6 @@ public class SMGBullet extends Projectile {
 				Const.NITRO_SMG_DISTANCE, source);
 		setRenderer(new BulletRenderer(this));
 		setController(new GenericProjectileController(this));
-		setCollider(new ProjectileCollider(this));
-		MetalWarriors.instance.getListeners().registerListener(this);
+		setCollider(new ProjectileCollider(this, 1));
 	}
 }

@@ -100,6 +100,7 @@ public abstract class Mech extends Actor {
 		super(position, width, height, speed, description);
 		// default actions that don't do anything. Have to be replaced in
 		// subclasses
+		_armPosition = 4;
 		_primaryAttack = new EmptyCharacterAction();
 		_secondaryAttack = new EmptyCharacterAction();
 		_specialAttack = new EmptyCharacterAction();

@@ -88,7 +88,7 @@ public class NitroRenderer extends MechRenderer implements IActorListener {
 		 * 
 		 * @author Daniel
 		 */
-		if (!_renderable.getState().has(MovableState.BLOCKING)) {
+		if (_renderable.getState().has(MovableState.BLOCKING)) {
 			setCurrentAnimation(_shielded);
 		} else if (!_renderable.getState().has(MovableState.JUMPING)) {
 			_flyingPrelude.clearListeners();
