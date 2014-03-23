@@ -53,6 +53,14 @@ public class Const {
 	 * Speed at which the bullets from Nitros SMG fly
 	 */
 	public static float NITRO_SMG_SPEED = 3.5f;
+	/**
+	 * Base damage Nitros sword inflicts.
+	 */
+	public static float NITRO_SWORD_DMG = 5;
+	/**
+	 * Delay between two strikes of Nitros sword.
+	 */
+	public static long NITRO_SWORD_DELAY = 300;
 
 	private Const() {
 	}
