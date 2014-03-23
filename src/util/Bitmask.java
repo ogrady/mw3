@@ -45,4 +45,22 @@ public class Bitmask {
 	public boolean has(final int val) {
 		return (_bits & val) != 0;
 	}
+
+	/**
+	 * Resets the {@link Bitmask} to the initial state (0, no bits set)
+	 */
+	public void reset() {
+		_bits = 0;
+	}
+
+	/**
+	 * Resets the {@link Bitmask} and puts one single value in
+	 * 
+	 * @param val
+	 *            the single value to put in
+	 */
+	public void set(final int val) {
+		reset();
+		add(val);
+	}
 }

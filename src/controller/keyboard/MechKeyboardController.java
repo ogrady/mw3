@@ -27,7 +27,7 @@ public class MechKeyboardController implements IController {
 
 	@Override
 	public void update(final Input input, final int delta) {
-		_mech.tick(delta);
+		_mech.tickActions(delta);
 
 		int deltaX = 0, deltaY = 0;
 		if (input.isKeyDown(_configuration.getInteger(Configuration.UP))) {
