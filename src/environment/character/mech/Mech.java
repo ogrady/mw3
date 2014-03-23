@@ -27,13 +27,10 @@ import environment.projectile.Projectile;
  * 
  */
 public abstract class Mech extends Actor {
+	private static final int[] ANGLES = { 0, 30, 50, 68, 90, 112, 130, 150, 180 };
 	protected CharacterAction _specialAttack, _primaryAttack, _secondaryAttack,
 			_jump, _block, _unblock, _itemUse, _armUp, _armDown;
 	protected int _armPosition;
-	/*private static final float[] angles = { 0, 30, 50, 68, 90, 128, 138, 150,
-			180 };*/
-	private static final float[] angles = { 0, 30, 50, 68, 90, 112, 130, 150,
-			180 };
 
 	/**
 	 * Mechs can rotate their arms to determine the direction they shoot in.<br>
@@ -83,7 +80,7 @@ public abstract class Mech extends Actor {
 	 *         {@link Projectile}
 	 */
 	public Vector2f getFireline() {
-		final double angle = Math.toRadians(angles[getArmPosition()]);
+		final double angle = Math.toRadians(ANGLES[getArmPosition()]);
 		return new Vector2f((float) Math.sin(angle) * getDirection(),
 				(float) -Math.cos(angle));
 	}
@@ -127,7 +124,14 @@ public abstract class Mech extends Actor {
 		};
 	}
 
-	public void tick(final long delta) {
+	/**
+	 * Sends the tick to all registered actions, to decrease their remaining
+	 * delay accordingly.
+	 * 
+	 * @param delta
+	 *            the passed milliseconds since the last tick
+	 */
+	public void tickActions(final long delta) {
 		_primaryAttack.getDelay().tick(delta);
 		_secondaryAttack.getDelay().tick(delta);
 		_specialAttack.getDelay().tick(delta);
@@ -139,34 +143,93 @@ public abstract class Mech extends Actor {
 		_armDown.getDelay().tick(delta);
 	}
 
-	public void primaryAttack() {
-		_primaryAttack.perform();
+	/**
+	 * Asks the {@link Mech} to perform the primary-attack-action (shooting in
+	 * most cases)
+	 * 
+	 * @return false, if the action could not be performed, because the timer
+	 *         has not expired yet
+	 */
+	public boolean primaryAttack() {
+		return _primaryAttack.perform();
 	}
 
-	public void specialAttack() {
-		_specialAttack.perform();
+	/**
+	 * Asks the {@link Mech} to perform the special-attack-action (e.g. for
+	 * {@link Nitro}: spawning a shield)
+	 * 
+	 * @return false, if the action could not be performed, because the timer
+	 *         has not expired yet
+	 */
+	public boolean specialAttack() {
+		return _specialAttack.perform();
 	}
 
-	public void secondaryAttack() {
-		_secondaryAttack.perform();
+	/**
+	 * Asks the {@link Mech} to perform the secondary-attack-action (a
+	 * melee-attack in most cases)
+	 * 
+	 * @return false, if the action could not be performed, because the timer
+	 *         has not expired yet
+	 */
+	public boolean secondaryAttack() {
+		return _secondaryAttack.perform();
 	}
 
-	public void block() {
-		_block.perform();
-		_state.add(MovableState.BLOCKING);
+	/**
+	 * Asks the {@link Mech} to perform the block-action. Successfully executing
+	 * it will cause the {@link Mech} to go into {@link MovableState#BLOCKING}
+	 * -state.
+	 * 
+	 * @return false, if the {@link Mech} could not block for any reasons
+	 */
+	public boolean block() {
+		final boolean blocking = _block.perform();
+		if (blocking) {
+			_state.add(MovableState.BLOCKING);
+		}
+		return blocking;
 	}
 
-	public void unblock() {
-		_unblock.perform();
-		_state.remove(MovableState.BLOCKING);
+	/**
+	 * Asks the {@link Mech} to perform the unblock-action. Successfully
+	 * executing it will cause the {@link Mech} to be no longer in
+	 * {@link MovableState#BLOCKING}-state.
+	 * 
+	 * @return false, if the {@link Mech} could not unblock for any reasons
+	 */
+	public boolean unblock() {
+		final boolean unblocked = _unblock.perform();
+		if (unblocked) {
+			_state.remove(MovableState.BLOCKING);
+		}
+		return unblocked;
 	}
 
-	public void jump() {
-		_jump.perform();
-		_state.add(MovableState.JUMPING);
+	/**
+	 * Asks the {@link Mech} to perform the jump-action. Successfully executing
+	 * it will cause the {@link Mech} to go into {@link MovableState#JUMPING}
+	 * -state.
+	 * 
+	 * @return false, if the {@link Mech} could not jump (not being able to jump
+	 *         at all, already jumping, being restricted because of blocking
+	 *         walls etc.)
+	 */
+	public boolean jump() {
+		final boolean jumping = _jump.perform();
+		if (jumping) {
+			_state.add(MovableState.JUMPING);
+		}
+		return jumping;
 	}
 
-	public void useItem() {
-		_itemUse.perform();
+	/**
+	 * Asks the {@link Mech} to perform the item-action.
+	 * 
+	 * @return false, if no item could be used (no item equipped or timer of
+	 *         equipped item not expired yet)
+	 */
+	public boolean useItem() {
+		return _itemUse.perform();
 	}
 }
