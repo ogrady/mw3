@@ -1,10 +1,11 @@
 package renderer.slick.mech;
 
+import listener.IAnimationListener;
+
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.geom.Vector2f;
 
-import renderer.slick.IAnimationListener;
 import renderer.slick.ObservableAnimation;
 import util.IBitmask;
 import environment.IDamageSource;

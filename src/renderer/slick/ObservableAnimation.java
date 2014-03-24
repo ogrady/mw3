@@ -1,5 +1,6 @@
 package renderer.slick;
 
+import listener.IAnimationListener;
 import listener.IListenable;
 import listener.ListenerSet;
 import listener.notifier.INotifier;
@@ -18,11 +19,11 @@ public class ObservableAnimation extends Animation implements
 	}
 
 	public void addListener(final IAnimationListener listener) {
-		_listeners.add(listener);
+		_listeners.registerListener(listener);
 	}
 
 	public void removeListener(final IAnimationListener listener) {
-		_listeners.remove(listener);
+		_listeners.unregisterListener(listener);
 	}
 
 	public void clearListeners() {
