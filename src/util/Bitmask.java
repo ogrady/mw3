@@ -12,7 +12,7 @@ package util;
  * @author Daniel
  * 
  */
-public class Bitmask {
+public class Bitmask implements IBitmask<Integer> {
 	protected int _bits;
 
 	/**
@@ -21,7 +21,8 @@ public class Bitmask {
 	 * @param val
 	 *            value to add
 	 */
-	public void add(final int val) {
+	@Override
+	public void add(final Integer val) {
 		_bits |= val;
 	}
 
@@ -31,7 +32,8 @@ public class Bitmask {
 	 * @param val
 	 *            value to remove
 	 */
-	public void remove(final int val) {
+	@Override
+	public void remove(final Integer val) {
 		_bits &= ~val;
 	}
 
@@ -42,13 +44,15 @@ public class Bitmask {
 	 *            true, if the corresponding bit is set
 	 * @return
 	 */
-	public boolean has(final int val) {
+	@Override
+	public boolean has(final Integer val) {
 		return (_bits & val) != 0;
 	}
 
 	/**
 	 * Resets the {@link Bitmask} to the initial state (0, no bits set)
 	 */
+	@Override
 	public void reset() {
 		_bits = 0;
 	}
@@ -59,7 +63,8 @@ public class Bitmask {
 	 * @param val
 	 *            the single value to put in
 	 */
-	public void set(final int val) {
+	@Override
+	public void set(final Integer val) {
 		reset();
 		add(val);
 	}

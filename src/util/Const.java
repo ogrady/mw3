@@ -18,6 +18,8 @@ public class Const {
 	public static final String MAP_LAYER_BACKGROUND = "background";
 	public static final String MAP_LAYER_DESTRUCTABLE = "destructable";
 	public static final String MAP_LAYER_SOLID = "solid";
+	public static final String DEBUGFLAGS = "debugflags";
+	public static final String CONF_PATH = "rsc/conf.properties";
 
 	/**
 	 * Delay between two rotations of a Mechs arm.
@@ -61,6 +63,10 @@ public class Const {
 	 * Delay between two strikes of Nitros sword.
 	 */
 	public static long NITRO_SWORD_DELAY = 300;
+	/**
+	 * HP Nitro initially has.
+	 */
+	public static int NITRO_HP = 100;
 
 	private Const() {
 	}

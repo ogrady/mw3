@@ -28,6 +28,8 @@ import game.MetalWarriors;
 public class Nitro extends Mech {
 	public Nitro(final Vector2f position, final String description) {
 		super(position, 0, 0, 5, description);
+		_maxLife = Const.NITRO_HP;
+		_currentLife = Const.NITRO_HP;
 		setRenderer(new NitroRenderer(this));
 		_specialAttack = new CharacterAction(Const.NITRO_SHIELD_DELAY) {
 			@Override
@@ -63,7 +65,7 @@ public class Nitro extends Mech {
 				}
 				final NitroRenderer r = (NitroRenderer) _renderer;
 				r.getArmJoint().add(getFireline().scale(r.getArmLength()));
-				new ParticleSword(exitpoint, new Vector2f(0, 3), Nitro.this);
+				new ParticleSword(exitpoint, new Vector2f(0, 1), Nitro.this);
 			}
 		};
 	}

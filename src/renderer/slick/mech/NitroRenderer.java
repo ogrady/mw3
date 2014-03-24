@@ -1,20 +1,18 @@
 package renderer.slick.mech;
 
-import listener.IActorListener;
-
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.geom.Vector2f;
 
 import renderer.slick.IAnimationListener;
 import renderer.slick.ObservableAnimation;
-import util.Bitmask;
+import util.IBitmask;
 import environment.IDamageSource;
 import environment.MovableState;
 import environment.character.mech.Nitro;
 import game.Viewport;
 
-public class NitroRenderer extends MechRenderer implements IActorListener {
+public class NitroRenderer extends MechRenderer {
 	final float _factor = 2;
 
 	public NitroRenderer(final Nitro pos) {
@@ -79,7 +77,7 @@ public class NitroRenderer extends MechRenderer implements IActorListener {
 	}
 
 	@Override
-	public void onChange(final Bitmask mask) {
+	public void onChange(final IBitmask<MovableState> mask) {
 		/**
 		 * The following is utter bullshit and doesn't work at all. :D I tried
 		 * to combine your code from the methods I had to delete in here - but
@@ -88,12 +86,12 @@ public class NitroRenderer extends MechRenderer implements IActorListener {
 		 * 
 		 * @author Daniel
 		 */
-		if (_renderable.getState().has(MovableState.BLOCKING)) {
+		if (mask.has(MovableState.BLOCKING)) {
 			setCurrentAnimation(_shielded);
-		} else if (!_renderable.getState().has(MovableState.JUMPING)) {
+		} else if (!mask.has(MovableState.JUMPING)) {
 			_flyingPrelude.clearListeners();
 			setIdle();
-		} else if (!_renderable.getState().has(MovableState.FLYING)) {
+		} else if (!mask.has(MovableState.FLYING)) {
 			_flyingPrelude.addListener(new IAnimationListener() {
 				@Override
 				public void onEnded() {
@@ -105,7 +103,7 @@ public class NitroRenderer extends MechRenderer implements IActorListener {
 				_flyingPrelude.setCurrentFrame(0);
 				setCurrentAnimation(_flyingPrelude);
 			}
-		} else if (_renderable.getState().has(MovableState.MOVING)) {
+		} else if (mask.has(MovableState.MOVING)) {
 			if (this._current == _walking) {
 				_walking.start();
 			} else {

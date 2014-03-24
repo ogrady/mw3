@@ -62,7 +62,7 @@ public abstract class Movable extends Positionable implements IMassObject,
 	 * @param position
 	 *            initial position
 	 * @param width
-	 *            initial widthrigtCo
+	 *            initial width
 	 * @param height
 	 *            initial height
 	 * @param speed
@@ -157,8 +157,8 @@ public abstract class Movable extends Positionable implements IMassObject,
 					_currentPosition.x = leftEdgeColider - _width;
 				}
 			}
-			
-			if(_currentPosition.x != oldPositionX) {
+
+			if (_currentPosition.x != oldPositionX) {
 				_state.set(MovableState.MOVING);
 			}
 		}
@@ -177,7 +177,7 @@ public abstract class Movable extends Positionable implements IMassObject,
 				}
 			}
 
-			if(_currentPosition.x != oldPositionX) {
+			if (_currentPosition.x != oldPositionX) {
 				_state.set(MovableState.MOVING);
 			}
 		}
@@ -201,8 +201,8 @@ public abstract class Movable extends Positionable implements IMassObject,
 					_currentPosition.y = lowerEdgeColider + 1;
 				}
 			}
-			
-			if(_currentPosition.y != oldPositionY) {
+
+			if (_currentPosition.y != oldPositionY) {
 				_state.set(MovableState.FLYING);
 				_state.add(MovableState.MOVING);
 			}
@@ -221,7 +221,7 @@ public abstract class Movable extends Positionable implements IMassObject,
 				}
 			}
 
-			if(_currentPosition.y != oldPositionY) {
+			if (_currentPosition.y != oldPositionY) {
 				_state.set(MovableState.FALLING);
 				_state.add(MovableState.MOVING);
 			}
@@ -238,16 +238,16 @@ public abstract class Movable extends Positionable implements IMassObject,
 					+ (downCollision ? " Down" : "") + " Collision happened!",
 					LogMessageType.PHYSICS_DEBUG);
 		}
-		
-		boolean isMoving = _currentPosition.x != oldPositionX || _currentPosition.y != oldPositionY;
-		
-		if(!isMoving) {
+
+		final boolean isMoving = _currentPosition.x != oldPositionX
+				|| _currentPosition.y != oldPositionY;
+
+		if (!isMoving) {
 			_state.set(MovableState.STANDING);
 		}
-		
-		MetalWarriors.logger.print(MovableState.bitMaskToString(_state.get()),
+
+		MetalWarriors.logger.print(_state.toString(),
 				LogMessageType.INPUT_DEBUG);
-		
 		return isMoving;
 	}
 

@@ -9,6 +9,8 @@ import listener.notifier.INotifier;
 
 import org.newdawn.slick.geom.Vector2f;
 
+import environment.collider.ActorCollider;
+
 /**
  * Actors are movable objects that can have an additional descriton string.<br>
  * As a fallback, the simple class name is used as description if null is
@@ -25,6 +27,27 @@ abstract public class Actor extends Movable implements
 	protected ListenerSet<IActorListener> _entityListeners;
 	protected String _description;
 	protected int _maxLife, _currentLife;
+
+	/**
+	 * @return the descriptive string for this {@link Actor}
+	 */
+	public String getDescription() {
+		return _description;
+	}
+
+	/**
+	 * @return the maximum life this {@link Actor} can have
+	 */
+	public int getMaxLife() {
+		return _maxLife;
+	}
+
+	/**
+	 * @return the current lifepoints the {@link Actor} has
+	 */
+	public int getCurrentLife() {
+		return _currentLife;
+	}
 
 	/**
 	 * Constructor
@@ -46,6 +69,7 @@ abstract public class Actor extends Movable implements
 		_entityListeners = new ListenerSet<IActorListener>();
 		_description = description != null ? description : getClass()
 				.getSimpleName();
+		_collider = new ActorCollider(this);
 		instances.add(this);
 	}
 

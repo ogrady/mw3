@@ -13,5 +13,5 @@ public enum LogMessageType {
 	GENERAL_INFO, GENERAL_DEBUG, GENERAL_ERROR,
 	// debug flags for specific implementation details (may be extended if
 	// needed
-	PHYSICS_DEBUG, INPUT_DEBUG, GFX_DEBUG
+	PHYSICS_DEBUG, INPUT_DEBUG, GFX_DEBUG, CONTROLLER_DEBUG
 }

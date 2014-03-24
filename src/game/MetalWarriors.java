@@ -25,6 +25,8 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Vector2f;
 
 import renderer.slick.mech.NitroRenderer;
+import util.Const;
+import controller.TestAi;
 import controller.keyboard.MechKeyboardController;
 import environment.Movable;
 import environment.character.mech.Nitro;
@@ -39,7 +41,6 @@ import exception.MapException;
 public class MetalWarriors extends BasicGame implements
 		IListenable<IGameListener> {
 	private static final boolean DEBUG = true;
-	public static final String CONF_PATH = "rsc/conf.properties";
 
 	public static MetalWarriors instance;
 	public static final Logger logger = new Logger();
@@ -52,7 +53,7 @@ public class MetalWarriors extends BasicGame implements
 
 	static {
 		if (DEBUG) {
-			reloadDebugFlags("debugflags");
+			reloadDebugFlags(Const.DEBUGFLAGS);
 		}
 	}
 
@@ -94,7 +95,7 @@ public class MetalWarriors extends BasicGame implements
 	}
 
 	public void loadConfiguration(final String path) {
-		_configuration = new Configuration(CONF_PATH);
+		_configuration = new Configuration(Const.CONF_PATH);
 		getListeners().notify(new INotifier<IGameListener>() {
 			@Override
 			public void notify(final IGameListener listener) {
@@ -108,13 +109,15 @@ public class MetalWarriors extends BasicGame implements
 		_viewport = new Viewport(0, 0, container);
 		_listeners = new ListenerSet<IGameListener>();
 		_container = container;
-		loadConfiguration(CONF_PATH);
+		loadConfiguration(Const.CONF_PATH);
 		/*_player = PlayerMechFactory.create(500, 480,
 				PlayerMechFactory.EMech.NITRO, _configuration);*/
-		_player = new Nitro(new Vector2f(500, 480), "");
+		_player = new Nitro(new Vector2f(440, 480), "");
 		_player.setController(new MechKeyboardController((Nitro) _player,
 				_configuration, (NitroRenderer) _player.getRenderer()));
 		_map = MapLoader.load("rsc/map/tm3.tmx");
+		final Nitro n2 = new Nitro(new Vector2f(530, 500), "");
+		n2.setController(new TestAi(n2));
 	}
 
 	/**
