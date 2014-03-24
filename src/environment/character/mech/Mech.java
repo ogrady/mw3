@@ -98,9 +98,10 @@ public abstract class Mech extends Actor {
 	public Mech(final Vector2f position, final float width, final float height,
 			final float speed, final String description) {
 		super(position, width, height, speed, description);
+		// look straight
+		_armPosition = 4;
 		// default actions that don't do anything. Have to be replaced in
 		// subclasses
-		_armPosition = 4;
 		_primaryAttack = new EmptyCharacterAction();
 		_secondaryAttack = new EmptyCharacterAction();
 		_specialAttack = new EmptyCharacterAction();
@@ -163,7 +164,11 @@ public abstract class Mech extends Actor {
 	 *         has not expired yet
 	 */
 	public boolean specialAttack() {
-		return _specialAttack.perform();
+		final boolean performing = _specialAttack.perform();
+		if (performing) {
+			_state.add(MovableState.SPECIAL);
+		}
+		return performing;
 	}
 
 	/**

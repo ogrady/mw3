@@ -24,6 +24,9 @@ public class NitroRenderer extends MechRenderer {
 				"rsc/nitro/flying.png", 40, 47, _factor), 60);
 		_broken = new ObservableAnimation(loadScaledSpriteSheet(
 				"rsc/nitro/broken.png", 47, 48, _factor), 60);
+		// this is the wrong sprite. Just to prevent NULL [Daniel]
+		_special = new ObservableAnimation(loadScaledSpriteSheet(
+				"rsc/nitro/shielded.png", 40, 46, _factor), 60);
 		_shielded = new ObservableAnimation(loadScaledSpriteSheet(
 				"rsc/nitro/shielded.png", 40, 46, _factor), 60);
 		_shielded.setLooping(false);

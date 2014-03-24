@@ -22,7 +22,78 @@ abstract public class MechRenderer extends MovableRenderer<Mech> implements
 		IActorListener {
 	protected HashMap<Integer, ObservableAnimation> _armPositions;
 	protected ObservableAnimation _walking, _jumping, _broken, _shielded,
-			_flyingPrelude, _arm;
+			_flyingPrelude, _arm, _special, _primaryAttack, _secondaryAttack;
+
+	/**
+	 * @return the map that contains the animations for all arm-positions
+	 */
+	public HashMap<Integer, ObservableAnimation> getArmPositions() {
+		return _armPositions;
+	}
+
+	/**
+	 * @return the animation for walking
+	 */
+	public ObservableAnimation getWalkingAnimation() {
+		return _walking;
+	}
+
+	/**
+	 * @return the animation for jumping
+	 */
+	public ObservableAnimation getJumpingAnimation() {
+		return _jumping;
+	}
+
+	/**
+	 * @return the animation for when the mech is broken
+	 */
+	public ObservableAnimation getBrokenAnimation() {
+		return _broken;
+	}
+
+	/**
+	 * @return the animation for when the {@link Mech} is using his shield
+	 */
+	public ObservableAnimation getShieldedAnimation() {
+		return _shielded;
+	}
+
+	/**
+	 * @return the animation for when the {@link Mech} starts flying
+	 */
+	public ObservableAnimation getFlyingPreludeAnimation() {
+		return _flyingPrelude;
+	}
+
+	/**
+	 * @return the current arm-animation
+	 */
+	public ObservableAnimation getArmAnimation() {
+		return _arm;
+	}
+
+	/**
+	 * @return the animation for when the {@link Mech} is performing its special
+	 *         movement
+	 */
+	public ObservableAnimation getSpecialAnimation() {
+		return _special;
+	}
+
+	/**
+	 * @return the animation for the primary attack
+	 */
+	public ObservableAnimation getPrimaryAttack() {
+		return _primaryAttack;
+	}
+
+	/**
+	 * @return the animation for the secondary attack
+	 */
+	public ObservableAnimation getSecondaryAttack() {
+		return _secondaryAttack;
+	}
 
 	/**
 	 * Constructor

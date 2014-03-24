@@ -60,6 +60,6 @@ public class EnumBitmask<E extends Enum<?>> implements IBitmask<E> {
 				contents += e + "\r\n";
 			}
 		}
-		return contents;
+		return contents.trim();
 	}
 }

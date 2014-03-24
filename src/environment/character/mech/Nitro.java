@@ -1,5 +1,7 @@
 package environment.character.mech;
 
+import listener.IAnimationListener;
+
 import org.newdawn.slick.geom.Vector2f;
 
 import renderer.slick.mech.NitroRenderer;
@@ -30,7 +32,6 @@ public class Nitro extends Mech {
 		super(position, 0, 0, 5, description);
 		_maxLife = Const.NITRO_HP;
 		_currentLife = Const.NITRO_HP;
-		setRenderer(new NitroRenderer(this));
 		_specialAttack = new CharacterAction(Const.NITRO_SHIELD_DELAY) {
 			@Override
 			protected void execute() {
@@ -68,5 +69,14 @@ public class Nitro extends Mech {
 				new ParticleSword(exitpoint, new Vector2f(0, 1), Nitro.this);
 			}
 		};
+		final NitroRenderer nr = new NitroRenderer(this);
+		setRenderer(nr);
+		nr.getSpecialAnimation().getListeners()
+				.registerListener(new IAnimationListener() {
+					@Override
+					public void onEnded() {
+						_state.remove(MovableState.SPECIAL);
+					}
+				});
 	}
 }
