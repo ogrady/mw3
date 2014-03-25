@@ -19,6 +19,7 @@ public class NitroRenderer extends MechRenderer {
 
 	public NitroRenderer(final Nitro pos) {
 		super(pos);
+		pos.getState().getListeners().registerListener(this);
 		_walking = new ObservableAnimation(loadScaledSpriteSheet(
 				Const.NITRO_RSC + "walking.png", 36, 45, _factor), 60);
 		_jumping = new ObservableAnimation(loadScaledSpriteSheet(
@@ -69,6 +70,8 @@ public class NitroRenderer extends MechRenderer {
 	@Override
 	public void render(final Graphics g, final Viewport vp) {
 		super.render(g, vp);
+		_arm.start();
+		_arm.setCurrentFrame(_renderable.getArmPosition());
 		final Image frame = _arm.getCurrentFrame();
 		final float adjustedCenter = (_renderable.getWidth() - frame.getWidth()) / 2;
 		final float adjustedX = adjustedCenter + _renderable.getDirection()
@@ -84,19 +87,18 @@ public class NitroRenderer extends MechRenderer {
 	@Override
 	public void onChange(final IBitmask<MovableState> mask) {
 		/**
-		 * The following is utter bullshit and doesn't work at all. :D I tried
-		 * to combine your code from the methods I had to delete in here - but
-		 * failed. But I didn't remove the code, so that you don't have to start
-		 * your work from scratch and can see the idea of the state-mask.
+		 * The following doesn't work at all. :D I tried to combine your code
+		 * from the methods I had to delete in here - but failed. But I didn't
+		 * remove the code, so that you don't have to start your work from
+		 * scratch and can see the idea of the state-mask.
 		 * 
 		 * @author Daniel
 		 */
 		if (mask.has(MovableState.BLOCKING)) {
 			setCurrentAnimation(_shielded);
-		} else if (!mask.has(MovableState.JUMPING)) {
-			_flyingPrelude.clearListeners();
-			setIdle();
-		} else if (!mask.has(MovableState.FLYING)) {
+		} else if (mask.has(MovableState.SPECIAL)) {
+			setCurrentAnimation(_special);
+		} else if (mask.has(MovableState.FLYING)) {
 			_flyingPrelude.addListener(new IAnimationListener() {
 				@Override
 				public void onEnded() {
@@ -108,6 +110,9 @@ public class NitroRenderer extends MechRenderer {
 				_flyingPrelude.setCurrentFrame(0);
 				setCurrentAnimation(_flyingPrelude);
 			}
+		} else if (mask.has(MovableState.JUMPING)) {
+			_flyingPrelude.clearListeners();
+			setIdle();
 		} else if (mask.has(MovableState.MOVING)) {
 			if (this._current == _walking) {
 				_walking.start();
