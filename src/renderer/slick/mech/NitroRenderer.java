@@ -7,6 +7,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.geom.Vector2f;
 
 import renderer.slick.ObservableAnimation;
+import util.Const;
 import util.IBitmask;
 import environment.IDamageSource;
 import environment.MovableState;
@@ -19,22 +20,22 @@ public class NitroRenderer extends MechRenderer {
 	public NitroRenderer(final Nitro pos) {
 		super(pos);
 		_walking = new ObservableAnimation(loadScaledSpriteSheet(
-				"rsc/nitro/walking.png", 36, 45, _factor), 60);
+				Const.NITRO_RSC + "walking.png", 36, 45, _factor), 60);
 		_jumping = new ObservableAnimation(loadScaledSpriteSheet(
-				"rsc/nitro/flying.png", 40, 47, _factor), 60);
-		_broken = new ObservableAnimation(loadScaledSpriteSheet(
-				"rsc/nitro/broken.png", 47, 48, _factor), 60);
+				Const.NITRO_RSC + "flying.png", 40, 47, _factor), 60);
+		_broken = new ObservableAnimation(loadScaledSpriteSheet(Const.NITRO_RSC
+				+ "broken.png", 47, 48, _factor), 60);
 		// this is the wrong sprite. Just to prevent NULL [Daniel]
 		_special = new ObservableAnimation(loadScaledSpriteSheet(
-				"rsc/nitro/shielded.png", 40, 46, _factor), 60);
+				Const.NITRO_RSC + "shielded.png", 40, 46, _factor), 60);
 		_shielded = new ObservableAnimation(loadScaledSpriteSheet(
-				"rsc/nitro/shielded.png", 40, 46, _factor), 60);
+				Const.NITRO_RSC + "shielded.png", 40, 46, _factor), 60);
 		_shielded.setLooping(false);
-		_arm = new ObservableAnimation(loadScaledSpriteSheet(
-				"rsc/nitro/arm.png", 29, 46, _factor), 60);
+		_arm = new ObservableAnimation(loadScaledSpriteSheet(Const.NITRO_RSC
+				+ "arm.png", 29, 46, _factor), 60);
 		_arm.setCurrentFrame(_arm.getFrameCount() / 2);
 		_flyingPrelude = new ObservableAnimation(loadScaledSpriteSheet(
-				"rsc/nitro/start_flying.png", 45, 50, _factor), 100);
+				Const.NITRO_RSC + "start_flying.png", 45, 50, _factor), 100);
 		_flyingPrelude.setLooping(true);
 		this.setIdle();
 	}
