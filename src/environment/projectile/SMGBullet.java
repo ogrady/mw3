@@ -5,6 +5,7 @@ import org.newdawn.slick.geom.Vector2f;
 import renderer.slick.projectile.BulletRenderer;
 import util.Const;
 import controller.projectile.GenericProjectileController;
+import environment.Actor;
 import environment.Movable;
 import environment.collider.ProjectileCollider;
 
@@ -29,7 +30,7 @@ public class SMGBullet extends Projectile {
 	 * @param source
 	 */
 	public SMGBullet(final Vector2f position, final Vector2f deltaVector,
-			final Movable source) {
+			final Actor source) {
 		super(position, deltaVector, Const.NITRO_SMG_DMG,
 				Const.NITRO_SMG_DISTANCE, source);
 		setRenderer(new BulletRenderer(this));

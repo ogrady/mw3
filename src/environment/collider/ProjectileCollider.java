@@ -1,6 +1,7 @@
 package environment.collider;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import level.Block;
@@ -19,6 +20,7 @@ import environment.projectile.Projectile;
  */
 public class ProjectileCollider extends DefaultCollider<Projectile> {
 	private int _remainingCollisions;
+	private final HashSet<Positionable> _collidedBefore;
 
 	/**
 	 * Constructor
@@ -32,6 +34,7 @@ public class ProjectileCollider extends DefaultCollider<Projectile> {
 	public ProjectileCollider(final Projectile projectile,
 			final int maxCollisions) {
 		super(projectile);
+		_collidedBefore = new HashSet<Positionable>();
 		_remainingCollisions = maxCollisions;
 	}
 
@@ -55,7 +58,6 @@ public class ProjectileCollider extends DefaultCollider<Projectile> {
 			}
 		}
 		dealDamage(collisions);
-		uponCollisions(collisions);
 		return collisions;
 	}
 
@@ -66,9 +68,15 @@ public class ProjectileCollider extends DefaultCollider<Projectile> {
 	 *            the list of things the {@link Projectile} collided with
 	 */
 	protected void dealDamage(final List<Positionable> collisions) {
+		int newCollisions = 0;
 		for (final Positionable collided : collisions) {
-			collided.getCollider().onDamageSourceCollide(_collidable);
+			if (!_collidedBefore.contains(collided)) {
+				collided.getCollider().onDamageSourceCollide(_collidable);
+				_collidedBefore.add(collided);
+				newCollisions++;
+			}
 		}
+		uponCollisions(collisions, newCollisions);
 	}
 
 	/**
@@ -82,9 +90,15 @@ public class ProjectileCollider extends DefaultCollider<Projectile> {
 	 * @param collisions
 	 *            a list of collisions to substract from the number of remaining
 	 *            collisions
+	 * @param relevant
+	 *            the number of relevant collisions that occured (the set of
+	 *            collisions minus the collisions that were handled before, as
+	 *            one {@link Projectile} can hit a {@link Positionable} only
+	 *            once)
 	 */
-	protected void uponCollisions(final List<Positionable> collisions) {
-		_remainingCollisions -= collisions.size();
+	protected void uponCollisions(final List<Positionable> collisions,
+			final int relevant) {
+		_remainingCollisions -= relevant;
 		if (_remainingCollisions <= 0) {
 			// bullets dealt damage to all entities it collided with and then
 			// vanishes

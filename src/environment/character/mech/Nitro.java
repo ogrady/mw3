@@ -66,7 +66,7 @@ public class Nitro extends Mech {
 				}
 				final NitroRenderer r = (NitroRenderer) _renderer;
 				r.getArmJoint().add(getFireline().scale(r.getArmLength()));
-				new ParticleSword(exitpoint, new Vector2f(0, 1), Nitro.this);
+				new ParticleSword(Nitro.this);
 			}
 		};
 		final NitroRenderer nr = new NitroRenderer(this);

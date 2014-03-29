@@ -27,6 +27,7 @@ public class TestAi implements IController {
 
 	@Override
 	public void update(final Input input, final int delta) {
+		_controllable.block();
 		MetalWarriors.logger.print(
 				String.format("%s HP: %d", _controllable.getDescription(),
 						_controllable.getCurrentLife()),

@@ -16,14 +16,15 @@ import environment.character.StationaryShield;
  * 
  */
 public class Const {
-	// names for the layers from the TMX-map
 	private static final char SEP = File.separatorChar;
+	public static final String DEBUGFLAGS = "debugflags";
 
+	// names for the layers from the TMX-map
 	public static final String MAP_LAYER_BACKGROUND = "background";
 	public static final String MAP_LAYER_DESTRUCTABLE = "destructable";
 	public static final String MAP_LAYER_SOLID = "solid";
-	public static final String DEBUGFLAGS = "debugflags";
 
+	// distinct directories
 	public static final String RSC_PATH = "rsc" + SEP;
 	public static final String CONF_PATH = RSC_PATH + "conf.properties";
 	public static final String NITRO_RSC = RSC_PATH + "nitro" + SEP;
@@ -69,7 +70,7 @@ public class Const {
 	/**
 	 * Delay between two strikes of Nitros sword.
 	 */
-	public static long NITRO_SWORD_DELAY = 300;
+	public static long NITRO_SWORD_DELAY = 1000;
 	/**
 	 * HP Nitro initially has.
 	 */

@@ -13,4 +13,9 @@ public interface IDamageSource {
 	 *         by shields
 	 */
 	float getBaseDamage();
+
+	/**
+	 * @return the entity that produced this damagesource
+	 */
+	Positionable getProducer();
 }

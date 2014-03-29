@@ -24,15 +24,28 @@ import game.Viewport;
  * 
  */
 public class ParticleSword extends Projectile {
+	/**
+	 * this determines the size of the hitbox
+	 */
 	public static final int SWORDSIZE = 30;
+	/**
+	 * the speed by which the sword moves (has to be adjusted to match the
+	 * animation)
+	 */
+	private static final Vector2f SPEED = new Vector2f(0, 3);
+	private final Vector2f _delta;
+	private final Vector2f _offset;
+	private final float _toTravel;
 
-	public ParticleSword(final Vector2f start, final Vector2f delta,
-			final Nitro source) {
-		super(start, delta, Const.NITRO_SWORD_DMG, source.getHeight()
-				- SWORDSIZE, source);
-		_currentPosition = start;
+	public ParticleSword(final Nitro source) {
+		super(new Vector2f(), new Vector2f(), Const.NITRO_SWORD_DMG, source
+				.getHeight() - SWORDSIZE, source);
+		_offset = new Vector2f();
+		_delta = SPEED;
 		setWidth(SWORDSIZE);
 		setHeight(SWORDSIZE);
+		_currentPosition = source.getPosition();
+		_toTravel = source.getHeight() - SWORDSIZE;
 		setController(new GenericProjectileController(this));
 		setCollider(new ProjectileCollider(this, Integer.MAX_VALUE));
 		// the whole renderer is for debugging purposes and will be replaced
@@ -41,11 +54,7 @@ public class ParticleSword extends Projectile {
 
 			@Override
 			public void render(final Graphics g, final Viewport vp) {
-				final Vector2f pos = ParticleSword.this._currentPosition;
-				final float w = ParticleSword.this.getWidth();
-				final float h = ParticleSword.this.getHeight();
-
-				g.fillRect(pos.x, pos.y, w, h);
+				g.draw(getHitbox());
 			}
 
 			@Override
@@ -53,5 +62,21 @@ public class ParticleSword extends Projectile {
 			}
 		});
 		MetalWarriors.instance.getListeners().registerListener(this);
+	}
+
+	@Override
+	public Vector2f getPosition() {
+		final Vector2f pos = _currentPosition.copy().add(_offset);
+		pos.x += _source.getDirection() == 1 ? _source.getWidth() : -SWORDSIZE;
+		return pos;
+	}
+
+	@Override
+	public boolean moveOn() {
+		_offset.add(_delta);
+		if (_offset.length() >= _toTravel) {
+			destruct();
+		}
+		return false;
 	}
 }

@@ -21,8 +21,13 @@ import environment.Movable;
 public class Projectile extends Movable implements IDamageSource {
 	protected Vector2f _deltaVector;
 	protected float _traveledDistance, _maxTravelDistance;
-	protected Movable _source;
+	protected Actor _source;
 	protected float _baseDamage;
+
+	@Override
+	public Actor getProducer() {
+		return _source;
+	}
 
 	@Override
 	public float getBaseDamage() {
@@ -121,11 +126,11 @@ public class Projectile extends Movable implements IDamageSource {
 	 * @param maxTravelDistance
 	 *            distance in pixel after which the projectile despawns
 	 * @param source
-	 *            the {@link Movable} that created the bullet
+	 *            the {@link Actor} that created the bullet
 	 */
 	public Projectile(final Vector2f position, final Vector2f deltaVector,
 			final float damage, final float maxTravelDistance,
-			final Movable source) {
+			final Actor source) {
 		super(position.copy(), 5, 5, deltaVector.length());
 		_baseDamage = damage;
 		_deltaVector = deltaVector;
