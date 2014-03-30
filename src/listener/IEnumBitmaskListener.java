@@ -12,10 +12,22 @@ import util.IBitmask;
  */
 public interface IEnumBitmaskListener<E extends Enum<?>> extends IListener {
 	/**
-	 * Called when the bitmask changes
+	 * Called, when an element was added to the mask
 	 * 
 	 * @param mask
-	 *            the mask that changed
+	 *            the mask after adding the new element
+	 * @param newElement
+	 *            the added element
 	 */
-	void onChange(IBitmask<E> mask);
+	void onAdd(IBitmask<E> mask, E newElement);
+
+	/**
+	 * Called, when an element was removed from the mask
+	 * 
+	 * @param mask
+	 *            the mask after removing the element
+	 * @param removedElement
+	 *            the removed element
+	 */
+	void onRemove(IBitmask<E> mask, E removedElement);
 }

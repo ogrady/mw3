@@ -30,6 +30,10 @@ public class Const {
 	public static final String NITRO_RSC = RSC_PATH + "nitro" + SEP;
 
 	/**
+	 * Factor by which sprites are scaled.
+	 */
+	public static final float SCALE_FACTOR = 2;
+	/**
 	 * Delay between two rotations of a Mechs arm.
 	 */
 	public static final long MECH_ARM_ROTATION_DELAY = 200;

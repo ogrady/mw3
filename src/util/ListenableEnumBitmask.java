@@ -15,7 +15,6 @@ import listener.notifier.INotifier;
 public class ListenableEnumBitmask<E extends Enum<?>> extends EnumBitmask<E>
 		implements IListenable<IEnumBitmaskListener<E>> {
 	private final ListenerSet<IEnumBitmaskListener<E>> _listeners;
-	private final INotifier<IEnumBitmaskListener<E>> _notifier;
 
 	/**
 	 * Constructor
@@ -23,12 +22,6 @@ public class ListenableEnumBitmask<E extends Enum<?>> extends EnumBitmask<E>
 	public ListenableEnumBitmask() {
 		super();
 		_listeners = new ListenerSet<IEnumBitmaskListener<E>>();
-		_notifier = new INotifier<IEnumBitmaskListener<E>>() {
-			@Override
-			public void notify(final IEnumBitmaskListener<E> listener) {
-				listener.onChange(ListenableEnumBitmask.this);
-			}
-		};
 	}
 
 	/**
@@ -39,7 +32,12 @@ public class ListenableEnumBitmask<E extends Enum<?>> extends EnumBitmask<E>
 		final boolean isNew = !has(value);
 		_map.put(value, true);
 		if (isNew) {
-			_listeners.notify(_notifier);
+			new INotifier<IEnumBitmaskListener<E>>() {
+				@Override
+				public void notify(final IEnumBitmaskListener<E> listener) {
+					listener.onAdd(ListenableEnumBitmask.this, value);
+				}
+			};
 		}
 	}
 
@@ -51,7 +49,12 @@ public class ListenableEnumBitmask<E extends Enum<?>> extends EnumBitmask<E>
 		final boolean had = has(value);
 		_map.put(value, false);
 		if (had) {
-			_listeners.notify(_notifier);
+			new INotifier<IEnumBitmaskListener<E>>() {
+				@Override
+				public void notify(final IEnumBitmaskListener<E> listener) {
+					listener.onRemove(ListenableEnumBitmask.this, value);
+				}
+			};
 		}
 	}
 

@@ -2,6 +2,7 @@ package renderer.slick.mech;
 
 import listener.IAnimationListener;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.geom.Vector2f;
@@ -15,28 +16,31 @@ import environment.character.mech.Nitro;
 import game.Viewport;
 
 public class NitroRenderer extends MechRenderer {
-	final float _factor = 2;
 
 	public NitroRenderer(final Nitro pos) {
 		super(pos);
 		pos.getState().getListeners().registerListener(this);
 		_walking = new ObservableAnimation(loadScaledSpriteSheet(
-				Const.NITRO_RSC + "walking.png", 36, 45, _factor), 60);
+				Const.NITRO_RSC + "walking.png", 36, 45, Const.SCALE_FACTOR),
+				60);
 		_jumping = new ObservableAnimation(loadScaledSpriteSheet(
-				Const.NITRO_RSC + "flying.png", 40, 47, _factor), 60);
+				Const.NITRO_RSC + "flying.png", 40, 47, Const.SCALE_FACTOR), 60);
 		_broken = new ObservableAnimation(loadScaledSpriteSheet(Const.NITRO_RSC
-				+ "broken.png", 47, 48, _factor), 60);
+				+ "broken.png", 47, 48, Const.SCALE_FACTOR), 60);
 		// this is the wrong sprite. Just to prevent NULL [Daniel]
 		_special = new ObservableAnimation(loadScaledSpriteSheet(
-				Const.NITRO_RSC + "shielded.png", 40, 46, _factor), 60);
+				Const.NITRO_RSC + "shielded.png", 40, 46, Const.SCALE_FACTOR),
+				60);
 		_shielded = new ObservableAnimation(loadScaledSpriteSheet(
-				Const.NITRO_RSC + "shielded.png", 40, 46, _factor), 60);
+				Const.NITRO_RSC + "shielded.png", 40, 46, Const.SCALE_FACTOR),
+				60);
 		_shielded.setLooping(false);
 		_arm = new ObservableAnimation(loadScaledSpriteSheet(Const.NITRO_RSC
-				+ "arm.png", 29, 46, _factor), 60);
+				+ "arm.png", 29, 46, Const.SCALE_FACTOR), 60);
 		_arm.setCurrentFrame(_arm.getFrameCount() / 2);
 		_flyingPrelude = new ObservableAnimation(loadScaledSpriteSheet(
-				Const.NITRO_RSC + "start_flying.png", 45, 50, _factor), 100);
+				Const.NITRO_RSC + "start_flying.png", 45, 50,
+				Const.SCALE_FACTOR), 100);
 		_flyingPrelude.setLooping(true);
 		this.setIdle();
 	}
@@ -70,13 +74,16 @@ public class NitroRenderer extends MechRenderer {
 	@Override
 	public void render(final Graphics g, final Viewport vp) {
 		super.render(g, vp);
+		g.setColor(Color.black);
+		g.drawString("" + _renderable.getCurrentLife(),
+				_renderable.getPosition().x, _renderable.getPosition().y - 20);
 		_arm.start();
 		_arm.setCurrentFrame(_renderable.getArmPosition());
 		final Image frame = _arm.getCurrentFrame();
 		final float adjustedCenter = (_renderable.getWidth() - frame.getWidth()) / 2;
 		final float adjustedX = adjustedCenter + _renderable.getDirection()
-				* 11 * _factor;
-		final float adjustedY = 7 * _factor;
+				* 11 * Const.SCALE_FACTOR;
+		final float adjustedY = 7 * Const.SCALE_FACTOR;
 		frame.draw(_renderable.getPosition().x + adjustedX,
 				_renderable.getPosition().y - adjustedY,
 				(_renderable.getDirection() - 1) * -frame.getWidth() / 2, 0,
@@ -84,8 +91,19 @@ public class NitroRenderer extends MechRenderer {
 				frame.getHeight());
 	}
 
-	@Override
-	public void onChange(final IBitmask<MovableState> mask) {
+	/**
+	 * This method is just a stub for backwards-compatibility and is called from
+	 * both, {@link #onAdd(IBitmask, MovableState)} and
+	 * {@link #onRemove(IBitmask, MovableState)} without utilizing their second
+	 * parameter. You might want to use that second parameter to probe the
+	 * hashmap of behaviours you planned on implementing and remove this method
+	 * entirely. So you can differentiate whether a state was added or removed
+	 * and which state it was - that's all I can provide you with for now,
+	 * sorry. I hope that works out for you.
+	 * 
+	 * @author Daniel
+	 */
+	public void handleBitmaskChanges(final IBitmask<MovableState> mask) {
 		/**
 		 * The following doesn't work at all. :D I tried to combine your code
 		 * from the methods I had to delete in here - but failed. But I didn't
@@ -126,12 +144,28 @@ public class NitroRenderer extends MechRenderer {
 
 	@Override
 	public Vector2f getArmJoint() {
-		return _renderable.getPosition().copy()
-				.add(new Vector2f(16 * _factor, 13 * _factor));
+		return _renderable
+				.getPosition()
+				.copy()
+				.add(new Vector2f(16 * Const.SCALE_FACTOR,
+						13 * Const.SCALE_FACTOR));
 	}
 
 	@Override
 	public int getArmLength() {
-		return (int) (28 * _factor);
+		return (int) (28 * Const.SCALE_FACTOR);
+	}
+
+	@Override
+	public void onAdd(final IBitmask<MovableState> mask,
+			final MovableState newElement) {
+		handleBitmaskChanges(mask);
+	}
+
+	@Override
+	public void onRemove(final IBitmask<MovableState> mask,
+			final MovableState removedElement) {
+		handleBitmaskChanges(mask);
+
 	}
 }
