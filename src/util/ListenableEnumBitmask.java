@@ -32,12 +32,12 @@ public class ListenableEnumBitmask<E extends Enum<?>> extends EnumBitmask<E>
 		final boolean isNew = !has(value);
 		_map.put(value, true);
 		if (isNew) {
-			new INotifier<IEnumBitmaskListener<E>>() {
+			_listeners.notify(new INotifier<IEnumBitmaskListener<E>>() {
 				@Override
 				public void notify(final IEnumBitmaskListener<E> listener) {
 					listener.onAdd(ListenableEnumBitmask.this, value);
 				}
-			};
+			});
 		}
 	}
 
@@ -49,12 +49,12 @@ public class ListenableEnumBitmask<E extends Enum<?>> extends EnumBitmask<E>
 		final boolean had = has(value);
 		_map.put(value, false);
 		if (had) {
-			new INotifier<IEnumBitmaskListener<E>>() {
+			_listeners.notify(new INotifier<IEnumBitmaskListener<E>>() {
 				@Override
 				public void notify(final IEnumBitmaskListener<E> listener) {
 					listener.onRemove(ListenableEnumBitmask.this, value);
 				}
-			};
+			});
 		}
 	}
 
