@@ -42,7 +42,11 @@ public class Configuration extends Properties {
 			// select (eject, enter mech)
 			SELECT = "select",
 			// pause
-			START = "start";
+			START = "start",
+			// background music volume
+			BGM_VOL = "bgm_vol",
+			// sound effects volume
+			SFX_VOL = "sfx_vol";
 
 	public char getChar(final String key) {
 		return getProperty(key).charAt(0);
@@ -50,6 +54,10 @@ public class Configuration extends Properties {
 
 	public int getInteger(final String key) {
 		return Integer.parseInt(getProperty(key));
+	}
+
+	public float getFloat(final String key) {
+		return Float.parseFloat(getProperty(key));
 	}
 
 	public double getDouble(final String key) {
