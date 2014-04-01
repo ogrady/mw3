@@ -1,4 +1,4 @@
-package environment.collider;
+package environment.collision;
 
 import environment.IDamageSource;
 import environment.character.StationaryShield;

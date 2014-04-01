@@ -93,8 +93,10 @@ public class Projectile extends Movable implements IDamageSource {
 	 * @return see {@link #move(float, float)}
 	 */
 	public boolean moveOn() {
+		_currentPosition.add(_deltaVector);
 		_traveledDistance += _deltaVector.length();
-		return move(_deltaVector.x, _deltaVector.y);
+		return true;
+		// return move(_deltaVector.x, _deltaVector.y);
 	}
 
 	@Override

@@ -5,7 +5,7 @@ import game.MetalWarriors;
 import game.Viewport;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 import listener.IGameListener;
 import logger.LogMessageType;
@@ -143,7 +143,7 @@ public abstract class Movable extends Positionable implements IMassObject,
 
 		_currentPosition.x += moveFactorX * _xspeed;
 
-		final List<Positionable> xCollisions = _collider.getCollisions();
+		final Collection<Positionable> xCollisions = _collider.getCollisions();
 
 		// Move right.
 		if (moveFactorX > 0) {
@@ -186,7 +186,7 @@ public abstract class Movable extends Positionable implements IMassObject,
 		_currentPosition.x = oldPositionX;
 		_currentPosition.y += moveFactorY * _yspeed;
 
-		final List<Positionable> yCollisions = _collider.getCollisions();
+		final Collection<Positionable> yCollisions = _collider.getCollisions();
 
 		// Moved up.
 		if (moveFactorY < 0) {

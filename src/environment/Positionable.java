@@ -9,9 +9,9 @@ import org.newdawn.slick.geom.Vector2f;
 import renderer.DefaultRenderer;
 import renderer.IRendereable;
 import renderer.slick.Slick2DRenderer;
-import environment.collider.DefaultCollider;
-import environment.collider.ICollidable;
-import environment.collider.ICollider;
+import environment.collision.DefaultCollider;
+import environment.collision.ICollidable;
+import environment.collision.ICollider;
 
 /**
  * Object that can be positioned somewhere on the playing field and has a

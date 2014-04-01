@@ -1,4 +1,4 @@
-package environment.collider;
+package environment.collision;
 
 /**
  * Collidables have to ability to collide with other abilities. The effect of

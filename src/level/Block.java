@@ -7,9 +7,9 @@ import org.newdawn.slick.geom.Vector2f;
 import renderer.DefaultRenderer;
 import util.Const;
 import environment.Positionable;
-import environment.collider.DefaultCollider;
-import environment.collider.DestructableBlockCollider;
-import environment.collider.NeverCollider;
+import environment.collision.DefaultCollider;
+import environment.collision.DestructableBlockCollider;
+import environment.collision.NeverCollider;
 
 /**
  * Block of which a map consists of. They hold information such as whether they

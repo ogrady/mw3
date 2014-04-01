@@ -58,7 +58,7 @@ public class Const {
 	 * Distance in pixels a bullet from Nitros SMG travels without hitting
 	 * anything before despawning.
 	 */
-	public static final long NITRO_SMG_DISTANCE = 200;
+	public static final long NITRO_SMG_DISTANCE = 400;
 	/**
 	 * Base damage one bullet from Nitros SMG inflicts.
 	 */
@@ -66,7 +66,7 @@ public class Const {
 	/**
 	 * Speed at which the bullets from Nitros SMG fly
 	 */
-	public static float NITRO_SMG_SPEED = 3.5f;
+	public static float NITRO_SMG_SPEED = 7f;
 	/**
 	 * Base damage Nitros sword inflicts.
 	 */

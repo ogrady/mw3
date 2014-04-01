@@ -7,7 +7,7 @@ import util.Const;
 import controller.projectile.GenericProjectileController;
 import environment.Actor;
 import environment.Movable;
-import environment.collider.ProjectileCollider;
+import environment.collision.ProjectileCollider;
 
 /**
  * The projectile Nitro fires from his SMG. Has a smooth ballistics and a range

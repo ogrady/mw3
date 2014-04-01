@@ -7,7 +7,7 @@ import renderer.slick.Slick2DRenderer;
 import util.Const;
 import controller.projectile.GenericProjectileController;
 import environment.character.mech.Nitro;
-import environment.collider.ProjectileCollider;
+import environment.collision.ProjectileCollider;
 import game.MetalWarriors;
 import game.Viewport;
 
@@ -77,6 +77,6 @@ public class ParticleSword extends Projectile {
 		if (_offset.length() >= _toTravel) {
 			destruct();
 		}
-		return false;
+		return true;
 	}
 }

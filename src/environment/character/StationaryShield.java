@@ -11,7 +11,7 @@ import org.newdawn.slick.geom.Vector2f;
 import renderer.slick.StationaryShieldRenderer;
 import util.Const;
 import environment.Positionable;
-import environment.collider.StationaryShieldCollider;
+import environment.collision.StationaryShieldCollider;
 import game.Configuration;
 import game.MetalWarriors;
 import game.Viewport;

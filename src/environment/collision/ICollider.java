@@ -1,14 +1,22 @@
-package environment.collider;
+package environment.collision;
 
-import java.util.List;
+import java.util.Collection;
 
 import level.Block;
 import environment.IDamageSource;
 import environment.Positionable;
 
+/**
+ * Interface for objects that handle the collisions
+ * 
+ * @author Daniel
+ * 
+ */
 public interface ICollider {
 
 	ICollidable getCollidable();
+
+	void handleCollisions();
 
 	/**
 	 * Checks for collisions at the current position of the held object
@@ -16,7 +24,7 @@ public interface ICollider {
 	 * @return a list of objects we collide with or an empty list of no
 	 *         collisions occur
 	 */
-	List<Positionable> getCollisions();
+	Collection<Positionable> getCollisions();
 
 	/**
 	 * Checks whether our collidable collides with some positionable.<br>

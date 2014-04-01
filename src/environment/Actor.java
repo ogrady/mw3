@@ -9,7 +9,7 @@ import listener.notifier.INotifier;
 
 import org.newdawn.slick.geom.Vector2f;
 
-import environment.collider.ActorCollider;
+import environment.collision.ActorCollider;
 
 /**
  * Actors are movable objects that can have an additional descriton string.<br>

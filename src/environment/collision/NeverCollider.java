@@ -1,4 +1,4 @@
-package environment.collider;
+package environment.collision;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +46,11 @@ public class NeverCollider implements ICollider {
 
 	@Override
 	public void onBlockCollide(final Block block) {
+	}
+
+	@Override
+	public void handleCollisions() {
+
 	}
 
 }

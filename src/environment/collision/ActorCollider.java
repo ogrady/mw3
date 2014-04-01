@@ -1,4 +1,4 @@
-package environment.collider;
+package environment.collision;
 
 import environment.Actor;
 import environment.IDamageSource;

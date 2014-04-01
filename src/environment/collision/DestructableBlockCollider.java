@@ -1,4 +1,4 @@
-package environment.collider;
+package environment.collision;
 
 import level.Block;
 import environment.IDamageSource;
