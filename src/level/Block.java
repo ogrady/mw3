@@ -1,6 +1,7 @@
 package level;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import org.newdawn.slick.geom.Vector2f;
 
@@ -20,6 +21,7 @@ import environment.collision.NeverCollider;
  */
 public class Block extends Positionable {
 	public static final ArrayList<Block> instances = new ArrayList<Block>();
+	public static final HashSet<Block> solidBlocks = new HashSet<Block>();
 	private final World _map;
 	private boolean _solid, _destructable;
 	private final int _xIndex, _yIndex;
@@ -64,10 +66,13 @@ public class Block extends Positionable {
 	 */
 	public void setSolid(final boolean solid) {
 		_solid = solid;
-		// block is just an empty space. We assume that it won't be set back to
-		// solid once it is gone -> no else-branch
-		if (!solid) {
-			_collider = new NeverCollider(this);
+		if (solid) {
+			solidBlocks.add(this);
+			setCollider(isDestructable() ? new DestructableBlockCollider(this)
+					: new DefaultCollider<Block>(this));
+		} else {
+			solidBlocks.remove(this);
+			setCollider(new NeverCollider(this));
 		}
 	}
 

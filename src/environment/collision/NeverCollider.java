@@ -32,11 +32,6 @@ public class NeverCollider implements ICollider {
 	}
 
 	@Override
-	public boolean collides(final Positionable other) {
-		return false;
-	}
-
-	@Override
 	public void onPositionableCollide(final Positionable positionable) {
 	}
 

@@ -1,12 +1,14 @@
 package environment.collision;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
 
 import level.Block;
 import environment.IDamageSource;
 import environment.Positionable;
 import environment.collider.collector.CollisionCollector;
-import environment.collider.collector.DefaultCollector;
 import environment.collider.handler.CollisionHandler;
 import environment.collider.handler.DefaultHandler;
 import environment.collision.validator.CollisionVerifier;
@@ -16,9 +18,9 @@ import environment.collision.validator.CollisionVerifier;
  * <ul>
  * <li><strong>a {@link Positionable}:</strong> the objects, this
  * {@link Collider} takes care of ("our" entity)</li>
- * <li><strong>a {@link CollisionCollector}</strong> which collects all
+ * <li><strong>a {@link CollisionCollector}s</strong> which collect all
  * collisions that occur at a given time with our entity. This is done by
- * employing different {@link CollisionVerifier}s within the collector to
+ * employing different {@link CollisionVerifier}s within the collectors to
  * dynamically add or remove criterions for collisions (see there for further
  * documentation)</li>
  * <li><strong>a {@link CollisionHandler}</strong> that handles the collisions
@@ -32,7 +34,7 @@ import environment.collision.validator.CollisionVerifier;
  * <li>handle notifications of other objects our entity collided with (see
  * former bullet point)</li>
  * <li>be dynamically changable by replacing the handler, or replacing the
- * collector</li>
+ * collectors</li>
  * </ul>
  * 
  * @author Daniel
@@ -40,42 +42,49 @@ import environment.collision.validator.CollisionVerifier;
  */
 public class Collider<P extends Positionable> implements ICollider {
 	protected P _collidable;
-	protected CollisionCollector<Positionable> _collector;
+	protected List<CollisionCollector<? extends Positionable>> _collectors;
 	protected CollisionHandler<Positionable, Positionable> _handler;
 
 	/**
-	 * Constructor empoys {@link DefaultCollector} and {@link DefaultHandler}.
-	 * Can be replaced in constructors of subclasses.
+	 * Constructor
 	 * 
 	 * @param positionable
 	 *            our entity
 	 */
-	public Collider(final P positionable,
-			final CollisionCollector<Positionable> collector,
-			final CollisionHandler<Positionable, Positionable> handler) {
+	public Collider(final P positionable) {
+		_collectors = new ArrayList<CollisionCollector<? extends Positionable>>();
 		_collidable = positionable;
-		_collector = collector;
-		_handler = handler;
+		_handler = new DefaultHandler();
+	}
+
+	/**
+	 * Adds another collector for gathering the collisions
+	 * 
+	 * @param collector
+	 *            the new {@link CollisionCollector}
+	 */
+	protected void addCollector(
+			final CollisionCollector<? extends Positionable> collector) {
+		_collectors.add(collector);
 	}
 
 	@Override
 	public void handleCollisions() {
-		_handler.handle(_collidable, _collector.collectCollisions(_collidable));
+		_handler.handle(_collidable, getCollisions());
 	}
 
 	@Override
 	public Collection<Positionable> getCollisions() {
-		return _collector.collectCollisions(_collidable);
+		final HashSet<Positionable> collisions = new HashSet<Positionable>();
+		for (final CollisionCollector<? extends Positionable> collector : _collectors) {
+			collector.collectionCollisions(_collidable, collisions);
+		}
+		return collisions;
 	}
 
 	@Override
 	public ICollidable getCollidable() {
 		return _collidable;
-	}
-
-	@Override
-	public boolean collides(final Positionable other) {
-		return _collector.collides(_collidable, other);
 	}
 
 	@Override

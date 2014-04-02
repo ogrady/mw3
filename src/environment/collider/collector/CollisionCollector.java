@@ -2,10 +2,12 @@ package environment.collider.collector;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 
 import environment.Positionable;
 import environment.collision.validator.CollisionVerifier;
-import environment.projectile.Projectile;
+import environment.collision.validator.IntersectionVerifier;
+import environment.collision.validator.NotselfVerifier;
 
 /**
  * {@link CollisionCollector}s gather the objects a {@link Positionable}
@@ -17,17 +19,30 @@ import environment.projectile.Projectile;
  * <li>...omit certain objects from collisions (instances of the own team etc.)</li>
  * <li>...</li>
  * </ul>
- * Their only job is to <strong>collect</strong> those collisions and return
- * them. Handling takes place in another place!
+ * This is achieved by applying {@link CollisionVerifier}s to them, which serve
+ * as criterion for whether a collision occurs or not. Their only job is to<br>
+ * So the only job of collectors is to <strong>collect</strong> those collisions
+ * and return them. Handling takes place elsewhere!
+ * <p>
+ * The reason why each collector only takes care of one collection is to be able
+ * to apply different criterions to different collectors. E.g. a collider could
+ * be interested in the collisions of its {@link Positionable} and the blocks,
+ * as well as with other {@link Positionable}s. For both lists, we would employ
+ * an {@link IntersectionVerifier}, to check for basic collision. But the list
+ * that contains the {@link Positionable}s also needs a {@link NotselfVerifier},
+ * as he would constantly collide with itself. Probing the map doesn't need this
+ * check and would therefore add complexity that is not needed. So instead we
+ * have different collectors for both those lists and every collector holds its
+ * own verifiers. The results of both collectors can be combined within the
+ * collider, to have both: the collisions with other {@link Positionable} and
+ * with the map.
+ * </p>
  * <p>
  * The general course of the collection goes like this:
  * <ol>
- * <li>the collector picks out structures that contain interesting objects
- * (lists, Quadtrees, database-tables, whatever we are storing our objects in).
- * This can employ a preselection, e.g. omiting lists of uninteresting objects
- * (collecting collisions for {@link Projectile} will probably not even consider
- * the list of other {@link Projectile}s for collisions).</li>
- * <li>the collected interesting objects are passed to the interchangeable
+ * <li>the collector holds one structure that contain interesting objects (list,
+ * Quadtree, database-table, whatever we are storing our objects in).
+ * <li>this list of collision-candidates is passed to the interchangeable
  * {@link CollisionVerifier}s one by one to check for actual collision. Based on
  * how the verifiers determines collision, some objects will pass this test,
  * while others don't. Multiple verifiers can be employed to narrow down the
@@ -42,38 +57,31 @@ import environment.projectile.Projectile;
  * @author Daniel
  * 
  * @param <E>
+ *            type of the collection, this collector can check against
  */
-public abstract class CollisionCollector<E extends Positionable> {
+public class CollisionCollector<E extends Positionable> {
+	private final Collection<E> _candidates;
 	private final ArrayList<CollisionVerifier> _verifiers;
 
 	/**
 	 * Constructor
 	 */
-	public CollisionCollector() {
+	public CollisionCollector(final Collection<E> candidates,
+			final CollisionVerifier... verifiers) {
+		_candidates = candidates;
 		_verifiers = new ArrayList<CollisionVerifier>();
+		addVerifiers(verifiers);
 	}
 
 	/**
-	 * Protected, as only subclasses should add additional verifiers from within
-	 * themselves. No collector should be contructed and altered afterwards. To
-	 * employ additional validators, you have to derive this class and do it in
-	 * the constructor.
+	 * Adds new verifiers to the {@link CollisionCollector}
 	 * 
-	 * @param verifier
-	 *            the new verifier. Will only be added if not null
+	 * @param verifiers
 	 */
-	public void addValidator(final CollisionVerifier verifier) {
-		if (verifier != null) {
-			_verifiers.add(verifier);
+	public void addVerifiers(final CollisionVerifier... verifiers) {
+		for (final CollisionVerifier v : verifiers) {
+			_verifiers.add(v);
 		}
-	}
-
-	/**
-	 * @return the {@link CollisionVerifier}s, currently used to check for
-	 *         collisions
-	 */
-	public ArrayList<CollisionVerifier> getValidator() {
-		return _verifiers;
 	}
 
 	/**
@@ -88,7 +96,7 @@ public abstract class CollisionCollector<E extends Positionable> {
 	 * @return if all {@link CollisionVerifier}s are satisfied (= the two
 	 *         objects collided)
 	 */
-	public boolean collides(final Positionable me, final Positionable other) {
+	private boolean collides(final Positionable me, final Positionable other) {
 		int i = 0;
 		while (i < _verifiers.size() && _verifiers.get(i).passes(me, other)) {
 			i++;
@@ -110,6 +118,25 @@ public abstract class CollisionCollector<E extends Positionable> {
 	 *            the entity we check for collisions with its environment
 	 * @return the list of objects, this collector deemed interesting
 	 */
-	public abstract Collection<E> collectCollisions(Positionable me);
 
+	/**
+	 * Collects all collisions from the candidate-list by applying the verifiers
+	 * to it. The results will be gathered in the passed {@link HashSet}, so we
+	 * can chain multiple {@link CollisionCollector}s and let them all put their
+	 * results into the same result-set, instead of generating one on their own
+	 * and uniting those sets later on.
+	 * 
+	 * @param me
+	 *            our entity
+	 * @param collisions
+	 *            {@link HashSet} the collisions will be put in by reference
+	 */
+	public void collectionCollisions(final Positionable me,
+			final HashSet<Positionable> collisions) {
+		for (final E candidate : _candidates) {
+			if (collides(me, candidate)) {
+				collisions.add(candidate);
+			}
+		}
+	}
 }

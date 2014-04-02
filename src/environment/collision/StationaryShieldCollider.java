@@ -14,7 +14,7 @@ public class StationaryShieldCollider extends DefaultCollider<StationaryShield> 
 	private final StationaryShield _shield;
 
 	/**
-	 * Constrcutor
+	 * Constructor
 	 * 
 	 * @param shield
 	 *            the logical {@link StationaryShield}

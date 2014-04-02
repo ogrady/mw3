@@ -4,7 +4,6 @@
 
       Should compile, pack jar and start game by calling "ant run" once
 -->
-<?xml version="1.0" encoding="UTF-8"?>
 <project>
    <!-- Set definitions, afterwards use variables only -->
    <property name="lib.dir" value="lib/slick" />
@@ -33,7 +32,7 @@
    </uptodate>
 
    <target name="clean">
-      <delete dir="${build.dir}" />
+     <delete dir="${build.dir}" />
    </target>
 
    <target name="compile" unless="nochanges">

@@ -1,8 +1,11 @@
 package environment.collision;
 
+import level.Block;
+import environment.Actor;
 import environment.Positionable;
-import environment.collider.collector.DefaultCollector;
-import environment.collider.handler.DefaultHandler;
+import environment.collider.collector.CollisionCollector;
+import environment.collision.validator.IntersectionVerifier;
+import environment.collision.validator.NotselfVerifier;
 
 /**
  * The defaultcollider does basic checking whether he collides with something or
@@ -16,6 +19,10 @@ import environment.collider.handler.DefaultHandler;
  */
 public class DefaultCollider<P extends Positionable> extends Collider<P> {
 	public DefaultCollider(final P positionable) {
-		super(positionable, new DefaultCollector(), new DefaultHandler());
+		super(positionable);
+		addCollector(new CollisionCollector<Block>(Block.solidBlocks,
+				new IntersectionVerifier()));
+		addCollector(new CollisionCollector<Actor>(Actor.instances,
+				new IntersectionVerifier(), new NotselfVerifier()));
 	}
 }

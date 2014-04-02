@@ -2,11 +2,16 @@ package environment.collision;
 
 import java.util.Collection;
 
+import level.Block;
 import environment.Actor;
 import environment.Positionable;
 import environment.character.StationaryShield;
-import environment.collider.collector.ProjectileCollector;
+import environment.collider.collector.CollisionCollector;
 import environment.collider.handler.ProjectileHandler;
+import environment.collision.validator.IntersectionVerifier;
+import environment.collision.validator.NotselfVerifier;
+import environment.collision.validator.OnceVerifier;
+import environment.collision.validator.SelfprotectValidator;
 import environment.projectile.Projectile;
 
 /**
@@ -30,14 +35,22 @@ public class ProjectileCollider extends Collider<Projectile> {
 	 */
 	public ProjectileCollider(final Projectile projectile,
 			final int maxCollisions) {
-		super(projectile, new ProjectileCollector(), new ProjectileHandler());
+		super(projectile);
+		_handler = new ProjectileHandler();
 		_remainingCollisions = maxCollisions;
+		addCollector(new CollisionCollector<Block>(Block.solidBlocks,
+				new IntersectionVerifier(), new OnceVerifier()));
+		addCollector(new CollisionCollector<Actor>(Actor.instances,
+				new IntersectionVerifier(), new NotselfVerifier(),
+				new SelfprotectValidator(), new OnceVerifier()));
+		addCollector(new CollisionCollector<StationaryShield>(
+				StationaryShield.instances, new IntersectionVerifier(),
+				new OnceVerifier()));
 	}
 
 	@Override
 	public void handleCollisions() {
-		final Collection<Positionable> collisions = _collector
-				.collectCollisions(_collidable);
+		final Collection<Positionable> collisions = getCollisions();
 		_handler.handle(_collidable, collisions);
 		_remainingCollisions -= collisions.size();
 		if (_remainingCollisions <= 0) {

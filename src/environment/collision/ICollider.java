@@ -14,8 +14,14 @@ import environment.Positionable;
  */
 public interface ICollider {
 
+	/**
+	 * @return the {@link ICollidable} this collider takes care of
+	 */
 	ICollidable getCollidable();
 
+	/**
+	 * Constructs a list of occuring collisions and handles them
+	 */
 	void handleCollisions();
 
 	/**
@@ -25,18 +31,6 @@ public interface ICollider {
 	 *         collisions occur
 	 */
 	Collection<Positionable> getCollisions();
-
-	/**
-	 * Checks whether our collidable collides with some positionable.<br>
-	 * When a collidable C0 looks for objects he collides with it should call
-	 * the collides-method of C1 to Cn and collect those results to have a
-	 * complete list of collisions do some boundry check.<br>
-	 * 
-	 * @param other
-	 *            the object to check for collisions
-	 * @return true, if the held collidable and the passed objects collide
-	 */
-	boolean collides(Positionable other);
 
 	/**
 	 * Collide with a positionable

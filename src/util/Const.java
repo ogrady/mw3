@@ -62,7 +62,7 @@ public class Const {
 	/**
 	 * Base damage one bullet from Nitros SMG inflicts.
 	 */
-	public static float NITRO_SMG_DMG = 1;
+	public static float NITRO_SMG_DMG = 3;
 	/**
 	 * Speed at which the bullets from Nitros SMG fly
 	 */
