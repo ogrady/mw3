@@ -123,7 +123,8 @@ public class Quadtree<E extends IBounding> implements Collection<E> {
 	 *            the element to check for collisions
 	 * @return the passed list for chaining
 	 */
-	public List<E> retrieve(final List<E> returnObjects, final IBounding element) {
+	public HashSet<E> retrieve(final HashSet<E> returnObjects,
+			final IBounding element) {
 		if (_split) {
 			final List<Integer> indices = getIndices(element.getHitbox());
 			for (final int i : indices) {

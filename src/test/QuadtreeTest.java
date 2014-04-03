@@ -1,6 +1,8 @@
 package test;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 
 import level.Block;
 import level.MapLoader;
@@ -33,7 +35,7 @@ public class QuadtreeTest extends BasicGame {
 	private World _world;
 	private Quadtree<Block> _qt;
 	private Rectangle _r;
-	private ArrayList<Block> _collisions;
+	private Collection<Block> _collisions;
 
 	public QuadtreeTest() {
 		super("Quadtree Test");
@@ -86,7 +88,7 @@ public class QuadtreeTest extends BasicGame {
 	@Override
 	public void update(final GameContainer arg0, final int arg1)
 			throws SlickException {
-		final ArrayList<Block> collisions = new ArrayList<Block>();
+		final HashSet<Block> collisions = new HashSet<Block>();
 		_qt.retrieve(collisions, new IBounding() {
 
 			@Override
