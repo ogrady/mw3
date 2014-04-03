@@ -23,8 +23,8 @@ import environment.collision.ICollider;
  * 
  * @author Daniel
  */
-public abstract class Positionable implements IRendereable<Slick2DRenderer>,
-		ICollidable {
+public abstract class Positionable implements IBounding,
+		IRendereable<Slick2DRenderer>, ICollidable {
 	public static final ArrayList<Positionable> instances = new ArrayList<Positionable>();
 
 	protected Vector2f _currentPosition;
@@ -103,6 +103,7 @@ public abstract class Positionable implements IRendereable<Slick2DRenderer>,
 	/**
 	 * @return hitbox for collisions
 	 */
+	@Override
 	public Shape getHitbox() {
 		return new Rectangle(getPosition().x, getPosition().y, getWidth() - 1,
 				getHeight() - 1);

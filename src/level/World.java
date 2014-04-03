@@ -71,16 +71,34 @@ public class World implements IRendereable<MapRenderer> {
 	}
 
 	/**
+	 * Gets the block at the passed coordinate
+	 * 
 	 * @param x
 	 *            x-coordinate of desired block
 	 * @param y
 	 *            y-coordinate of desired block
-	 * @return block ad desired position or NULL if the indices where out of
-	 *         range
+	 * @return block at desired position or NULL if the indices where out of
+	 *         bounds
 	 */
 	public Block getBlock(final int x, final int y) {
 		return x >= 0 && x < getWidth() && y >= 0 && y < getHeight() ? _blocks[x][y]
 				: null;
+	}
+
+	/**
+	 * Gets the block that contains the passed point-coordinate
+	 * 
+	 * @param x
+	 *            x-coordinate of the point
+	 * @param y
+	 *            y-coordinate of the point
+	 * @return block at desired position or NULL if the indices where out of
+	 *         bounds
+	 */
+	public Block getBlockAt(final int x, final int y) {
+		final int xcoord = x / getBlockWidth();
+		final int ycoord = y / getBlockHeight();
+		return getBlock(xcoord, ycoord);
 	}
 
 	/**
