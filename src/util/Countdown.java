@@ -53,7 +53,7 @@ public class Countdown {
 	 * @param delta
 	 *            the milliseconds to substract from the remaining time
 	 */
-	public void tick(final long delta) {
+	public void tick(final int delta) {
 		_current = Math.max(_current - delta, 0);
 	}
 

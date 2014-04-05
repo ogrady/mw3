@@ -24,11 +24,12 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Vector2f;
 
-import renderer.slick.mech.NitroRenderer;
 import util.Const;
 import controller.TestAi;
-import controller.keyboard.MechKeyboardController;
+import controller.device.MechKeyboardController;
+import controller.device.MechXboxPadController;
 import environment.Movable;
+import environment.character.mech.Mech;
 import environment.character.mech.Nitro;
 import exception.MapException;
 
@@ -110,11 +111,10 @@ public class MetalWarriors extends BasicGame implements
 		_listeners = new ListenerSet<IGameListener>();
 		_container = container;
 		loadConfiguration(Const.CONF_PATH);
-		/*_player = PlayerMechFactory.create(500, 480,
-				PlayerMechFactory.EMech.NITRO, _configuration);*/
 		_player = new Nitro(new Vector2f(440, 480), "");
-		_player.setController(new MechKeyboardController((Nitro) _player,
-				_configuration, (NitroRenderer) _player.getRenderer()));
+		_player.setController(new MechKeyboardController((Mech) _player,
+				_configuration));
+		_player.setController(new MechXboxPadController((Mech) _player));
 		_map = MapLoader.load("rsc/map/tm3.tmx");
 		final Nitro n2 = new Nitro(new Vector2f(350, 500), "");
 		n2.setController(new TestAi(n2));

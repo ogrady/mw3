@@ -1,4 +1,4 @@
-package controller.keyboard;
+package controller.device;
 
 import game.Configuration;
 import game.MetalWarriors;
@@ -23,6 +23,7 @@ import org.newdawn.slick.KeyListener;
  * @author Daniel
  * 
  */
+@Deprecated
 public class KeyboardWatchdog implements IListenable<IInputListener>,
 		KeyListener {
 

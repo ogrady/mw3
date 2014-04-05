@@ -1,7 +1,7 @@
 package listener.notifier;
 
 import listener.IListener;
-import controller.keyboard.KeyboardWatchdog;
+import controller.device.KeyboardWatchdog;
 
 /**
  * Notifiers are one-method-interfaces to simulate method-pointers. Used for

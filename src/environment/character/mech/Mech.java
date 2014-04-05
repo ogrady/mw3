@@ -1,5 +1,6 @@
 package environment.character.mech;
 
+import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Vector2f;
 
 import util.Const;
@@ -133,7 +134,7 @@ public abstract class Mech extends Actor {
 	 * @param delta
 	 *            the passed milliseconds since the last tick
 	 */
-	public void tickActions(final long delta) {
+	public void tickActions(final int delta) {
 		_primaryAttack.getDelay().tick(delta);
 		_secondaryAttack.getDelay().tick(delta);
 		_specialAttack.getDelay().tick(delta);
@@ -237,5 +238,11 @@ public abstract class Mech extends Actor {
 	 */
 	public boolean useItem() {
 		return _itemUse.perform();
+	}
+
+	@Override
+	public void onTick(final Input input, final int delta) {
+		super.onTick(input, delta);
+		tickActions(delta);
 	}
 }

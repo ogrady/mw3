@@ -1,16 +1,14 @@
-package controller.keyboard;
+package controller.device;
 
 import org.newdawn.slick.Input;
 
-import renderer.slick.mech.NitroRenderer;
 import controller.IControllable;
 import controller.IController;
 import environment.character.mech.Mech;
-import environment.character.mech.Nitro;
 import game.Configuration;
 
 /**
- * Keyboard controller specific for the Nitro mech
+ * Keyboard controller specific for mechs.
  * 
  * @author Daniel
  * 
@@ -20,16 +18,15 @@ public class MechKeyboardController implements IController {
 	private final Configuration _configuration;
 
 	public MechKeyboardController(final Mech mech,
-			final Configuration configuration, final NitroRenderer renderer) {
+			final Configuration configuration) {
 		_mech = mech;
 		_configuration = configuration;
 	}
 
 	@Override
 	public void update(final Input input, final int delta) {
-		_mech.tickActions(delta);
-
-		int deltaX = 0, deltaY = 0;
+		int deltaX = 0;
+		final int deltaY = 0;
 		if (input.isKeyDown(_configuration.getInteger(Configuration.UP))) {
 			_mech.armUp();
 		}
@@ -43,7 +40,7 @@ public class MechKeyboardController implements IController {
 			deltaX = 1;
 		}
 		if (input.isKeyDown(_configuration.getInteger(Configuration.JUMP))) {
-			deltaY = -2;
+			_mech.jump();
 		}
 		if (input.isKeyDown(_configuration.getInteger(Configuration.SPECIAL))) {
 			_mech.specialAttack();
@@ -69,6 +66,6 @@ public class MechKeyboardController implements IController {
 
 	@Override
 	public void setControllable(final IControllable controllable) {
-		_mech = (Nitro) controllable;
+		_mech = (Mech) controllable;
 	}
 }

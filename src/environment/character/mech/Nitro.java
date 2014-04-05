@@ -69,6 +69,13 @@ public class Nitro extends Mech {
 				new ParticleSword(Nitro.this);
 			}
 		};
+		_jump = new CharacterAction(0) {
+
+			@Override
+			protected void execute() {
+				move(0, -2);
+			}
+		};
 		final NitroRenderer nr = new NitroRenderer(this);
 		setRenderer(nr);
 		nr.getSpecialAnimation().getListeners()
