@@ -46,10 +46,14 @@ import environment.IBounding;
  * @author Steven Lambert, Daniel
  * 
  * @param <E>
- *            type of elements, this {@link Quadtree} can hold. Has to implement
+ *            type of elements, this {@link QuadTree} can hold. Has to implement
  *            {@link IBounding}, to do intersection-checks with the subtrees
  */
-public class Quadtree<E extends IBounding> implements Collection<E> {
+public class QuadTree<E extends IBounding> implements Collection<E> {
+	/**
+	 * how many elements a tree has to hold before rejoining
+	 */
+	private final static int MIN_PER_TREE = 5;
 	/**
 	 * how many elements a tree holds before it splits
 	 */
@@ -62,8 +66,9 @@ public class Quadtree<E extends IBounding> implements Collection<E> {
 	private final int _level;
 	private final Collection<E> _elements;
 	private final Rectangle _bounds;
-	private final Quadtree<E>[] _nodes;
+	private final QuadTree<E>[] _nodes;
 	private boolean _split;
+	private final QuadTree<E> _parent;
 
 	/**
 	 * @return the bounding box of the tree
@@ -76,7 +81,7 @@ public class Quadtree<E extends IBounding> implements Collection<E> {
 	 * @return the four subtrees, if split. Results in an empty array, if not
 	 *         split
 	 */
-	public Quadtree<E>[] getNodes() {
+	public QuadTree<E>[] getNodes() {
 		return _nodes;
 	}
 
@@ -103,11 +108,12 @@ public class Quadtree<E extends IBounding> implements Collection<E> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public Quadtree(final int level, final Rectangle bounds) {
-		_level = level;
+	public QuadTree(final QuadTree<E> parent, final Rectangle bounds) {
+		_parent = parent;
+		_level = parent == null ? 0 : parent.getLevel() + 1;
 		_elements = new HashSet<E>();
 		_bounds = bounds;
-		_nodes = new Quadtree[4];
+		_nodes = new QuadTree[4];
 		_split = false;
 	}
 
@@ -117,13 +123,27 @@ public class Quadtree<E extends IBounding> implements Collection<E> {
 	 * collision-check. It only narrows down the area in which we look for
 	 * candidates.
 	 * 
-	 * @param returnObjects
-	 *            the list of candidates, element could collide with
 	 * @param element
 	 *            the element to check for collisions
-	 * @return the passed list for chaining
+	 * @return the list of candidates, the passed element could collide with
 	 */
-	public HashSet<E> retrieve(final HashSet<E> returnObjects,
+	public HashSet<E> getCandidates(final IBounding element) {
+		final HashSet<E> candidates = new HashSet<E>();
+		retrieve(candidates, element);
+		return candidates;
+	}
+
+	/**
+	 * Recursively browses through subtrees to find candidates. Entrance point
+	 * is {@link #getCandidates(IBounding)}.
+	 * 
+	 * @param returnObjects
+	 *            the list of candidates, element could collide with. Filled by
+	 *            reference
+	 * @param element
+	 *            the element to check for collisions
+	 */
+	private void retrieve(final HashSet<E> returnObjects,
 			final IBounding element) {
 		if (_split) {
 			final List<Integer> indices = getIndices(element.getHitbox());
@@ -133,7 +153,6 @@ public class Quadtree<E extends IBounding> implements Collection<E> {
 		} else {
 			returnObjects.addAll(_elements);
 		}
-		return returnObjects;
 	}
 
 	/**
@@ -168,14 +187,13 @@ public class Quadtree<E extends IBounding> implements Collection<E> {
 		final float x = _bounds.getX();
 		final float y = _bounds.getY();
 
-		_nodes[0] = new Quadtree<E>(_level + 1, new Rectangle(x, y, width,
+		_nodes[0] = new QuadTree<E>(this, new Rectangle(x, y, width, height));
+		_nodes[1] = new QuadTree<E>(this, new Rectangle(x + width, y, width,
 				height));
-		_nodes[1] = new Quadtree<E>(_level + 1, new Rectangle(x + width, y,
+		_nodes[2] = new QuadTree<E>(this, new Rectangle(x, y + height, width,
+				height));
+		_nodes[3] = new QuadTree<E>(this, new Rectangle(x + width, y + height,
 				width, height));
-		_nodes[2] = new Quadtree<E>(_level + 1, new Rectangle(x, y + height,
-				width, height));
-		_nodes[3] = new Quadtree<E>(_level + 1, new Rectangle(x + width, y
-				+ height, width, height));
 		_split = true;
 	}
 
@@ -299,7 +317,9 @@ public class Quadtree<E extends IBounding> implements Collection<E> {
 
 	/**
 	 * Removes an element from the tree. If it is split, it has to be in at
-	 * least one subtree, from which it will be removed as well.
+	 * least one subtree, from which it will be removed as well. If removing an
+	 * element causes the tree to underflow and the tree is not the root, it
+	 * will cause its parent to rejoin and redistribute all elements.
 	 * 
 	 * @param b
 	 *            the element to remove
@@ -313,6 +333,10 @@ public class Quadtree<E extends IBounding> implements Collection<E> {
 			for (final int i : indices) {
 				removed = removed && _nodes[i].remove(b);
 			}
+		}
+		if (_parent != null && _elements.size() < MIN_PER_TREE) {
+			_parent.split();
+			_parent.redistribute();
 		}
 		return removed;
 	}

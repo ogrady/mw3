@@ -18,7 +18,7 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 
 import util.Const;
-import util.Quadtree;
+import util.QuadTree;
 import environment.IBounding;
 
 /**
@@ -33,7 +33,7 @@ import environment.IBounding;
  */
 public class QuadtreeTest extends BasicGame {
 	private World _world;
-	private Quadtree<Block> _qt;
+	private QuadTree<Block> _qt;
 	private Rectangle _r;
 	private Collection<Block> _collisions;
 
@@ -46,7 +46,7 @@ public class QuadtreeTest extends BasicGame {
 		try {
 			final AppGameContainer app = new AppGameContainer(
 					new QuadtreeTest());
-			app.setDisplayMode(800, 600, false);
+			app.setDisplayMode(1000, 800, false);
 			app.setVSync(true);
 			app.setTargetFrameRate(60);
 			app.start();
@@ -75,7 +75,7 @@ public class QuadtreeTest extends BasicGame {
 	@Override
 	public void init(final GameContainer arg0) throws SlickException {
 		_world = MapLoader.load(Const.RSC_PATH + "map/tm3.tmx");
-		_qt = new Quadtree<Block>(0, new Rectangle(0, 0, _world.getWidth()
+		_qt = new QuadTree<Block>(null, new Rectangle(0, 0, _world.getWidth()
 				* _world.getBlockWidth(), _world.getHeight()
 				* _world.getBlockHeight()));
 		_qt.addAll(Block.solidBlocks);
@@ -88,8 +88,7 @@ public class QuadtreeTest extends BasicGame {
 	@Override
 	public void update(final GameContainer arg0, final int arg1)
 			throws SlickException {
-		final HashSet<Block> collisions = new HashSet<Block>();
-		_qt.retrieve(collisions, new IBounding() {
+		final HashSet<Block> collisions = _qt.getCandidates(new IBounding() {
 
 			@Override
 			public Shape getHitbox() {
@@ -118,10 +117,10 @@ public class QuadtreeTest extends BasicGame {
 		}
 	}
 
-	private void renderQuadTree(final Graphics g, final Quadtree<?> qt) {
+	private void renderQuadTree(final Graphics g, final QuadTree<?> qt) {
 		g.draw(qt.getBounds());
 		if (qt.isSplit()) {
-			for (final Quadtree<?> sub : qt.getNodes()) {
+			for (final QuadTree<?> sub : qt.getNodes()) {
 				renderQuadTree(g, sub);
 			}
 		}

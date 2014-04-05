@@ -96,7 +96,7 @@ public class CollisionCollector<E extends Positionable> {
 	 * @return if all {@link CollisionVerifier}s are satisfied (= the two
 	 *         objects collided)
 	 */
-	private boolean collides(final Positionable me, final Positionable other) {
+	protected boolean collides(final Positionable me, final Positionable other) {
 		int i = 0;
 		while (i < _verifiers.size() && _verifiers.get(i).passes(me, other)) {
 			i++;
