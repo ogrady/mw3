@@ -141,6 +141,11 @@ public class MechXboxPadController implements IController, ControllerListener {
 		if (_pressed.contains(B)) {
 			_mech.secondaryAttack();
 		}
+		if (_pressed.contains(RB)) {
+			_mech.block();
+		} else {
+			_mech.unblock();
+		}
 	}
 
 	@Override
