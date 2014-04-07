@@ -39,7 +39,7 @@ public class KeyboardWatchdog implements IListenable<IInputListener>,
 		_accepting = true;
 		_notifiers = new HashMap<Integer, ParametrizedNotifier<Boolean, IInputListener>>();
 		// up
-		_notifiers.put(configuration.getInteger(Configuration.UP),
+		_notifiers.put(configuration.getInteger(Configuration.KB_UP),
 				new ParametrizedNotifier<Boolean, IInputListener>() {
 
 					@Override
@@ -49,7 +49,7 @@ public class KeyboardWatchdog implements IListenable<IInputListener>,
 					}
 				});
 		// down
-		_notifiers.put(configuration.getInteger(Configuration.DOWN),
+		_notifiers.put(configuration.getInteger(Configuration.KB_DOWN),
 				new ParametrizedNotifier<Boolean, IInputListener>() {
 
 					@Override
@@ -59,7 +59,7 @@ public class KeyboardWatchdog implements IListenable<IInputListener>,
 					}
 				});
 		// left
-		_notifiers.put(configuration.getInteger(Configuration.LEFT),
+		_notifiers.put(configuration.getInteger(Configuration.KB_LEFT),
 				new ParametrizedNotifier<Boolean, IInputListener>() {
 
 					@Override
@@ -69,7 +69,7 @@ public class KeyboardWatchdog implements IListenable<IInputListener>,
 					}
 				});
 		// right
-		_notifiers.put(configuration.getInteger(Configuration.RIGHT),
+		_notifiers.put(configuration.getInteger(Configuration.KB_RIGHT),
 				new ParametrizedNotifier<Boolean, IInputListener>() {
 
 					@Override
@@ -79,7 +79,7 @@ public class KeyboardWatchdog implements IListenable<IInputListener>,
 					}
 				});
 		// jump
-		_notifiers.put(configuration.getInteger(Configuration.JUMP),
+		_notifiers.put(configuration.getInteger(Configuration.KB_JUMP),
 				new ParametrizedNotifier<Boolean, IInputListener>() {
 
 					@Override
@@ -89,7 +89,7 @@ public class KeyboardWatchdog implements IListenable<IInputListener>,
 					}
 				});
 		// attack 1
-		_notifiers.put(configuration.getInteger(Configuration.ATTACK_1),
+		_notifiers.put(configuration.getInteger(Configuration.KB_ATTACK_1),
 				new ParametrizedNotifier<Boolean, IInputListener>() {
 
 					@Override
@@ -99,7 +99,7 @@ public class KeyboardWatchdog implements IListenable<IInputListener>,
 					}
 				});
 		// attack 2
-		_notifiers.put(configuration.getInteger(Configuration.ATTACK_2),
+		_notifiers.put(configuration.getInteger(Configuration.KB_ATTACK_2),
 				new ParametrizedNotifier<Boolean, IInputListener>() {
 
 					@Override
@@ -109,7 +109,7 @@ public class KeyboardWatchdog implements IListenable<IInputListener>,
 					}
 				});
 		// special
-		_notifiers.put(configuration.getInteger(Configuration.SPECIAL),
+		_notifiers.put(configuration.getInteger(Configuration.KB_SPECIAL),
 				new ParametrizedNotifier<Boolean, IInputListener>() {
 
 					@Override
@@ -119,7 +119,7 @@ public class KeyboardWatchdog implements IListenable<IInputListener>,
 					}
 				});
 		// item
-		_notifiers.put(configuration.getInteger(Configuration.ITEM),
+		_notifiers.put(configuration.getInteger(Configuration.KB_ITEM),
 				new ParametrizedNotifier<Boolean, IInputListener>() {
 
 					@Override
@@ -129,7 +129,7 @@ public class KeyboardWatchdog implements IListenable<IInputListener>,
 					}
 				});
 		// block
-		_notifiers.put(configuration.getInteger(Configuration.BLOCK),
+		_notifiers.put(configuration.getInteger(Configuration.KB_BLOCK),
 				new ParametrizedNotifier<Boolean, IInputListener>() {
 
 					@Override
@@ -139,7 +139,7 @@ public class KeyboardWatchdog implements IListenable<IInputListener>,
 					}
 				});
 		// select
-		_notifiers.put(configuration.getInteger(Configuration.SELECT),
+		_notifiers.put(configuration.getInteger(Configuration.KB_SELECT),
 				new ParametrizedNotifier<Boolean, IInputListener>() {
 
 					@Override
@@ -149,7 +149,7 @@ public class KeyboardWatchdog implements IListenable<IInputListener>,
 					}
 				});
 		// start
-		_notifiers.put(configuration.getInteger(Configuration.START),
+		_notifiers.put(configuration.getInteger(Configuration.KB_START),
 				new ParametrizedNotifier<Boolean, IInputListener>() {
 
 					@Override

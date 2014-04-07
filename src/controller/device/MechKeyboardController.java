@@ -19,7 +19,7 @@ public class MechKeyboardController implements IController {
 
 	public MechKeyboardController(final Mech mech,
 			final Configuration configuration) {
-		_mech = mech;
+		setControllable(mech);
 		_configuration = configuration;
 	}
 
@@ -27,31 +27,34 @@ public class MechKeyboardController implements IController {
 	public void update(final Input input, final int delta) {
 		int deltaX = 0;
 		final int deltaY = 0;
-		if (input.isKeyDown(_configuration.getInteger(Configuration.UP))) {
+		if (input.isKeyDown(_configuration.getInteger(Configuration.KB_UP))) {
 			_mech.armUp();
 		}
-		if (input.isKeyDown(_configuration.getInteger(Configuration.DOWN))) {
+		if (input.isKeyDown(_configuration.getInteger(Configuration.KB_DOWN))) {
 			_mech.armDown();
 		}
-		if (input.isKeyDown(_configuration.getInteger(Configuration.LEFT))) {
+		if (input.isKeyDown(_configuration.getInteger(Configuration.KB_LEFT))) {
 			deltaX = -1;
 		}
-		if (input.isKeyDown(_configuration.getInteger(Configuration.RIGHT))) {
+		if (input.isKeyDown(_configuration.getInteger(Configuration.KB_RIGHT))) {
 			deltaX = 1;
 		}
-		if (input.isKeyDown(_configuration.getInteger(Configuration.JUMP))) {
+		if (input.isKeyDown(_configuration.getInteger(Configuration.KB_JUMP))) {
 			_mech.jump();
 		}
-		if (input.isKeyDown(_configuration.getInteger(Configuration.SPECIAL))) {
+		if (input
+				.isKeyDown(_configuration.getInteger(Configuration.KB_SPECIAL))) {
 			_mech.specialAttack();
 		}
-		if (input.isKeyDown(_configuration.getInteger(Configuration.ATTACK_1))) {
+		if (input.isKeyDown(_configuration
+				.getInteger(Configuration.KB_ATTACK_1))) {
 			_mech.primaryAttack();
 		}
-		if (input.isKeyDown(_configuration.getInteger(Configuration.ATTACK_2))) {
+		if (input.isKeyDown(_configuration
+				.getInteger(Configuration.KB_ATTACK_2))) {
 			_mech.secondaryAttack();
 		}
-		if (input.isKeyDown(_configuration.getInteger(Configuration.BLOCK))) {
+		if (input.isKeyDown(_configuration.getInteger(Configuration.KB_BLOCK))) {
 			_mech.block();
 		} else {
 			_mech.unblock();

@@ -8,6 +8,7 @@ import org.newdawn.slick.Input;
 import controller.IControllable;
 import controller.IController;
 import environment.character.mech.Mech;
+import game.Configuration;
 
 /**
  * Controller to move a mech with a Xbox-360-gamepad<br>
@@ -61,7 +62,7 @@ public class MechXboxPadController implements IController, ControllerListener {
 	/**
 	 * Start-button
 	 */
-	START = 9,
+	START = 8,
 	/**
 	 * Pressing the left ministick
 	 */
@@ -89,6 +90,7 @@ public class MechXboxPadController implements IController, ControllerListener {
 
 	public Mech _mech;
 	private Input _input;
+	private final Configuration _configuration;
 	private final HashSet<Integer> _pressed;
 
 	/**
@@ -97,9 +99,10 @@ public class MechXboxPadController implements IController, ControllerListener {
 	 * @param _mech
 	 *            the mech to controll
 	 */
-	public MechXboxPadController(final Mech _mech) {
+	public MechXboxPadController(final Mech mech, final Configuration config) {
 		_pressed = new HashSet<Integer>();
-		setControllable(_mech);
+		setControllable(mech);
+		_configuration = config;
 	}
 
 	@Override
@@ -117,31 +120,36 @@ public class MechXboxPadController implements IController, ControllerListener {
 	@Override
 	public void update(final Input input, final int delta) {
 		setInput(input);
-		if (_pressed.contains(UP)) {
+		if (_pressed.contains(_configuration.getInteger(Configuration.XB_UP))) {
 			_mech.armUp();
 		}
-		if (_pressed.contains(DOWN)) {
+		if (_pressed.contains(_configuration.getInteger(Configuration.XB_DOWN))) {
 			_mech.armDown();
 		}
-		if (_pressed.contains(RIGHT)) {
+		if (_pressed
+				.contains(_configuration.getInteger(Configuration.XB_RIGHT))) {
 			_mech.move(1, 0);
 		}
-		if (_pressed.contains(LEFT)) {
+		if (_pressed.contains(_configuration.getInteger(Configuration.XB_LEFT))) {
 			_mech.move(-1, 0);
 		}
-		if (_pressed.contains(A)) {
+		if (_pressed.contains(_configuration.getInteger(Configuration.XB_JUMP))) {
 			_mech.jump();
 		}
-		if (_pressed.contains(X)) {
+		if (_pressed.contains(_configuration
+				.getInteger(Configuration.XB_ATTACK_1))) {
 			_mech.primaryAttack();
 		}
-		if (_pressed.contains(Y)) {
+		if (_pressed.contains(_configuration
+				.getInteger(Configuration.XB_SPECIAL))) {
 			_mech.specialAttack();
 		}
-		if (_pressed.contains(B)) {
+		if (_pressed.contains(_configuration
+				.getInteger(Configuration.XB_ATTACK_2))) {
 			_mech.secondaryAttack();
 		}
-		if (_pressed.contains(RB)) {
+		if (_pressed
+				.contains(_configuration.getInteger(Configuration.XB_BLOCK))) {
 			_mech.block();
 		} else {
 			_mech.unblock();

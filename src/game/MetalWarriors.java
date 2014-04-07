@@ -113,7 +113,8 @@ public class MetalWarriors extends BasicGame implements
 		_player = new Nitro(new Vector2f(440, 480), "");
 		_player.setController(new MechKeyboardController((Mech) _player,
 				_configuration));
-		// _player.setController(new MechXboxPadController((Mech) _player));
+		/*_player.setController(new MechXboxPadController((Mech) _player,
+				_configuration));*/
 		_map = MapLoader.load("rsc/map/tm3.tmx");
 		final Nitro n2 = new Nitro(new Vector2f(350, 500), "");
 		n2.setController(new TestAi(n2));

@@ -20,29 +20,53 @@ public class Configuration extends Properties {
 	// the following constants are merely the keys for the stored buttons in the
 	// hashmap, NOT the keys (as keys on the keyboard) themselves!
 	// move left
-			LEFT = "left_key",
+			KB_LEFT = "kb_left_key",
 			// move right
-			RIGHT = "right_key",
+			KB_RIGHT = "kb_right_key",
 			// look up
-			UP = "up_key",
+			KB_UP = "kb_up_key",
 			// look down
-			DOWN = "down_key",
+			KB_DOWN = "kb_down_key",
 			// jump
-			JUMP = "jump_key",
+			KB_JUMP = "kb_jump_key",
 			// primary attack
-			ATTACK_1 = "attack_key_1",
+			KB_ATTACK_1 = "kb_attack_key_1",
 			// secondary attack
-			ATTACK_2 = "attack_key_2",
+			KB_ATTACK_2 = "kb_attack_key_2",
 			// special move
-			SPECIAL = "special",
+			KB_SPECIAL = "kb_special_key",
 			// item
-			ITEM = "item_key",
+			KB_ITEM = "kb_item_key",
 			// block
-			BLOCK = "block_key",
+			KB_BLOCK = "kb_block_key",
 			// select (eject, enter mech)
-			SELECT = "select",
+			KB_SELECT = "kb_select_key",
 			// pause
-			START = "start",
+			KB_START = "kb_start_key",
+			// move left
+			XB_LEFT = "xb_left_key",
+			// move right
+			XB_RIGHT = "xb_right_key",
+			// look up
+			XB_UP = "xb_up_key",
+			// look down
+			XB_DOWN = "xb_down_key",
+			// jump
+			XB_JUMP = "xb_jump_key",
+			// primary attack
+			XB_ATTACK_1 = "xb_attack_key_1",
+			// secondary attack
+			XB_ATTACK_2 = "xb_attack_key_2",
+			// special move
+			XB_SPECIAL = "xb_special_key",
+			// item
+			XB_ITEM = "xb_item_key",
+			// block
+			XB_BLOCK = "xb_block_key",
+			// select (eject, enter mech)
+			XB_SELECT = "xb_select_key",
+			// pause
+			XB_START = "xb_start_key",
 			// background music volume
 			BGM_VOL = "bgm_vol",
 			// sound effects volume
