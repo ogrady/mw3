@@ -1,12 +1,12 @@
-package environment.collision.validator;
+package environment.collision.verifier;
 
 import environment.Positionable;
 
-public class UncollidableValidator extends CollisionVerifier {
+public class NotselfVerifier extends CollisionVerifier {
 
 	@Override
 	public boolean passes(final Positionable me, final Positionable other) {
-		return false;
+		return me != other;
 	}
 
 }

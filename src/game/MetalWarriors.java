@@ -71,7 +71,7 @@ public class MetalWarriors extends BasicGame implements
 	 * @return the viewport which determines which part of the playing field the
 	 *         player can see
 	 */
-	public Viewport getViewPort() {
+	public Viewport getViewport() {
 		return _viewport;
 	}
 

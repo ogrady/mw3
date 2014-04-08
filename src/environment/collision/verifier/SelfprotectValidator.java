@@ -1,4 +1,4 @@
-package environment.collision.validator;
+package environment.collision.verifier;
 
 import environment.Positionable;
 import environment.projectile.Projectile;
