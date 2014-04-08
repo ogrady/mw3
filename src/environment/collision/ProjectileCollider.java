@@ -8,12 +8,11 @@ import environment.Positionable;
 import environment.character.StationaryShield;
 import environment.collider.collector.CollisionCollector;
 import environment.collider.handler.ProjectileHandler;
-import environment.collision.validator.IntersectionVerifier;
-import environment.collision.validator.NotselfVerifier;
-import environment.collision.validator.OnceVerifier;
-import environment.collision.validator.SelfprotectValidator;
+import environment.collision.verifier.IntersectionVerifier;
+import environment.collision.verifier.NotselfVerifier;
+import environment.collision.verifier.OnceVerifier;
+import environment.collision.verifier.SelfprotectValidator;
 import environment.projectile.Projectile;
-
 /**
  * Collider for {@link Projectile}s. Destroys blocks and
  * {@link StationaryShield}s from Nitro and damages {@link Actor}s.

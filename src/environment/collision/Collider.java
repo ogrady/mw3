@@ -11,7 +11,7 @@ import environment.Positionable;
 import environment.collider.collector.CollisionCollector;
 import environment.collider.handler.CollisionHandler;
 import environment.collider.handler.DefaultHandler;
-import environment.collision.validator.CollisionVerifier;
+import environment.collision.verifier.CollisionVerifier;
 
 /**
  * Colliders are composite-objects, consisting of:

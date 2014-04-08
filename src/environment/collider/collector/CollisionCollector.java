@@ -5,9 +5,9 @@ import java.util.Collection;
 import java.util.HashSet;
 
 import environment.Positionable;
-import environment.collision.validator.CollisionVerifier;
-import environment.collision.validator.IntersectionVerifier;
-import environment.collision.validator.NotselfVerifier;
+import environment.collision.verifier.CollisionVerifier;
+import environment.collision.verifier.IntersectionVerifier;
+import environment.collision.verifier.NotselfVerifier;
 
 /**
  * {@link CollisionCollector}s gather the objects a {@link Positionable}

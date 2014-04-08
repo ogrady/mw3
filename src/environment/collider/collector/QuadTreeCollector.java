@@ -4,7 +4,7 @@ import java.util.HashSet;
 
 import util.QuadTree;
 import environment.Positionable;
-import environment.collision.validator.CollisionVerifier;
+import environment.collision.verifier.CollisionVerifier;
 
 public class QuadTreeCollector<E extends Positionable> extends
 		CollisionCollector<E> {

@@ -4,8 +4,8 @@ import level.Block;
 import environment.Actor;
 import environment.Positionable;
 import environment.collider.collector.CollisionCollector;
-import environment.collision.validator.IntersectionVerifier;
-import environment.collision.validator.NotselfVerifier;
+import environment.collision.verifier.IntersectionVerifier;
+import environment.collision.verifier.NotselfVerifier;
 
 /**
  * The defaultcollider does basic checking whether he collides with something or
