@@ -34,9 +34,9 @@ import exception.MapException;
 
 /**
  * Main class for the game
- * 
+ *
  * @author Daniel
- * 
+ *
  */
 public class MetalWarriors extends BasicGame implements
 		IListenable<IGameListener> {
@@ -65,6 +65,13 @@ public class MetalWarriors extends BasicGame implements
 	 */
 	public Configuration getConfiguration() {
 		return _configuration;
+	}
+
+	/**
+	 * @return the map the game is currently playing
+	 */
+	public World getMap() {
+		return _map;
 	}
 
 	/**
@@ -110,14 +117,36 @@ public class MetalWarriors extends BasicGame implements
 		_listeners = new ListenerSet<IGameListener>();
 		_container = container;
 		loadConfiguration(Const.CONF_PATH);
+		loadMap("rsc/map/tm3.tmx");
 		_player = new Nitro(new Vector2f(440, 480), "");
+		// _player = new Nitro(new Vector2f(500, 120), "");
 		_player.setController(new MechKeyboardController((Mech) _player,
 				_configuration));
 		/*_player.setController(new MechXboxPadController((Mech) _player,
 				_configuration));*/
-		_map = MapLoader.load("rsc/map/tm3.tmx");
-		final Nitro n2 = new Nitro(new Vector2f(350, 500), "");
-		n2.setController(new TestAi(n2));
+		for (int i = 0; i < 0; i++) {
+			final Nitro n = new Nitro(new Vector2f(20 + i * _player.getWidth()
+					+ 1, 450), "");
+			n.setController(new TestAi(n));
+		}
+	}
+
+	/**
+	 * Loads the map from the given path and notifies all listeners that the map
+	 * is now ready
+	 *
+	 * @param path
+	 *            path to the map
+	 */
+	public void loadMap(final String path) {
+		_map = MapLoader.load(path);
+		_listeners.notify(new INotifier<IGameListener>() {
+
+			@Override
+			public void notify(final IGameListener listener) {
+				listener.onLoadMap(_map);
+			}
+		});
 	}
 
 	/**
@@ -155,7 +184,6 @@ public class MetalWarriors extends BasicGame implements
 				listener.onRender(g, _viewport);
 			}
 		});
-
 	}
 
 	public static void main(final String[] args) throws MapException {
@@ -192,7 +220,7 @@ public class MetalWarriors extends BasicGame implements
 
 	/**
 	 * Reloads the flags for the logger from the specified file
-	 * 
+	 *
 	 * @param file
 	 *            file to load the flags from line by line
 	 */

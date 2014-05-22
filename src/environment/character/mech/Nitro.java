@@ -23,9 +23,9 @@ import game.MetalWarriors;
  * Equipped with an SMG, particle sword and jetpack. Can block attacks and spawn
  * {@link StationaryShield}s on his position.
  * </p>
- * 
+ *
  * @author Daniel
- * 
+ *
  */
 public class Nitro extends Mech {
 	public Nitro(final Vector2f position, final String description) {

@@ -22,12 +22,12 @@ import controller.IController;
  * Object that may move over the playing field. It has a certain speed and can
  * be affected by gravity. Typical examples are parts of the map that move but
  * do not interact in any other way (like platforms)
- * 
+ *
  * @author Daniel
- * 
+ *
  */
 public abstract class Movable extends Positionable implements IMassObject,
-		IControllable, IGameListener {
+IControllable, IGameListener {
 	public static final ArrayList<Movable> instances = new ArrayList<Movable>();
 	protected float _xspeed;
 	protected float _yspeed;
@@ -58,7 +58,7 @@ public abstract class Movable extends Positionable implements IMassObject,
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param position
 	 *            initial position
 	 * @param width
@@ -96,7 +96,7 @@ public abstract class Movable extends Positionable implements IMassObject,
 	 * The final movement is determined by the parameters times the speed in the
 	 * direction.<br>
 	 * Fails when collisions occur.
-	 * 
+	 *
 	 * @param moveFactorX
 	 *            times the x-speed
 	 * @param moveFactorY
@@ -113,7 +113,7 @@ public abstract class Movable extends Positionable implements IMassObject,
 	 * The final movement is determined by the parameters times the speed in the
 	 * direction.<br>
 	 * Fails when collisions occur.
-	 * 
+	 *
 	 * @param moveFactorX
 	 *            times the x-speed
 	 * @param moveFactorY
@@ -253,6 +253,10 @@ public abstract class Movable extends Positionable implements IMassObject,
 
 	@Override
 	public void onLoadConfig(final Configuration conf) {
+	}
+
+	@Override
+	public void onLoadMap(final level.World map) {
 	}
 
 	@Override

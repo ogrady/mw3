@@ -20,11 +20,11 @@ import environment.collision.ICollider;
  * therefore has a {@link DefaultCollider} upon creation which can be exchanged
  * for more fitting colliders in subclasses. Typial instances are blocks for the
  * map which are placed once but do not move afterwards.
- * 
+ *
  * @author Daniel
  */
 public abstract class Positionable implements IBounding,
-		IRendereable<Slick2DRenderer>, ICollidable {
+IRendereable<Slick2DRenderer>, ICollidable {
 	public static final ArrayList<Positionable> instances = new ArrayList<Positionable>();
 
 	protected Vector2f _currentPosition;
@@ -131,7 +131,7 @@ public abstract class Positionable implements IBounding,
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param position
 	 *            initial position
 	 * @param width

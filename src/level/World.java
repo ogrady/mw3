@@ -1,22 +1,58 @@
 package level;
 
+import listener.IBlockListener;
+
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.tiled.TiledMap;
 
 import renderer.IRendereable;
 import renderer.slick.MapRenderer;
+import util.QuadTree;
 
 /**
  * Represents the internal structure of a map the game is played on.<br>
  * Each map wraps a TiledMap which holds all the information from the tiled-file
  * and an array of blocks to check for collisions and such.
- * 
+ *
  * @author Daniel
- * 
+ *
  */
-public class World implements IRendereable<MapRenderer> {
+public class World implements IRendereable<MapRenderer>, IBlockListener {
 	private final TiledMap _map;
 	private final Block[][] _blocks;
 	private MapRenderer _renderer;
+	private final QuadTree<Block> _quadtree;
+
+	public static World last;
+
+	/**
+	 * Places a block at a certain position in the grid. This method will mostly
+	 * be used upon loading a map from file and injecting the blocks one after
+	 * one into the map. Solid blocks will be added to the quadtree of solid
+	 * blocks.
+	 *
+	 * @param x
+	 *            x index for the block
+	 * @param y
+	 *            y index for the block
+	 * @param b
+	 *            block to add
+	 */
+	public void setBlockAt(final int x, final int y, final Block b) {
+		final Block old = _blocks[x][y];
+		_blocks[x][y] = b;
+		if (b.isSolid()) {
+			_quadtree.add(b);
+		}
+		if (old != null) {
+			b.getListeners().unregisterListener(this);
+		}
+		b.getListeners().registerListener(this);
+	}
+
+	public QuadTree<Block> getQuadtree() {
+		return _quadtree;
+	}
 
 	/**
 	 * @return tiled map used to create the map
@@ -30,6 +66,20 @@ public class World implements IRendereable<MapRenderer> {
 	 */
 	public Block[][] getBlocks() {
 		return _blocks;
+	}
+
+	/**
+	 * @return width of the map in pixels
+	 */
+	public int getPixelWidth() {
+		return getWidth() * getBlockWidth();
+	}
+
+	/**
+	 * @return height of the map in pixels
+	 */
+	public int getPixelHeight() {
+		return getHeight() * getBlockHeight();
 	}
 
 	/**
@@ -72,7 +122,7 @@ public class World implements IRendereable<MapRenderer> {
 
 	/**
 	 * Gets the block at the passed coordinate
-	 * 
+	 *
 	 * @param x
 	 *            x-coordinate of desired block
 	 * @param y
@@ -87,7 +137,7 @@ public class World implements IRendereable<MapRenderer> {
 
 	/**
 	 * Gets the block that contains the passed point-coordinate
-	 * 
+	 *
 	 * @param x
 	 *            x-coordinate of the point
 	 * @param y
@@ -103,7 +153,7 @@ public class World implements IRendereable<MapRenderer> {
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param tiledMap
 	 *            the tiledmap to use
 	 */
@@ -111,5 +161,17 @@ public class World implements IRendereable<MapRenderer> {
 		_map = tiledMap;
 		_blocks = new Block[_map.getWidth()][_map.getHeight()];
 		_renderer = new MapRenderer(this);
+		_quadtree = new QuadTree<>(null, new Rectangle(0, 0, getPixelWidth(),
+				getPixelHeight()));
+		last = this;
+	}
+
+	@Override
+	public void onChangeSolidness(final Block b, final boolean solid) {
+		if (solid) {
+			_quadtree.add(b);
+		} else {
+			_quadtree.remove(b);
+		}
 	}
 }

@@ -6,16 +6,16 @@ import environment.character.StationaryShield;
 /**
  * Collider for {@link StationaryShield}s from Nitro. Those only collide with
  * damage-sources, while other entities can pass through them.
- * 
+ *
  * @author Daniel
- * 
+ *
  */
 public class StationaryShieldCollider extends DefaultCollider<StationaryShield> {
 	private final StationaryShield _shield;
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param shield
 	 *            the logical {@link StationaryShield}
 	 */

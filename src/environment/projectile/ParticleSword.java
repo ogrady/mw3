@@ -19,9 +19,9 @@ import game.Viewport;
  * top to bottom).<br>
  * As it is invisible, its speed has to match the sword-animation to always be
  * at the tip of the sword in the animation.
- * 
+ *
  * @author Daniel
- * 
+ *
  */
 public class ParticleSword extends Projectile {
 	/**

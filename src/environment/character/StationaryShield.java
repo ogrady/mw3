@@ -2,6 +2,7 @@ package environment.character;
 
 import java.util.ArrayList;
 
+import level.World;
 import listener.IGameListener;
 
 import org.newdawn.slick.Graphics;
@@ -21,10 +22,10 @@ import game.Viewport;
  * of damage before being destroyed.<br>
  * Even if they are not being destroyed by damage, they will disappear after a
  * certain time to live (ttl).<br>
- * 
- * 
+ *
+ *
  * @author Daniel
- * 
+ *
  */
 // TODO implement an IShieldListener for when a shield vanishes, to be able to
 // track how many shields a Nitro currently has
@@ -35,7 +36,7 @@ public class StationaryShield extends Positionable implements IGameListener {
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param position
 	 *            position of the shield. Will be copied and therefore has no
 	 *            reference-connection to the passed vector
@@ -52,6 +53,11 @@ public class StationaryShield extends Positionable implements IGameListener {
 	@Override
 	public void onLoadConfig(final Configuration conf) {
 		// shield doesn't care
+	}
+
+	@Override
+	public void onLoadMap(final World map) {
+		// shield doesn't give two fucks
 	}
 
 	@Override

@@ -11,9 +11,9 @@ import environment.character.StationaryShield;
  * configuration-file!<br>
  * The values stored inside this class are for aspects of the game, the player
  * has no control over.
- * 
+ *
  * @author Daniel
- * 
+ *
  */
 public class Const {
 	private static final char SEP = File.separatorChar;
@@ -53,7 +53,7 @@ public class Const {
 	/**
 	 * Time in ms until Nitro can fire his SMG again.
 	 */
-	public static final long NITRO_SMG_DELAY = 150;
+	public static final long NITRO_SMG_DELAY = 200;
 	/**
 	 * Distance in pixels a bullet from Nitros SMG travels without hitting
 	 * anything before despawning.

@@ -14,9 +14,9 @@ import environment.Movable;
  * Subclasses can employ additional effects, such as the jitter from Havoc's gun
  * and are responsible to determine what happens when the projectile collides
  * with other entities, such as {@link Actor}s or the world.
- * 
+ *
  * @author Daniel
- * 
+ *
  */
 public class Projectile extends Movable implements IDamageSource {
 	protected Vector2f _deltaVector;
@@ -54,7 +54,7 @@ public class Projectile extends Movable implements IDamageSource {
 	/**
 	 * The delta-vector determines the current direction and movement of the
 	 * projectile.<br>
-	 * 
+	 *
 	 * @return the delta-vector of the bullet
 	 */
 	public Vector2f getDeltaVector() {
@@ -64,7 +64,7 @@ public class Projectile extends Movable implements IDamageSource {
 	/**
 	 * {@link Projectile}s should despawn after they flew a certain distance
 	 * without colliding with anything.
-	 * 
+	 *
 	 * @return the distance the {@link Projectile} travels before despawning
 	 */
 	public float getMaxTravelDistance() {
@@ -77,7 +77,7 @@ public class Projectile extends Movable implements IDamageSource {
 	 * {@link Projectile} just maintains the value. The {@link IController} of
 	 * the bullet is responsible for removing it from the game when it's
 	 * "lifespan" expires.
-	 * 
+	 *
 	 * @return the distance this {@link Projectile} traveled already
 	 */
 	public float getTraveledDistance() {
@@ -89,7 +89,7 @@ public class Projectile extends Movable implements IDamageSource {
 	 * use the {@link #move(float, float)}-method where we have to specify x-
 	 * and y-movement. We rather just tell the bullet to move itself by applying
 	 * it's own delta-vector to it's current position.
-	 * 
+	 *
 	 * @return see {@link #move(float, float)}
 	 */
 	public boolean moveOn() {
@@ -114,7 +114,7 @@ public class Projectile extends Movable implements IDamageSource {
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param position
 	 *            starting position (most likely the tip of a gun). Position
 	 *            will be copied and therefore has no connection to

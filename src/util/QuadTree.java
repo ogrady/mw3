@@ -107,6 +107,10 @@ public class QuadTree<E extends IBounding> implements Collection<E> {
 		return _elements;
 	}
 
+	public QuadTree() {
+		this(null, new Rectangle(0, 0, 0, 0));
+	}
+
 	@SuppressWarnings("unchecked")
 	public QuadTree(final QuadTree<E> parent, final Rectangle bounds) {
 		_parent = parent;

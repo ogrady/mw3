@@ -7,9 +7,9 @@ import environment.MovableState;
 /**
  * Colliders for {@link Actor} that take damage upon colliding with
  * {@link IDamageSource}s
- * 
+ *
  * @author Daniel
- * 
+ *
  */
 public class ActorCollider extends DefaultCollider<Actor> {
 	public ActorCollider(final Actor positionable) {
@@ -29,6 +29,7 @@ public class ActorCollider extends DefaultCollider<Actor> {
 			// if we are blocking and facing into the direction the damage came
 			// from, reduce the taken damage
 			if (_collidable.getDirection() == srcdir) {
+				// TODO put this constant somewhere else
 				dmg *= 0.8;
 			}
 		}

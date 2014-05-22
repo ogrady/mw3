@@ -36,7 +36,7 @@ import environment.IBounding;
  *
  */
 public class QuadtreeTest extends BasicGame {
-	public static final int PARTICLES = 500;
+	public static final int PARTICLES = 200;
 	private World _world;
 	private QuadTree<Block> _qt;
 	private Rectangle _r;
@@ -131,7 +131,7 @@ public class QuadtreeTest extends BasicGame {
 	 * @param g
 	 * @param qt
 	 */
-	private void renderQuadTree(final Graphics g, final QuadTree<?> qt) {
+	public static void renderQuadTree(final Graphics g, final QuadTree<?> qt) {
 		g.draw(qt.getBounds());
 		if (qt.isSplit()) {
 			for (final QuadTree<?> sub : qt.getNodes()) {

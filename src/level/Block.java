@@ -3,6 +3,11 @@ package level;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import listener.IBlockListener;
+import listener.IListenable;
+import listener.ListenerSet;
+import listener.notifier.INotifier;
+
 import org.newdawn.slick.geom.Vector2f;
 
 import renderer.DefaultRenderer;
@@ -15,16 +20,17 @@ import environment.collision.NeverCollider;
 /**
  * Block of which a map consists of. They hold information such as whether they
  * are destructable or not
- * 
+ *
  * @author Daniel
- * 
+ *
  */
-public class Block extends Positionable {
+public class Block extends Positionable implements IListenable<IBlockListener> {
 	public static final ArrayList<Block> instances = new ArrayList<Block>();
 	public static final HashSet<Block> solidBlocks = new HashSet<Block>();
 	private final World _map;
 	private boolean _solid, _destructable;
 	private final int _xIndex, _yIndex;
+	private final ListenerSet<IBlockListener> _listeners;
 
 	/**
 	 * @return the x-coordinate this block has in the grid of the map (not to
@@ -69,11 +75,18 @@ public class Block extends Positionable {
 		if (solid) {
 			solidBlocks.add(this);
 			setCollider(isDestructable() ? new DestructableBlockCollider(this)
-					: new DefaultCollider<Block>(this));
+			: new DefaultCollider<Block>(this));
 		} else {
 			solidBlocks.remove(this);
 			setCollider(new NeverCollider(this));
 		}
+		_listeners.notify(new INotifier<IBlockListener>() {
+
+			@Override
+			public void notify(final IBlockListener listener) {
+				listener.onChangeSolidness(Block.this, _solid);
+			}
+		});
 	}
 
 	/**
@@ -86,19 +99,19 @@ public class Block extends Positionable {
 	/**
 	 * Sets whether a block is destructed upon receiving damage. The collider
 	 * will be replaced accordingly
-	 * 
+	 *
 	 * @param destructable
 	 *            set a block destructable or not
 	 */
 	public void setDestructable(final boolean destructable) {
 		_destructable = destructable;
 		setCollider(_destructable ? new DestructableBlockCollider(this)
-				: new DefaultCollider<Block>(this));
+		: new DefaultCollider<Block>(this));
 	}
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param x
 	 *            x-coordinate within the map-grid
 	 * @param y
@@ -112,6 +125,7 @@ public class Block extends Positionable {
 		_xIndex = x;
 		_yIndex = y;
 		_map = map;
+		_listeners = new ListenerSet<IBlockListener>();
 		instances.add(this);
 	}
 
@@ -145,5 +159,10 @@ public class Block extends Positionable {
 	@Override
 	public String toString() {
 		return String.format("Block at (%d|%d)", _xIndex, _yIndex);
+	}
+
+	@Override
+	public ListenerSet<IBlockListener> getListeners() {
+		return _listeners;
 	}
 }

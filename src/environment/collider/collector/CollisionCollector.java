@@ -20,9 +20,9 @@ import environment.collision.verifier.NotselfVerifier;
  * <li>...</li>
  * </ul>
  * This is achieved by applying {@link CollisionVerifier}s to them, which serve
- * as criterion for whether a collision occurs or not. Their only job is to<br>
- * So the only job of collectors is to <strong>collect</strong> those collisions
- * and return them. Handling takes place elsewhere!
+ * as criterion for whether a collision occurs or not. So the only job of
+ * collectors is to <strong>collect</strong> those collisions and return them.
+ * Handling takes place elsewhere!
  * <p>
  * The reason why each collector only takes care of one collection is to be able
  * to apply different criterions to different collectors. E.g. a collider could
@@ -53,9 +53,9 @@ import environment.collision.verifier.NotselfVerifier;
  * Also, note the difference between active and passive collisions:<br>
  * active: our object ran into something<br>
  * passive: something ran into our object -> probably call to onFoobar()-method
- * 
+ *
  * @author Daniel
- * 
+ *
  * @param <E>
  *            type of the collection, this collector can check against
  */
@@ -68,6 +68,10 @@ public class CollisionCollector<E extends Positionable> {
 	 */
 	public CollisionCollector(final Collection<E> candidates,
 			final CollisionVerifier... verifiers) {
+		if (candidates == null) {
+			throw new NullPointerException(
+					"The candidates for a Collider must be a valid collection and can not be NULL");
+		}
 		_candidates = candidates;
 		_verifiers = new ArrayList<CollisionVerifier>();
 		addVerifiers(verifiers);
@@ -75,7 +79,7 @@ public class CollisionCollector<E extends Positionable> {
 
 	/**
 	 * Adds new verifiers to the {@link CollisionCollector}
-	 * 
+	 *
 	 * @param verifiers
 	 */
 	public void addVerifiers(final CollisionVerifier... verifiers) {
@@ -87,7 +91,7 @@ public class CollisionCollector<E extends Positionable> {
 	/**
 	 * Checks if one specific {@link Positionable} satisfies all employed
 	 * {@link CollisionVerifier}s
-	 * 
+	 *
 	 * @param me
 	 *            the own {@link Positionable}
 	 * @param other
@@ -113,7 +117,7 @@ public class CollisionCollector<E extends Positionable> {
 	 * Interesting lists are available through static lists, for example
 	 * {@link Positionable#instances}. Later on, this could be replaced with
 	 * Quadtrees or similar structures.
-	 * 
+	 *
 	 * @param me
 	 *            the entity we check for collisions with its environment
 	 * @return the list of objects, this collector deemed interesting
@@ -125,7 +129,7 @@ public class CollisionCollector<E extends Positionable> {
 	 * can chain multiple {@link CollisionCollector}s and let them all put their
 	 * results into the same result-set, instead of generating one on their own
 	 * and uniting those sets later on.
-	 * 
+	 *
 	 * @param me
 	 *            our entity
 	 * @param collisions

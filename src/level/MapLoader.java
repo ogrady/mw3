@@ -10,15 +10,15 @@ import exception.MapException;
  * Loads a map from a given tmx-file.<br>
  * Also extracts information for blocks, like whether they are solid,
  * destructable etc.
- * 
+ *
  * @author Daniel
- * 
+ *
  */
 public class MapLoader {
 
 	/**
 	 * Loads a map from the given tmx-file
-	 * 
+	 *
 	 * @param mapPath
 	 *            path to the tmx-file
 	 * @return a constructed map
@@ -41,7 +41,8 @@ public class MapLoader {
 					// destructables are solid by default
 					b.setSolid(b.isDestructable()
 							|| tm.getTileId(x, y, solidIndex) != 0);
-					map.getBlocks()[x][y] = b;
+					// map.getBlocks()[x][y] = b;
+					map.setBlockAt(x, y, b);
 				}
 			}
 		} catch (final SlickException e) {
