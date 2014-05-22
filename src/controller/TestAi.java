@@ -1,5 +1,7 @@
 package controller;
 
+import java.util.Random;
+
 import logger.LogMessageType;
 
 import org.newdawn.slick.Input;
@@ -9,6 +11,7 @@ import game.MetalWarriors;
 
 public class TestAi implements IController {
 	private Mech _controllable;
+	private int dir = 1;
 
 	public TestAi(final Mech m) {
 		setControllable(m);
@@ -27,7 +30,21 @@ public class TestAi implements IController {
 
 	@Override
 	public void update(final Input input, final int delta) {
-		_controllable.block();
+		dir = new Random().nextInt(10) == 0 ? -1 * dir : dir;
+		final int action = new Random().nextInt(10);
+		switch (action) {
+		case 0:
+			_controllable.block();
+		case 1:
+			_controllable.secondaryAttack();
+		case 2:
+			_controllable.specialAttack();
+		default:
+		case 3:
+			_controllable.primaryAttack();
+		}
+		_controllable.move(dir, 0);
+		// _controllable.block();
 		MetalWarriors.logger.print(
 				String.format("%s HP: %d", _controllable.getDescription(),
 						_controllable.getCurrentLife()),

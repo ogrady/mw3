@@ -17,9 +17,9 @@ import environment.collision.ActorCollider;
  * passed.<br>
  * They are the main actors in the game, such as the pilots and mechs and
  * maintain health.
- * 
+ *
  * @author Daniel
- * 
+ *
  */
 abstract public class Actor extends Movable implements
 		IListenable<IActorListener> {
@@ -51,7 +51,7 @@ abstract public class Actor extends Movable implements
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param position
 	 *            initial position
 	 * @param width
@@ -77,7 +77,7 @@ abstract public class Actor extends Movable implements
 	 * Makes the {@link Actor} reduce its hitpoints by the incoming amount of
 	 * damage and notify its listeners of this event.<br>
 	 * When its hitpoints reach zero, he will also broadcast an onDie-event.
-	 * 
+	 *
 	 * @param src
 	 *            the source of damage
 	 * @param amount
