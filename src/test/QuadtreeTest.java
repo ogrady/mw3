@@ -3,6 +3,8 @@ package test;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Random;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import level.Block;
 import level.MapLoader;
@@ -16,6 +18,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
+import org.newdawn.slick.geom.Vector2f;
 
 import util.Const;
 import util.QuadTree;
@@ -26,12 +29,14 @@ import environment.IBounding;
  * By default, blocks are solid as stored in the map-object.<br>
  * By right-clicking a block, its solidness can be toggled<br>
  * Left-clicking creates a rectangle at the click-position to check for
- * candidates
- * 
+ * candidates.<br>
+ * Also spawns particles flying around as stresstest for the FPS
+ *
  * @author Daniel
- * 
+ *
  */
 public class QuadtreeTest extends BasicGame {
+	public static final int PARTICLES = 500;
 	private World _world;
 	private QuadTree<Block> _qt;
 	private Rectangle _r;
@@ -46,7 +51,7 @@ public class QuadtreeTest extends BasicGame {
 		try {
 			final AppGameContainer app = new AppGameContainer(
 					new QuadtreeTest());
-			app.setDisplayMode(1000, 800, false);
+			app.setDisplayMode(800, 800, false);
 			app.setVSync(true);
 			app.setTargetFrameRate(60);
 			app.start();
@@ -69,6 +74,7 @@ public class QuadtreeTest extends BasicGame {
 				g.fill(b.getHitbox());
 			}
 		}
+		Particle.drawAll(g);
 
 	}
 
@@ -79,6 +85,7 @@ public class QuadtreeTest extends BasicGame {
 				* _world.getBlockWidth(), _world.getHeight()
 				* _world.getBlockHeight()));
 		_qt.addAll(Block.solidBlocks);
+		Particle.create(arg0, PARTICLES, _qt);
 		System.out.println("solid blocks: " + Block.solidBlocks.size());
 		System.out.println("tree has size: " + _qt.size());
 		arg0.getInput().addMouseListener(this);
@@ -95,9 +102,10 @@ public class QuadtreeTest extends BasicGame {
 				return _r;
 			}
 		});
-		System.out.println("collision candidates: " + collisions.size());
+		// System.out.println("quadtreetest.update: collision candidates: " +
+		// collisions.size());
 		_collisions = collisions;
-
+		Particle.updateAll();
 	}
 
 	@Override
@@ -117,12 +125,120 @@ public class QuadtreeTest extends BasicGame {
 		}
 	}
 
+	/**
+	 * Renders a quadtree ini white
+	 *
+	 * @param g
+	 * @param qt
+	 */
 	private void renderQuadTree(final Graphics g, final QuadTree<?> qt) {
 		g.draw(qt.getBounds());
 		if (qt.isSplit()) {
 			for (final QuadTree<?> sub : qt.getNodes()) {
 				renderQuadTree(g, sub);
 			}
+		}
+	}
+
+	static public class Particle implements IBounding {
+		private static final CopyOnWriteArrayList<Particle> PARTICLES = new CopyOnWriteArrayList<Particle>();
+		private static final int DISTANCE = 500;
+		private static float FACTOR = 5f;
+		Vector2f _p, _v;
+		float _traveled;
+		QuadTree<Block> _qt;
+		GameContainer _gc;
+
+		/**
+		 * Creates a given amount of particles
+		 *
+		 * @param gc
+		 *            game container
+		 * @param amount
+		 *            amount of particles to create
+		 * @param qt
+		 *            quadtree to check for collisions
+		 */
+		public static void create(final GameContainer gc, final int amount,
+				final QuadTree<Block> qt) {
+			for (int i = 0; i < amount; i++) {
+				new Particle(qt, gc);
+			}
+		}
+
+		/**
+		 * Makes all particles move
+		 */
+		public static void updateAll() {
+			for (final Particle p : PARTICLES) {
+				p.update();
+			}
+		}
+
+		/**
+		 * Draws all particles
+		 *
+		 * @param g
+		 */
+		public static void drawAll(final Graphics g) {
+			for (final Particle p : PARTICLES) {
+				p.draw(g);
+			}
+		}
+
+		/**
+		 * Constructor
+		 *
+		 * @param qt
+		 *            quadtree to check for collisions
+		 * @param gc
+		 *            gamecontainer to derive the width and height from
+		 */
+		public Particle(final QuadTree<Block> qt, final GameContainer gc) {
+			final Random r = new Random();
+			_qt = qt;
+			_gc = gc;
+			_p = new Vector2f(r.nextInt(gc.getWidth()), r.nextInt(gc
+					.getHeight()));
+			_v = new Vector2f(r.nextFloat() * FACTOR, r.nextFloat() * FACTOR);
+			PARTICLES.add(this);
+
+		}
+
+		/**
+		 * Makes the particle move. If it has traveled its maximum distance, it
+		 * will be replaced with one randomly spawned new particle
+		 */
+		public void update() {
+			_p.add(_v);
+			_traveled += _v.length();
+			if (_traveled >= DISTANCE) {
+				PARTICLES.remove(this);
+				create(_gc, 1, _qt);
+			}
+		}
+
+		/**
+		 * Draws the particle at its current position and marks all blocks it
+		 * collides with
+		 *
+		 * @param g
+		 */
+		public void draw(final Graphics g) {
+			g.setColor(Color.cyan);
+			g.drawRect(_p.x, _p.y, 2, 2);
+			final Collection<Block> col = _qt.getCandidates(this);
+			g.setColor(Color.magenta);
+			for (final Block b : col) {
+				g.drawRect(b.getPosition().x, b.getPosition().y, b.getWidth(),
+						b.getHeight());
+			}
+
+		}
+
+		@Override
+		public Shape getHitbox() {
+			return new Rectangle(_p.x, _p.y, 2, 2);
 		}
 	}
 }

@@ -42,9 +42,9 @@ import environment.IBounding;
  * should suffice. But in future implementations, re-joining trees should
  * seriously be considered and good criterions for doing so should be found.
  * </p>
- * 
+ *
  * @author Steven Lambert, Daniel
- * 
+ *
  * @param <E>
  *            type of elements, this {@link QuadTree} can hold. Has to implement
  *            {@link IBounding}, to do intersection-checks with the subtrees
@@ -57,7 +57,7 @@ public class QuadTree<E extends IBounding> implements Collection<E> {
 	/**
 	 * how many elements a tree holds before it splits
 	 */
-	private final static int MAX_PER_LEVEL = 10;
+	private final static int MAX_PER_LEVEL = 20;
 	/**
 	 * how deep a tree can become by splitting
 	 */
@@ -122,7 +122,7 @@ public class QuadTree<E extends IBounding> implements Collection<E> {
 	 * <strong>could</strong> collide. This doesn't actually do any
 	 * collision-check. It only narrows down the area in which we look for
 	 * candidates.
-	 * 
+	 *
 	 * @param element
 	 *            the element to check for collisions
 	 * @return the list of candidates, the passed element could collide with
@@ -136,7 +136,7 @@ public class QuadTree<E extends IBounding> implements Collection<E> {
 	/**
 	 * Recursively browses through subtrees to find candidates. Entrance point
 	 * is {@link #getCandidates(IBounding)}.
-	 * 
+	 *
 	 * @param returnObjects
 	 *            the list of candidates, element could collide with. Filled by
 	 *            reference
@@ -200,7 +200,7 @@ public class QuadTree<E extends IBounding> implements Collection<E> {
 	/**
 	 * Generates a list of indices of all subtrees the passed {@link Shape}
 	 * intersected with.
-	 * 
+	 *
 	 * @param s
 	 *            the {@link Shape} to check for
 	 * @return a list of indices, ranging from 0 (doesn't touch the tree at all)
@@ -211,6 +211,8 @@ public class QuadTree<E extends IBounding> implements Collection<E> {
 		final List<Integer> indices = new ArrayList<Integer>();
 		if (_split) {
 			for (int i = 0; i < _nodes.length; i++) {
+				/*System.out.println("quadtree.getIndices checking "
+						+ _nodes.length);*/
 				if (_nodes[i].getBounds().intersects(s)) {
 					indices.add(i);
 				}
@@ -320,7 +322,7 @@ public class QuadTree<E extends IBounding> implements Collection<E> {
 	 * least one subtree, from which it will be removed as well. If removing an
 	 * element causes the tree to underflow and the tree is not the root, it
 	 * will cause its parent to rejoin and redistribute all elements.
-	 * 
+	 *
 	 * @param b
 	 *            the element to remove
 	 * @return true, if the element could successfully be removed from the tree
