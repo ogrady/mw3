@@ -28,19 +28,6 @@ import environment.IBounding;
  * elements over the subtrees upon splits.<br>
  * This enables us to reuse the tree, instead of re-building it in every
  * iteration.<br>
- * On the downside, this implementation has a far bigger usage of space, as, in
- * contrast to the original implementation, every tree keeps book over all the
- * elements contained inside the subtrees. This leads to more efficient HAS and
- * SIZE operation, as the collection to hold the elements is a {@link HashSet}
- * and avoids unnecessary descends into all subtrees, to remove elements.
- * </p>
- * <p>
- * When removing elements from the tree, subtrees are still not being joined
- * yet, if possible. This could lead to severe fracturing of the tree into very
- * small pieces that contain only one element, which basically renders this
- * structure useless. For now, rebuilding the index after heavy modification
- * should suffice. But in future implementations, re-joining trees should
- * seriously be considered and good criterions for doing so should be found.
  * </p>
  *
  * @author Steven Lambert, Daniel
@@ -64,11 +51,12 @@ public class QuadTree<E extends IBounding> implements Collection<E> {
 	private final static int MAX_LEVEL = 5;
 
 	private final int _level;
-	private final Collection<E> _elements;
-	private final Rectangle _bounds;
-	private final QuadTree<E>[] _nodes;
+	private int _size;
 	private boolean _split;
+	private Collection<E> _elements;
+	private final Rectangle _bounds;
 	private final QuadTree<E> _parent;
+	private final QuadTree<E>[] _nodes;
 
 	/**
 	 * @return the bounding box of the tree
@@ -100,11 +88,25 @@ public class QuadTree<E extends IBounding> implements Collection<E> {
 	}
 
 	/**
-	 * @return the elements this tree holds. Contains all elements that are
-	 *         contained within the subtrees as well
+	 * @return the elements this tree holds. Contains only the elements that are
+	 *         stored in this particular tree, not in the subtrees
 	 */
 	public Collection<E> getElements() {
 		return _elements;
+	}
+
+	/**
+	 * Collects all elements from the tree, including possible elements in the
+	 * subtree. This makes this operation rather costly and it should be used
+	 * with care.
+	 *
+	 * @return all elements in the tree, including the ones in all subtrees (no
+	 *         duplicates)
+	 */
+	public Collection<E> getAllElements() {
+		final HashSet<E> all = new HashSet<E>(_size);
+		collectInto(all);
+		return all;
 	}
 
 	public QuadTree() {
@@ -123,7 +125,7 @@ public class QuadTree<E extends IBounding> implements Collection<E> {
 
 	/**
 	 * Retrieves a list of objects from the tree, the passed element
-	 * <strong>could</strong> collide. This doesn't actually do any
+	 * <strong>could</strong> collide with. This doesn't actually do any
 	 * collision-check. It only narrows down the area in which we look for
 	 * candidates.
 	 *
@@ -150,8 +152,7 @@ public class QuadTree<E extends IBounding> implements Collection<E> {
 	private void retrieve(final HashSet<E> returnObjects,
 			final IBounding element) {
 		if (_split) {
-			final List<Integer> indices = getIndices(element.getHitbox());
-			for (final int i : indices) {
+			for (final int i : getIndices(element.getHitbox())) {
 				_nodes[i].retrieve(returnObjects, element);
 			}
 		} else {
@@ -177,6 +178,46 @@ public class QuadTree<E extends IBounding> implements Collection<E> {
 			assert indices.size() != 0;
 			for (final int i : indices) {
 				_nodes[i].add(element);
+			}
+		}
+		// after redistribution, each element is in one childnode. The parent
+		// doesn't hold any further reference to the elements
+		_elements.clear();
+	}
+
+	/**
+	 * Joins the quadtree. This is accomplished by collecting all remaining
+	 * elements from the subtrees and putting them back in this tree. This
+	 * method should only be called after making sure that the tree must be
+	 * joined, as it doesn't make guarantees that the tree will then be valid.<br>
+	 * That means you can join a tree at any time while the subtrees are still
+	 * full, which will result in an overflowed tree.
+	 */
+	private void join() {
+		assert _size < MIN_PER_TREE;
+		if (_split) {
+			final Collection<E> bucket = new HashSet<E>(_size);
+			collectInto(bucket);
+			clear();
+			_elements = bucket;
+			// size is the same as before! But clear set it to 0
+			_size = _elements.size();
+		}
+	}
+
+	/**
+	 * Puts all elements in this tree into the passed bucket (filled by
+	 * reference). If split, all elements from the subtrees are added as well.
+	 *
+	 * @param bucket
+	 *            the list to put the elements in
+	 */
+	private void collectInto(final Collection<E> bucket) {
+		if (!_split) {
+			bucket.addAll(_elements);
+		} else {
+			for (final QuadTree<E> _node : _nodes) {
+				_node.collectInto(bucket);
 			}
 		}
 	}
@@ -212,11 +253,9 @@ public class QuadTree<E extends IBounding> implements Collection<E> {
 	 *         for the {@link #_nodes}.
 	 */
 	private List<Integer> getIndices(final Shape s) {
-		final List<Integer> indices = new ArrayList<Integer>();
+		final List<Integer> indices = new ArrayList<Integer>(4);
 		if (_split) {
 			for (int i = 0; i < _nodes.length; i++) {
-				/*System.out.println("quadtree.getIndices checking "
-						+ _nodes.length);*/
 				if (_nodes[i].getBounds().intersects(s)) {
 					indices.add(i);
 				}
@@ -231,21 +270,25 @@ public class QuadTree<E extends IBounding> implements Collection<E> {
 	 */
 	@Override
 	public boolean add(final E e) {
-		// add it to the outer node in any case, for keeping the recursive
-		// deletion going
-		_elements.add(e);
+		boolean added = false;
 		if (_split) {
-			final List<Integer> indices = getIndices(e.getHitbox());
-			for (final int i : indices) {
-				_nodes[i].add(e);
+			for (final int i : getIndices(e.getHitbox())) {
+				added = _nodes[i].add(e) || added;
+			}
+			if (added) {
+				_size++;
 			}
 		} else {
-			if (_elements.size() > MAX_PER_LEVEL && _level < MAX_LEVEL) {
-				assert !_split;
-				redistribute();
+			added = _elements.add(e);
+			if (added) {
+				_size++;
+				if (_size > MAX_PER_LEVEL && _level < MAX_LEVEL) {
+					assert !_split;
+					redistribute();
+				}
 			}
 		}
-		return true;
+		return added;
 	}
 
 	@Override
@@ -262,13 +305,16 @@ public class QuadTree<E extends IBounding> implements Collection<E> {
 	 */
 	@Override
 	public void clear() {
-		_elements.clear();
-		for (int i = 0; i < _nodes.length; i++) {
-			if (_nodes[i] != null) {
+		if (_split) {
+			assert _elements.isEmpty();
+			for (int i = 0; i < _nodes.length; i++) {
 				_nodes[i].clear();
 				_nodes[i] = null;
 			}
+		} else {
+			_elements.clear();
 		}
+		_size = 0;
 		_split = false;
 	}
 
@@ -277,7 +323,29 @@ public class QuadTree<E extends IBounding> implements Collection<E> {
 	 */
 	@Override
 	public boolean contains(final Object o) {
-		return _elements.contains(o);
+		if (o instanceof IBounding) {
+			return contains((IBounding) o);
+		}
+		return false;
+	}
+
+	public boolean contains(final IBounding b) {
+		boolean contains = false;
+		// if the object intersects with the bounds of the quadtree, it MIGHT be
+		// in it. In that case, check if it is contained in the list of elements
+		// or, if split, look for the subtrees if they have it. We can stop our
+		// search as soon as one child contains the object.
+		if (_bounds.intersects(b.getHitbox())) {
+			if (!_split) {
+				contains = _elements.contains(b);
+			} else {
+				final int i = 0;
+				while (i < _nodes.length && !contains) {
+					contains = _nodes[i].contains(b);
+				}
+			}
+		}
+		return contains;
 	}
 
 	@Override
@@ -296,16 +364,15 @@ public class QuadTree<E extends IBounding> implements Collection<E> {
 	 */
 	@Override
 	public boolean isEmpty() {
-		return _elements.isEmpty();
+		return _size == 0;
 	}
 
 	/**
-	 * Iterator of the toplevel-tree contains all elements. Makes no guarantee
-	 * of any order!
+	 * Uses the expensive {@link #getAllElements()}
 	 */
 	@Override
 	public Iterator<E> iterator() {
-		return _elements.iterator();
+		return getAllElements().iterator();
 	}
 
 	/**
@@ -333,17 +400,21 @@ public class QuadTree<E extends IBounding> implements Collection<E> {
 	 *         and all subtrees containing it
 	 */
 	private boolean remove(final IBounding b) {
-		boolean removed = _elements.remove(b);
-		if (removed && _split) {
-			final List<Integer> indices = getIndices(b.getHitbox());
-			for (final int i : indices) {
+		boolean removed = true;
+		if (!_split) {
+			removed = _elements.remove(b);
+		} else {
+			for (final int i : getIndices(b.getHitbox())) {
 				removed = removed && _nodes[i].remove(b);
 			}
 		}
-		if (_parent != null && _elements.size() < MIN_PER_TREE) {
-			_parent.split();
-			_parent.redistribute();
+		if (removed) {
+			_size--;
+			if (_parent != null && _size < MIN_PER_TREE) {
+				join();
+			}
 		}
+		assert _parent == null || _size >= MIN_PER_TREE || !_split;
 		return removed;
 	}
 
@@ -363,16 +434,22 @@ public class QuadTree<E extends IBounding> implements Collection<E> {
 
 	@Override
 	public int size() {
-		return _elements.size();
+		return _size;
 	}
 
+	/**
+	 * Uses the costly {@link #getAllElements()}
+	 */
 	@Override
 	public Object[] toArray() {
-		return _elements.toArray();
+		return getAllElements().toArray();
 	}
 
+	/**
+	 * Uses the costly {@link #getAllElements()}
+	 */
 	@Override
 	public <T> T[] toArray(final T[] a) {
-		return _elements.toArray(a);
+		return getAllElements().toArray(a);
 	}
 }

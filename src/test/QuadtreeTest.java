@@ -36,7 +36,7 @@ import environment.IBounding;
  *
  */
 public class QuadtreeTest extends BasicGame {
-	public static final int PARTICLES = 200;
+	public static final int PARTICLES = 100;
 	private World _world;
 	private QuadTree<Block> _qt;
 	private Rectangle _r;
@@ -120,13 +120,14 @@ public class QuadtreeTest extends BasicGame {
 			if (b.isSolid()) {
 				_qt.add(b);
 			} else {
+				b.destroy();
 				_qt.remove(b);
 			}
 		}
 	}
 
 	/**
-	 * Renders a quadtree ini white
+	 * Renders a quadtree in white
 	 *
 	 * @param g
 	 * @param qt
