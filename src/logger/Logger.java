@@ -1,6 +1,13 @@
 package logger;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import util.EnumBitmask;
 
@@ -20,9 +27,9 @@ import util.EnumBitmask;
  * Per default the logger prints to the default output-stream (System.out) but
  * can be reconfigured to put all output to a logfile.
  * </p>
- * 
+ *
  * @author Daniel
- * 
+ *
  */
 public class Logger {
 	private PrintStream _sink;
@@ -44,7 +51,7 @@ public class Logger {
 	 * <li>GENERAL_ERROR for unspecified errors, like printing out an exception</li>
 	 * <li>GENERAL_INFO for info message like loadout</li>
 	 * </ul>
-	 * 
+	 *
 	 * @param sink
 	 */
 	public Logger(final PrintStream sink) {
@@ -56,7 +63,7 @@ public class Logger {
 
 	/**
 	 * Prints a message of the given type
-	 * 
+	 *
 	 * @param message
 	 *            message to print
 	 * @param type
@@ -73,7 +80,7 @@ public class Logger {
 	/**
 	 * Prints a message under the GENERAL_DEBUG flag. Should only be used for
 	 * quick debugging and replaced with a specific flag afterwards
-	 * 
+	 *
 	 * @param message
 	 *            the message to print
 	 */
@@ -85,7 +92,7 @@ public class Logger {
 	/**
 	 * Sets a new sink which has to be null and un-errored. May be used to print
 	 * to files
-	 * 
+	 *
 	 * @param sink
 	 *            the new sink aka output-stream
 	 */
@@ -97,7 +104,7 @@ public class Logger {
 
 	/**
 	 * Accepts a set of message-types
-	 * 
+	 *
 	 * @param logMessageTypes
 	 *            message-types to add to the list of accepted message-types
 	 */
@@ -109,13 +116,56 @@ public class Logger {
 
 	/**
 	 * Ignores a set of message-types
-	 * 
+	 *
 	 * @param logMessageTypes
 	 *            message-types which should be ignored from now on
 	 */
 	public void ignore(final LogMessageType... logMessageTypes) {
 		for (final LogMessageType type : logMessageTypes) {
 			_accepted.remove(type);
+		}
+	}
+
+	/**
+	 * Reloads the flags for the logger from the specified file
+	 *
+	 * @param file
+	 *            file to load the flags from line by line
+	 */
+	public void loadFlagsFromFile(final String file) {
+		final List<LogMessageType> flags = new ArrayList<LogMessageType>();
+		BufferedReader in = null;
+		try {
+			in = new BufferedReader(new FileReader(new File(file)));
+			String line;
+			while ((line = in.readLine()) != null) {
+				try {
+					flags.add(LogMessageType.valueOf(line));
+				} catch (final IllegalArgumentException iae) {
+					print(String.format(
+							"Could not parse debug flag '%s' from '%s'. Discarding.",
+							line, file), LogMessageType.GENERAL_ERROR);
+				}
+			}
+		} catch (final FileNotFoundException e) {
+			print(String.format(
+					"Could not find file '%s' to parse debug flags from. Falling back to default flags.",
+					file), LogMessageType.GENERAL_INFO);
+		} catch (final IOException e) {
+			print(String.format(
+					"Error when attempting to read debug flags from '%s': '%s'. Falling back to default flags.",
+					file, e.getMessage()), LogMessageType.GENERAL_ERROR);
+		} finally {
+			if (in != null) {
+				try {
+					in.close();
+				} catch (final IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		for (final LogMessageType flag : flags) {
+			accept(flag);
 		}
 	}
 }

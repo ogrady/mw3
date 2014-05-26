@@ -1,13 +1,12 @@
 package environment;
 
-import game.Configuration;
 import game.MetalWarriors;
 import game.Viewport;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-import listener.IGameListener;
+import listener.IPlayingStateListener;
 import logger.LogMessageType;
 
 import org.newdawn.slick.Graphics;
@@ -27,7 +26,7 @@ import controller.IController;
  *
  */
 public abstract class Movable extends Positionable implements IMassObject,
-IControllable, IGameListener {
+IControllable, IPlayingStateListener {
 	public static final ArrayList<Movable> instances = new ArrayList<Movable>();
 	protected float _xspeed;
 	protected float _yspeed;
@@ -75,13 +74,15 @@ IControllable, IGameListener {
 		_yspeed = speed;
 		_state = new ListenableEnumBitmask<MovableState>();
 		Movable.instances.add(this);
-		MetalWarriors.instance.getListeners().registerListener(this);
+		MetalWarriors.instance.getPlayingState().getListeners()
+				.registerListener(this);
 	}
 
 	@Override
 	public void destruct() {
 		super.destruct();
-		MetalWarriors.instance.getListeners().unregisterListener(this);
+		MetalWarriors.instance.getPlayingState().getListeners()
+				.unregisterListener(this);
 		Movable.instances.remove(this);
 	}
 
@@ -249,10 +250,6 @@ IControllable, IGameListener {
 		MetalWarriors.logger.print(_state.toString(),
 				LogMessageType.INPUT_DEBUG);
 		return isMoving;
-	}
-
-	@Override
-	public void onLoadConfig(final Configuration conf) {
 	}
 
 	@Override

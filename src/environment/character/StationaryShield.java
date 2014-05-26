@@ -3,8 +3,8 @@ package environment.character;
 import java.util.ArrayList;
 
 import level.World;
-import listener.IGameListener;
 import listener.IListenable;
+import listener.IPlayingStateListener;
 import listener.IStationaryShieldListener;
 import listener.ListenerSet;
 import listener.notifier.INotifier;
@@ -17,7 +17,6 @@ import renderer.slick.StationaryShieldRenderer;
 import util.Const;
 import environment.Positionable;
 import environment.collision.StationaryShieldCollider;
-import game.Configuration;
 import game.MetalWarriors;
 import game.Viewport;
 
@@ -33,8 +32,8 @@ import game.Viewport;
  */
 // TODO implement an IShieldListener for when a shield vanishes, to be able to
 // track how many shields a Nitro currently has
-public class StationaryShield extends Positionable implements IGameListener,
-IListenable<IStationaryShieldListener> {
+public class StationaryShield extends Positionable implements
+		IPlayingStateListener, IListenable<IStationaryShieldListener> {
 	public static final ArrayList<StationaryShield> instances = new ArrayList<StationaryShield>();
 	private final ListenerSet<IStationaryShieldListener> _listeners;
 	private long _ttl;
@@ -58,16 +57,6 @@ IListenable<IStationaryShieldListener> {
 	}
 
 	@Override
-	public void onLoadConfig(final Configuration conf) {
-		// shield doesn't care
-	}
-
-	@Override
-	public void onLoadMap(final World map) {
-		// shield doesn't give two fucks
-	}
-
-	@Override
 	public void onTick(final Input input, final int delta) {
 		this._ttl -= delta;
 		if (this._ttl <= 0) {
@@ -82,9 +71,15 @@ IListenable<IStationaryShieldListener> {
 	}
 
 	@Override
+	public void onLoadMap(final World map) {
+		// shield doesn't give a fuck
+	}
+
+	@Override
 	public void destruct() {
 		instances.remove(this);
-		MetalWarriors.instance.getListeners().unregisterListener(this);
+		MetalWarriors.instance.getPlayingState().getListeners()
+		.unregisterListener(this);
 		_listeners.notify(new INotifier<IStationaryShieldListener>() {
 			@Override
 			public void notify(final IStationaryShieldListener listener) {

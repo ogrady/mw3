@@ -6,12 +6,13 @@ import controller.IControllable;
 import controller.IController;
 import environment.character.mech.Mech;
 import game.Configuration;
+import game.MetalWarriors;
 
 /**
  * Keyboard controller specific for mechs.
- * 
+ *
  * @author Daniel
- * 
+ *
  */
 public class MechKeyboardController implements IController {
 	private Mech _mech;
@@ -27,6 +28,9 @@ public class MechKeyboardController implements IController {
 	public void update(final Input input, final int delta) {
 		int deltaX = 0;
 		final int deltaY = 0;
+		if (input.isKeyDown(_configuration.getInteger(Configuration.KB_START))) {
+			MetalWarriors.instance.gotoMenu();
+		}
 		if (input.isKeyDown(_configuration.getInteger(Configuration.KB_UP))) {
 			_mech.armUp();
 		}

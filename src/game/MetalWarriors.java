@@ -1,36 +1,17 @@
 package game;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import level.MapLoader;
-import level.World;
-import listener.IGameListener;
-import listener.IListenable;
-import listener.ListenerSet;
-import listener.notifier.INotifier;
-import logger.LogMessageType;
+import exception.MapException;
+import gamestates.MainMenuState;
+import gamestates.PlayingState;
 import logger.Logger;
 
 import org.newdawn.slick.AppGameContainer;
-import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.geom.Vector2f;
+import org.newdawn.slick.state.GameState;
+import org.newdawn.slick.state.StateBasedGame;
 
 import util.Const;
-import controller.TestAi;
-import controller.device.MechKeyboardController;
-import environment.Movable;
-import environment.character.mech.Mech;
-import environment.character.mech.Nitro;
-import exception.MapException;
 
 /**
  * Main class for the game
@@ -38,23 +19,29 @@ import exception.MapException;
  * @author Daniel
  *
  */
-public class MetalWarriors extends BasicGame implements
-IListenable<IGameListener> {
-	private static final boolean DEBUG = true;
-
+public class MetalWarriors extends StateBasedGame {
+	// singleton instance
 	public static MetalWarriors instance;
+	// global logger-instance
 	public static final Logger logger = new Logger();
-	private Movable _player;
-	private World _map;
-	private Viewport _viewport;
-	private GameContainer _container;
-	private Configuration _configuration;
-	private ListenerSet<IGameListener> _listeners;
+	// current configuration which can be reloaded on the fly
+	private final Configuration _configuration;
+	// gamestates
+	private PlayingState _playingState;
+	private MainMenuState _mainMenuState;
 
+	private static final boolean DEBUG = true;
 	static {
 		if (DEBUG) {
-			reloadDebugFlags(Const.DEBUGFLAGS);
+			logger.loadFlagsFromFile(Const.DEBUGFLAGS);
 		}
+	}
+
+	/**
+	 * @return the {@link GameState} that is active, when the game is played
+	 */
+	public PlayingState getPlayingState() {
+		return _playingState;
 	}
 
 	/**
@@ -68,122 +55,39 @@ IListenable<IGameListener> {
 	}
 
 	/**
-	 * @return the map the game is currently playing
+	 * Puts the game in the menu-state. A bit sketchy but works for testing the
+	 * different states for now
 	 */
-	public World getMap() {
-		return _map;
+	public void gotoMenu() {
+		enterState(Const.MAIN_MENU_STATE_ID);
 	}
 
 	/**
-	 * @return the viewport which determines which part of the playing field the
-	 *         player can see
+	 * Constructor
 	 */
-	public Viewport getViewport() {
-		return _viewport;
-	}
-
-	/**
-	 * @return the width of the window
-	 */
-	public int getWidth() {
-		return _container.getWidth();
-	}
-
-	/**
-	 * @return the height of the window
-	 */
-	public int getHeight() {
-		return _container.getHeight();
-	}
-
 	public MetalWarriors() {
 		super("Metal Warriors 3");
+		_configuration = new Configuration();
 		instance = this;
-	}
-
-	public void loadConfiguration(final String path) {
-		_configuration = new Configuration(Const.CONF_PATH);
-		getListeners().notify(new INotifier<IGameListener>() {
-			@Override
-			public void notify(final IGameListener listener) {
-				listener.onLoadConfig(_configuration);
-			}
-		});
-	}
-
-	@Override
-	public void init(final GameContainer container) throws SlickException {
-		_viewport = new Viewport(0, 0, container);
-		_listeners = new ListenerSet<IGameListener>();
-		_container = container;
-		loadConfiguration(Const.CONF_PATH);
-		loadMap("rsc/map/tm3.tmx");
-		_player = new Nitro(new Vector2f(440, 480), "");
-		// _player = new Nitro(new Vector2f(500, 120), "");
-		_player.setController(new MechKeyboardController((Mech) _player,
-				_configuration));
-		/*_player.setController(new MechXboxPadController((Mech) _player,
-				_configuration));*/
-		for (int i = 0; i < 7; i++) {
-			final Nitro n = new Nitro(new Vector2f(20 + i * _player.getWidth()
-					+ 1, 450), "");
-			n.setController(new TestAi(n));
-		}
+		loadConfiguration();
 	}
 
 	/**
-	 * Loads the map from the given path and notifies all listeners that the map
-	 * is now ready
-	 *
-	 * @param path
-	 *            path to the map
+	 * Reloads the configuration from a confpath. The configuration itself will
+	 * notify all of its listeners of this event.
 	 */
-	public void loadMap(final String path) {
-		_map = MapLoader.load(path);
-		_listeners.notify(new INotifier<IGameListener>() {
-
-			@Override
-			public void notify(final IGameListener listener) {
-				listener.onLoadMap(_map);
-			}
-		});
+	public void loadConfiguration() {
+		_configuration.reload(Const.CONF_PATH);
 	}
 
-	/**
-	 * This method is called every iteration and causes all controllers to
-	 * consider updating their controlled objects
-	 */
 	@Override
-	public void update(final GameContainer container, final int delta)
-			throws SlickException {
-		for (final Movable mv : Movable.instances) {
-			mv.applyGravity(9.81f);
-		}
-		_listeners.notify(new INotifier<IGameListener>() {
-			@Override
-			public void notify(final IGameListener listener) {
-				listener.onTick(container.getInput(), delta);
-			}
-		});
-		_viewport.centerAround(_player);
-	}
-
-	/**
-	 * This method is called every iteration after
-	 * {@link #update(GameContainer, int)} and causes all renderer to render
-	 * their held object
-	 */
-	@Override
-	public void render(final GameContainer container, final Graphics g)
-			throws SlickException {
-		g.translate(_viewport.getPosition().x, _viewport.getPosition().y);
-		_map.getRenderer().render(g, _viewport);
-		_listeners.notify(new INotifier<IGameListener>() {
-			@Override
-			public void notify(final IGameListener listener) {
-				listener.onRender(g, _viewport);
-			}
-		});
+	public void initStatesList(final GameContainer gc) throws SlickException {
+		_playingState = new PlayingState();
+		_mainMenuState = new MainMenuState();
+		// order is important here to preserve the ids as set in the config!
+		addState(_playingState);
+		addState(_mainMenuState);
+		enterState(Const.PLAYING_STATE_ID);
 	}
 
 	public static void main(final String[] args) throws MapException {
@@ -210,57 +114,6 @@ IListenable<IGameListener> {
 			app.start();
 		} catch (final SlickException e) {
 			e.printStackTrace();
-		}
-	}
-
-	@Override
-	public ListenerSet<IGameListener> getListeners() {
-		return _listeners;
-	}
-
-	/**
-	 * Reloads the flags for the logger from the specified file
-	 *
-	 * @param file
-	 *            file to load the flags from line by line
-	 */
-	private static void reloadDebugFlags(final String file) {
-		final List<LogMessageType> flags = new ArrayList<LogMessageType>();
-		BufferedReader in = null;
-		try {
-			in = new BufferedReader(new FileReader(new File(file)));
-			String line;
-			while ((line = in.readLine()) != null) {
-				try {
-					flags.add(LogMessageType.valueOf(line));
-				} catch (final IllegalArgumentException iae) {
-					logger.print(
-							String.format(
-									"Could not parse debug flag '%s' from '%s'. Discarding.",
-									line, file), LogMessageType.GENERAL_ERROR);
-				}
-			}
-		} catch (final FileNotFoundException e) {
-			logger.print(
-					String.format(
-							"Could not find file '%s' to parse debug flags from. Falling back to default flags.",
-							file), LogMessageType.GENERAL_INFO);
-		} catch (final IOException e) {
-			logger.print(
-					String.format(
-							"Error when attempting to read debug flags from '%s': '%s'. Falling back to default flags.",
-							file, e.getMessage()), LogMessageType.GENERAL_ERROR);
-		} finally {
-			if (in != null) {
-				try {
-					in.close();
-				} catch (final IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		for (final LogMessageType flag : flags) {
-			logger.accept(flag);
 		}
 	}
 }

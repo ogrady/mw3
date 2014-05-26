@@ -61,7 +61,8 @@ public class ParticleSword extends Projectile {
 			public void update(final long delta) {
 			}
 		});
-		MetalWarriors.instance.getListeners().registerListener(this);
+		MetalWarriors.instance.getPlayingState().getListeners()
+				.registerListener(this);
 	}
 
 	@Override

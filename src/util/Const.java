@@ -19,6 +19,10 @@ public class Const {
 	private static final char SEP = File.separatorChar;
 	public static final String DEBUGFLAGS = "debugflags";
 
+	// ids for the gamestates
+	public static final int PLAYING_STATE_ID = 0;
+	public static final int MAIN_MENU_STATE_ID = 1;
+
 	// names for the layers from the TMX-map
 	public static final String MAP_LAYER_BACKGROUND = "background";
 	public static final String MAP_LAYER_DESTRUCTABLE = "destructable";

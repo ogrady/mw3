@@ -43,7 +43,8 @@ public class Nitro extends Mech implements IStationaryShieldListener {
 					_activeShields++;
 					final StationaryShield s = new StationaryShield(
 							_currentPosition);
-					MetalWarriors.instance.getListeners().registerListener(s);
+					MetalWarriors.instance.getPlayingState().getListeners()
+							.registerListener(s);
 					s.getListeners().registerListener(Nitro.this);
 				}
 			}
@@ -85,12 +86,12 @@ public class Nitro extends Mech implements IStationaryShieldListener {
 		final NitroRenderer nr = new NitroRenderer(this);
 		setRenderer(nr);
 		nr.getSpecialAnimation().getListeners()
-		.registerListener(new IAnimationListener() {
-			@Override
-			public void onEnded() {
-				_state.remove(MovableState.SPECIAL);
-			}
-		});
+				.registerListener(new IAnimationListener() {
+					@Override
+					public void onEnded() {
+						_state.remove(MovableState.SPECIAL);
+					}
+				});
 	}
 
 	@Override
