@@ -4,6 +4,10 @@ import java.util.ArrayList;
 
 import level.World;
 import listener.IGameListener;
+import listener.IListenable;
+import listener.IStationaryShieldListener;
+import listener.ListenerSet;
+import listener.notifier.INotifier;
 
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -29,8 +33,10 @@ import game.Viewport;
  */
 // TODO implement an IShieldListener for when a shield vanishes, to be able to
 // track how many shields a Nitro currently has
-public class StationaryShield extends Positionable implements IGameListener {
+public class StationaryShield extends Positionable implements IGameListener,
+IListenable<IStationaryShieldListener> {
 	public static final ArrayList<StationaryShield> instances = new ArrayList<StationaryShield>();
+	private final ListenerSet<IStationaryShieldListener> _listeners;
 	private long _ttl;
 	public int _hp;
 
@@ -43,10 +49,11 @@ public class StationaryShield extends Positionable implements IGameListener {
 	 */
 	public StationaryShield(final Vector2f position) {
 		super(position.copy(), 10, 60);
-		this._ttl = Const.NITRO_SHIELD_TTL;
-		this._hp = Const.NITRO_SHIELD_HP;
-		this.setCollider(new StationaryShieldCollider(this));
-		this.setRenderer(new StationaryShieldRenderer(this));
+		_listeners = new ListenerSet<IStationaryShieldListener>();
+		_ttl = Const.NITRO_SHIELD_TTL;
+		_hp = Const.NITRO_SHIELD_HP;
+		setCollider(new StationaryShieldCollider(this));
+		setRenderer(new StationaryShieldRenderer(this));
 		instances.add(this);
 	}
 
@@ -78,6 +85,17 @@ public class StationaryShield extends Positionable implements IGameListener {
 	public void destruct() {
 		instances.remove(this);
 		MetalWarriors.instance.getListeners().unregisterListener(this);
+		_listeners.notify(new INotifier<IStationaryShieldListener>() {
+			@Override
+			public void notify(final IStationaryShieldListener listener) {
+				listener.onDestruct(StationaryShield.this);
+			}
+		});
 		super.destruct();
+	}
+
+	@Override
+	public ListenerSet<IStationaryShieldListener> getListeners() {
+		return _listeners;
 	}
 }

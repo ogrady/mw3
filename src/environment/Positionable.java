@@ -24,7 +24,7 @@ import environment.collision.ICollider;
  * @author Daniel
  */
 public abstract class Positionable implements IBounding,
-IRendereable<Slick2DRenderer>, ICollidable {
+		IRendereable<Slick2DRenderer>, ICollidable {
 	public static final ArrayList<Positionable> instances = new ArrayList<Positionable>();
 
 	protected Vector2f _currentPosition;

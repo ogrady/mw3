@@ -39,7 +39,7 @@ import exception.MapException;
  *
  */
 public class MetalWarriors extends BasicGame implements
-		IListenable<IGameListener> {
+IListenable<IGameListener> {
 	private static final boolean DEBUG = true;
 
 	public static MetalWarriors instance;
@@ -124,7 +124,7 @@ public class MetalWarriors extends BasicGame implements
 				_configuration));
 		/*_player.setController(new MechXboxPadController((Mech) _player,
 				_configuration));*/
-		for (int i = 0; i < 0; i++) {
+		for (int i = 0; i < 7; i++) {
 			final Nitro n = new Nitro(new Vector2f(20 + i * _player.getWidth()
 					+ 1, 450), "");
 			n.setController(new TestAi(n));

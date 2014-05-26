@@ -55,6 +55,14 @@ public class Const {
 	 */
 	public static final long NITRO_SMG_DELAY = 200;
 	/**
+	 * Delay between two strikes of Nitros sword.
+	 */
+	public static final long NITRO_SWORD_DELAY = 1000;
+	/**
+	 * Max shields Nitro can have on the screen
+	 */
+	public static final int NITRO_MAX_SHIELD_COUNT = 1;
+	/**
 	 * Distance in pixels a bullet from Nitros SMG travels without hitting
 	 * anything before despawning.
 	 */
@@ -62,23 +70,19 @@ public class Const {
 	/**
 	 * Base damage one bullet from Nitros SMG inflicts.
 	 */
-	public static float NITRO_SMG_DMG = 3;
+	public static final float NITRO_SMG_DMG = 3;
 	/**
 	 * Speed at which the bullets from Nitros SMG fly
 	 */
-	public static float NITRO_SMG_SPEED = 7f;
+	public static final float NITRO_SMG_SPEED = 7f;
 	/**
 	 * Base damage Nitros sword inflicts.
 	 */
-	public static float NITRO_SWORD_DMG = 5;
-	/**
-	 * Delay between two strikes of Nitros sword.
-	 */
-	public static long NITRO_SWORD_DELAY = 1000;
+	public static final float NITRO_SWORD_DMG = 5;
 	/**
 	 * HP Nitro initially has.
 	 */
-	public static int NITRO_HP = 100;
+	public static final int NITRO_HP = 100;
 
 	private Const() {
 	}

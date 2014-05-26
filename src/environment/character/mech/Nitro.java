@@ -1,6 +1,7 @@
 package environment.character.mech;
 
 import listener.IAnimationListener;
+import listener.IStationaryShieldListener;
 
 import org.newdawn.slick.geom.Vector2f;
 
@@ -27,7 +28,9 @@ import game.MetalWarriors;
  * @author Daniel
  *
  */
-public class Nitro extends Mech {
+public class Nitro extends Mech implements IStationaryShieldListener {
+	private int _activeShields;
+
 	public Nitro(final Vector2f position, final String description) {
 		super(position, 0, 0, 5, description);
 		_maxLife = Const.NITRO_HP;
@@ -35,10 +38,13 @@ public class Nitro extends Mech {
 		_specialAttack = new CharacterAction(Const.NITRO_SHIELD_DELAY) {
 			@Override
 			protected void execute() {
-				if (!_state.has(MovableState.BLOCKING)) {
+				if (!_state.has(MovableState.BLOCKING)
+						&& _activeShields < Const.NITRO_MAX_SHIELD_COUNT) {
+					_activeShields++;
 					final StationaryShield s = new StationaryShield(
 							_currentPosition);
 					MetalWarriors.instance.getListeners().registerListener(s);
+					s.getListeners().registerListener(Nitro.this);
 				}
 			}
 		};
@@ -79,11 +85,16 @@ public class Nitro extends Mech {
 		final NitroRenderer nr = new NitroRenderer(this);
 		setRenderer(nr);
 		nr.getSpecialAnimation().getListeners()
-				.registerListener(new IAnimationListener() {
-					@Override
-					public void onEnded() {
-						_state.remove(MovableState.SPECIAL);
-					}
-				});
+		.registerListener(new IAnimationListener() {
+			@Override
+			public void onEnded() {
+				_state.remove(MovableState.SPECIAL);
+			}
+		});
+	}
+
+	@Override
+	public void onDestruct(final StationaryShield shield) {
+		_activeShields--;
 	}
 }
