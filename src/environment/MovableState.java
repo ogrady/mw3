@@ -6,13 +6,13 @@ import util.EnumBitmask;
  * Several states a {@link Movable} can have. Multiple states can be active at
  * once (e.g. {@link #FLYING} and {@link #MOVING}), which are stored in a
  * {@link EnumBitmask} inside the {@link Movable}.
- * 
+ *
  * @author Daniel
- * 
+ *
  */
 public enum MovableState {
 	/**
-	 * The mech is unmovable.
+	 * The mech is unmoving.
 	 */
 	STANDING,
 	/**
@@ -32,7 +32,8 @@ public enum MovableState {
 	 */
 	HOVERING,
 	/**
-	 * The mech is in a state, where it is either in an up- or downward motion.
+	 * The mech is in a state, where it is either in an upward motion. Transists
+	 * into {@link #FALLING}
 	 */
 	JUMPING,
 	/**
@@ -46,7 +47,7 @@ public enum MovableState {
 
 	/**
 	 * Converts a bitmask to a readable string.
-	 * 
+	 *
 	 * @param enumBitMask
 	 *            The bitmask to be converted to a string.
 	 * @return A string with all the names of this enum the representing bitmask

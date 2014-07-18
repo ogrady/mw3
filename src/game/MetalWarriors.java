@@ -68,8 +68,8 @@ public class MetalWarriors extends StateBasedGame {
 	public MetalWarriors() {
 		super("Metal Warriors 3");
 		_configuration = new Configuration();
-		instance = this;
 		loadConfiguration();
+		instance = this;
 	}
 
 	/**

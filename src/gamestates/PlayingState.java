@@ -33,7 +33,7 @@ import game.Viewport;
  *
  */
 public class PlayingState extends BasicGameState implements
-		IListenable<IPlayingStateListener> {
+IListenable<IPlayingStateListener> {
 	private Movable _player;
 	private World _map;
 	private Viewport _viewport;
@@ -91,23 +91,26 @@ public class PlayingState extends BasicGameState implements
 			throws SlickException {
 		if (!(sbg instanceof MetalWarriors)) {
 			throw new RuntimeException(getClass().getSimpleName()
-					+ "can only be used with an instance of "
+					+ " can only be used with an instance of "
 					+ MetalWarriors.class.getSimpleName());
 		}
 		final MetalWarriors mw = (MetalWarriors) sbg;
 		_viewport = new Viewport(0, 0, gc);
 		_listeners = new ListenerSet<IPlayingStateListener>();
 		_container = gc;
-		loadMap("rsc/map/tm3.tmx");
+		loadMap("rsc/map/tm4.tmx");
 		_player = new Nitro(new Vector2f(440, 480), "");
 		// _player = new Nitro(new Vector2f(500, 120), "");
 		_player.setController(new MechKeyboardController((Mech) _player, mw
 				.getConfiguration()));
 		/*_player.setController(new MechXboxPadController((Mech) _player,
 				_configuration));*/
-		for (int i = 0; i < 7; i++) {
-			final Nitro n = new Nitro(new Vector2f(20 + i * _player.getWidth()
-					+ 1, 450), "");
+		for (int i = 0; i < 10; i++) {
+			float x = _map.getBlockWidth() + i * (_player.getWidth() + 10);
+			if (x > _map.getPixelWidth() - _map.getBlockWidth()) {
+				x = _map.getPixelWidth() / 2;
+			}
+			final Nitro n = new Nitro(new Vector2f(x, 450), "");
 			n.setController(new TestAi(n));
 		}
 

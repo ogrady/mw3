@@ -100,7 +100,7 @@ public class NitroRenderer extends MechRenderer {
 	 * entirely. So you can differentiate whether a state was added or removed
 	 * and which state it was - that's all I can provide you with for now,
 	 * sorry. I hope that works out for you.
-	 * 
+	 *
 	 * @author Daniel
 	 */
 	public void handleBitmaskChanges(final IBitmask<MovableState> mask) {
@@ -109,7 +109,7 @@ public class NitroRenderer extends MechRenderer {
 		 * from the methods I had to delete in here - but failed. But I didn't
 		 * remove the code, so that you don't have to start your work from
 		 * scratch and can see the idea of the state-mask.
-		 * 
+		 *
 		 * @author Daniel
 		 */
 		if (mask.has(MovableState.BLOCKING)) {

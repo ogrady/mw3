@@ -1,5 +1,9 @@
 package environment.character;
 
+import listener.ICharacterActionListener;
+import listener.IListenable;
+import listener.ListenerSet;
+import listener.notifier.INotifier;
 import util.Countdown;
 
 /**
@@ -10,17 +14,24 @@ import util.Countdown;
  * delay.<br>
  * As they are interchangeable objects, the base-class can define
  * basic-functionality and delay and subclasses can set other actions.
- * 
+ *
  * @author Daniel
- * 
+ *
  */
-public abstract class CharacterAction {
+public abstract class CharacterAction implements
+		IListenable<ICharacterActionListener> {
 	private final Countdown _delay;
+	private final ListenerSet<ICharacterActionListener> _listeners;
+
+	@Override
+	public ListenerSet<ICharacterActionListener> getListeners() {
+		return _listeners;
+	}
 
 	/**
 	 * Timer to display the remaining delay until this {@link CharacterAction}
 	 * can be performed again
-	 * 
+	 *
 	 * @return the timer to display the remaining delay
 	 */
 	public Countdown getDelay() {
@@ -29,11 +40,12 @@ public abstract class CharacterAction {
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param delay
 	 *            the delay for this action
 	 */
 	public CharacterAction(final long delay) {
+		_listeners = new ListenerSet<ICharacterActionListener>();
 		_delay = new Countdown(delay);
 	}
 
@@ -42,10 +54,10 @@ public abstract class CharacterAction {
 	 * associated character jump.<br>
 	 * But only if the timer has already run out. If not, the call will simply
 	 * be ignored. Else, the {@link #execute()}-method will be called.
-	 * 
+	 *
 	 * @return whether the action could be performed or not (= timer was still
 	 *         running)
-	 * 
+	 *
 	 */
 	public boolean perform() {
 		boolean done = false;
@@ -58,7 +70,13 @@ public abstract class CharacterAction {
 	}
 
 	public void stop() {
+		new INotifier<ICharacterActionListener>() {
+			@Override
+			public void notify(final ICharacterActionListener listener) {
+				listener.onEnded(CharacterAction.this);
 
+			}
+		};
 	}
 
 	/**
