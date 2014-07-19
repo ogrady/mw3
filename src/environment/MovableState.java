@@ -16,7 +16,9 @@ public enum MovableState {
 	 */
 	STANDING,
 	/**
-	 * The mech is in a state of motion.
+	 * The mech is in a state of HORIZONTAL motion (vertical movement is
+	 * indicated via {@link MovableState#FALLING} and
+	 * {@link MovableState#JUMPING} (and also {@link MovableState#FLYING}).
 	 */
 	MOVING,
 	/**

@@ -164,7 +164,7 @@ public abstract class Mech extends Actor {
 				CharacterActionName.values().length);
 		// look straight
 		_armPosition = 4;
-		// make sure every character action has at least en ampty action. Those
+		// make sure every character action has at least an empty action. Those
 		// don't do anything and can be replaced in the subclasses.
 		for (final CharacterActionName key : CharacterActionName.values()) {
 			setCharacterAction(key, new EmptyCharacterAction());

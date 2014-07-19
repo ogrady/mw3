@@ -33,7 +33,7 @@ import game.Viewport;
  *
  */
 public class PlayingState extends BasicGameState implements
-IListenable<IPlayingStateListener> {
+		IListenable<IPlayingStateListener> {
 	private Movable _player;
 	private World _map;
 	private Viewport _viewport;
@@ -105,7 +105,7 @@ IListenable<IPlayingStateListener> {
 				.getConfiguration()));
 		/*_player.setController(new MechXboxPadController((Mech) _player,
 				_configuration));*/
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 0; i++) {
 			float x = _map.getBlockWidth() + i * (_player.getWidth() + 10);
 			if (x > _map.getPixelWidth() - _map.getBlockWidth()) {
 				x = _map.getPixelWidth() / 2;

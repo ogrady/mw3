@@ -1,18 +1,21 @@
 package renderer.slick;
 
+import logger.LogMessageType;
+
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
 import environment.Positionable;
+import game.MetalWarriors;
 import game.Viewport;
 
 /**
  * Renderers for positionable objects that can not move should extend this
  * class.
- * 
+ *
  * @author Daniel
- * 
+ *
  */
 abstract public class PositionableRenderer<P extends Positionable> extends
 		Slick2DRenderer {
@@ -21,7 +24,7 @@ abstract public class PositionableRenderer<P extends Positionable> extends
 	/**
 	 * Constructor<br>
 	 * constructs a renderer which is looking to the right side
-	 * 
+	 *
 	 * @param renderable
 	 */
 	public PositionableRenderer(final P renderable) {
@@ -53,5 +56,8 @@ abstract public class PositionableRenderer<P extends Positionable> extends
 	@Override
 	public void setCurrentAnimation(final ObservableAnimation newCurrent) {
 		super.setCurrentAnimation(newCurrent);
+		MetalWarriors.logger.print(
+				"setting current animation to " + newCurrent,
+				LogMessageType.GFX_DEBUG);
 	}
 }
