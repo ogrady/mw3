@@ -103,7 +103,8 @@ public class NitroRenderer extends MechRenderer {
 	 *
 	 * @author Daniel
 	 */
-	public void handleBitmaskChanges(final IBitmask<MovableState> mask) {
+	public void handleBitmaskChanges(final IBitmask<MovableState> mask,
+			final MovableState added, final MovableState removed) {
 		/**
 		 * The following doesn't work at all. :D I tried to combine your code
 		 * from the methods I had to delete in here - but failed. But I didn't
@@ -159,13 +160,13 @@ public class NitroRenderer extends MechRenderer {
 	@Override
 	public void onAdd(final IBitmask<MovableState> mask,
 			final MovableState newElement) {
-		handleBitmaskChanges(mask);
+		handleBitmaskChanges(mask, newElement, null);
 	}
 
 	@Override
 	public void onRemove(final IBitmask<MovableState> mask,
 			final MovableState removedElement) {
-		handleBitmaskChanges(mask);
+		handleBitmaskChanges(mask, null, removedElement);
 
 	}
 }
