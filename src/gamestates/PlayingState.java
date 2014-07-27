@@ -7,6 +7,7 @@ import listener.IPlayingStateListener;
 import listener.ListenerSet;
 import listener.notifier.INotifier;
 
+import org.lwjgl.input.Controllers;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
@@ -16,11 +17,14 @@ import org.newdawn.slick.state.GameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import util.Const;
+import controller.IController;
 import controller.TestAi;
 import controller.device.MechKeyboardController;
+import controller.device.MechXboxPadController;
 import environment.Movable;
 import environment.character.mech.Mech;
 import environment.character.mech.Nitro;
+import game.Configuration;
 import game.MetalWarriors;
 import game.Viewport;
 
@@ -33,7 +37,7 @@ import game.Viewport;
  *
  */
 public class PlayingState extends BasicGameState implements
-IListenable<IPlayingStateListener> {
+		IListenable<IPlayingStateListener> {
 	private Movable _player;
 	private World _map;
 	private Viewport _viewport;
@@ -101,12 +105,10 @@ IListenable<IPlayingStateListener> {
 		loadMap("rsc/map/tm4.tmx");
 		_player = new Nitro(new Vector2f(440, 480), "");
 		// _player = new Nitro(new Vector2f(500, 120), "");
-		_player.setController(new MechKeyboardController((Mech) _player, mw
-				.getConfiguration()));
-		/*_player.setController(new MechXboxPadController((Mech) _player,
-				_configuration));*/
-		for (int i = 0; i < 0; i++) {
-			float x = _map.getBlockWidth() + i * (_player.getWidth() + 10);
+
+		selectInputDevice((Mech) _player, mw.getConfiguration());
+		for (int j = 0; j < 0; j++) {
+			float x = _map.getBlockWidth() + j * (_player.getWidth() + 10);
 			if (x > _map.getPixelWidth() - _map.getBlockWidth()) {
 				x = _map.getPixelWidth() / 2;
 			}
@@ -114,6 +116,33 @@ IListenable<IPlayingStateListener> {
 			n.setController(new TestAi(n));
 		}
 
+	}
+
+	/**
+	 * Looks for a connected xbox-pad and uses it. If none is found, the
+	 * keyboard will be used as controller
+	 *
+	 * @param mov
+	 *            the movable to select the controller for
+	 * @param conf
+	 *            the configuration to fetch the key-binding for the controller
+	 *            from
+	 */
+	private static void selectInputDevice(final Mech mov,
+			final Configuration conf) {
+		IController controller = null;
+		int i = 0;
+		while (i < Controllers.getControllerCount() && controller == null) {
+			if (Controllers.getController(i).getName().toLowerCase()
+					.contains("xbox")) {
+				controller = new MechXboxPadController(mov, conf);
+			}
+			i++;
+		}
+		if (controller == null) {
+			controller = new MechKeyboardController(mov, conf);
+		}
+		mov.setController(controller);
 	}
 
 	@Override
