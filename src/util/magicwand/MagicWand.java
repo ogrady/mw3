@@ -93,33 +93,13 @@ public class MagicWand {
 	private Path connect(final List<Vector2f> points, final int xOffset,
 			final int yOffset) {
 		final Vector2f first = points.remove(0);
-		float minX = first.x;
-		float maxX = first.x;
-		float minY = first.y;
-		float maxY = first.y;
 		Vector2f next = first;
 		final Path p = new Path(next.x + xOffset, next.y + yOffset);
 		while (!points.isEmpty()) {
 			next = getClosest(next, points);
 			p.lineTo(next.x + xOffset, next.y + yOffset);
 			points.remove(next);
-			if (next.x < minX) {
-				minX = next.x;
-			}
-			if (next.y < minY) {
-				minY = next.y;
-			}
-			if (next.x > maxX) {
-				maxX = next.x;
-			}
-			if (next.y > maxY) {
-				maxY = next.y;
-			}
 		}
-		/*p.close();
-		p.setX(minX);
-		p.setY(minY);
-		p.*/
 		return p;
 	}
 

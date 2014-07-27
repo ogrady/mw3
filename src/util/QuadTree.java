@@ -256,19 +256,11 @@ public class QuadTree<E extends IBounding> implements Collection<E> {
 		final List<Integer> indices = new ArrayList<Integer>(4);
 		if (_split) {
 			for (int i = 0; i < _nodes.length; i++) {
-				// in contrast to rectangles, paths don't yield
-				// intersect = true if they are fully contained. So we have to
-				// check that too
-				if (_nodes[i].getBounds().intersects(s)
-						|| _nodes[i].getBounds().contains(s)) {
+				if (_nodes[i].getBounds().intersects(s)) {
 					indices.add(i);
 				}
 			}
 		}
-		/*
-		if (indices.isEmpty()) {
-			System.out.println("quadtree.getindices " + s);
-		}*/
 		return indices;
 	}
 
