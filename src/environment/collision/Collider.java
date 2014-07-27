@@ -77,7 +77,7 @@ public class Collider<P extends Positionable> implements ICollider {
 	public Collection<Positionable> getCollisions() {
 		final HashSet<Positionable> collisions = new HashSet<Positionable>();
 		for (final CollisionCollector<? extends Positionable> collector : _collectors) {
-			collector.collectionCollisions(_collidable, collisions);
+			collector.collectCollisions(_collidable, collisions);
 		}
 		return collisions;
 	}

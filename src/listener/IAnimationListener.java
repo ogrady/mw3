@@ -1,10 +1,16 @@
 package listener;
 
+import org.newdawn.slick.Animation;
+
 /**
- * TODO: please document this interface, Greg
- * 
+ *
  * @author Greg
  */
 public interface IAnimationListener extends IListener {
+	/**
+	 * Called, when the last frame of the {@link Animation} has been displayed
+	 * (Daniel)
+	 *
+	 */
 	public void onEnded();
 }

@@ -37,11 +37,22 @@ public class MapLoader {
 			for (int y = 0; y < tm.getHeight(); y++) {
 				for (int x = 0; x < tm.getWidth(); x++) {
 					b = new Block(x, y, map);
+					if (tm.getTileId(x, y, destructableIndex) != 0) {
+						b.setDestructable(true);
+						b.setSolid(true);
+						b.computeHitbox(tm
+								.getTileImage(x, y, destructableIndex));
+					} else if (tm.getTileId(x, y, solidIndex) != 0) {
+						b.setSolid(true);
+						b.computeHitbox(tm.getTileImage(x, y, solidIndex));
+					}
+					/*
 					b.setDestructable(tm.getTileId(x, y, destructableIndex) != 0);
 					// destructables are solid by default
 					b.setSolid(b.isDestructable()
 							|| tm.getTileId(x, y, solidIndex) != 0);
 					// map.getBlocks()[x][y] = b;
+					 * */
 					map.setBlockAt(x, y, b);
 				}
 			}

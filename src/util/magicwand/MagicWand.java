@@ -25,7 +25,9 @@ import org.newdawn.slick.geom.Vector2f;
  * therefore be used with care in regards to running time. It might prove to be
  * reasonable to store hitboxes we have already computed, instead of computing
  * them multiple times (e.g. when using the same tile of a tileset for multiple
- * {@link Block}s).
+ * {@link Block}s).<br>
+ * <b>Having a block with holes in it will probably fail due to how the
+ * algorithm works!</b>
  *
  * @author Daniel
  *
@@ -73,9 +75,11 @@ public class MagicWand {
 	 * @return the outer border around all solid pixels of the passed image or
 	 *         an empty rectangle, if the image is empty
 	 */
-	public Shape getBoundingShape(final Image img) {
+	public Shape getBoundingShape(final Image img, final int xOffset,
+			final int yOffset) {
 		final List<Vector2f> corners = getCorners(img);
-		return corners.isEmpty() ? new Rectangle(0, 0, 0, 0) : connect(corners);
+		return corners.isEmpty() ? new Rectangle(0, 0, 0, 0) : connect(corners,
+				xOffset, yOffset);
 	}
 
 	/**
@@ -86,16 +90,36 @@ public class MagicWand {
 	 *            the list of points to connect
 	 * @return a closes shape, spanning around all passed points
 	 */
-	private Path connect(final List<Vector2f> points) {
+	private Path connect(final List<Vector2f> points, final int xOffset,
+			final int yOffset) {
 		final Vector2f first = points.remove(0);
+		float minX = first.x;
+		float maxX = first.x;
+		float minY = first.y;
+		float maxY = first.y;
 		Vector2f next = first;
-		final Path p = new Path(next.x, next.y);
+		final Path p = new Path(next.x + xOffset, next.y + yOffset);
 		while (!points.isEmpty()) {
 			next = getClosest(next, points);
-			p.lineTo(next.x, next.y);
+			p.lineTo(next.x + xOffset, next.y + yOffset);
 			points.remove(next);
+			if (next.x < minX) {
+				minX = next.x;
+			}
+			if (next.y < minY) {
+				minY = next.y;
+			}
+			if (next.x > maxX) {
+				maxX = next.x;
+			}
+			if (next.y > maxY) {
+				maxY = next.y;
+			}
 		}
-		p.close();
+		/*p.close();
+		p.setX(minX);
+		p.setY(minY);
+		p.*/
 		return p;
 	}
 
@@ -111,7 +135,7 @@ public class MagicWand {
 	private Vector2f getClosest(final Vector2f of, final List<Vector2f> others) {
 		assert !others.contains(of);
 		Vector2f closest = others.get(0);
-		for (int i = 0; i < others.size(); i++) {
+		for (int i = 1; i < others.size(); i++) {
 			if (others.get(i).distance(of) < closest.distance(of)) {
 				closest = others.get(i);
 			}

@@ -33,7 +33,7 @@ import game.Viewport;
  *
  */
 public class PlayingState extends BasicGameState implements
-		IListenable<IPlayingStateListener> {
+IListenable<IPlayingStateListener> {
 	private Movable _player;
 	private World _map;
 	private Viewport _viewport;

@@ -42,10 +42,6 @@ abstract public class PositionableRenderer<P extends Positionable> extends
 				(_renderable.getDirection() - 1) * -frame.getWidth() / 2, 0,
 				(_renderable.getDirection() + 1) * frame.getWidth() / 2,
 				frame.getHeight());
-		/*for (final Positionable p : _renderable.getCollider().getCollisions()) {
-			g.draw(p.getHitbox());
-		}
-		g.draw(_renderable.getHitbox());*/
 	}
 
 	/**

@@ -8,10 +8,14 @@ import listener.IListenable;
 import listener.ListenerSet;
 import listener.notifier.INotifier;
 
+import org.newdawn.slick.Image;
+import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
 
 import renderer.DefaultRenderer;
 import util.Const;
+import util.magicwand.MagicWand;
 import environment.Positionable;
 import environment.collision.DefaultCollider;
 import environment.collision.DestructableBlockCollider;
@@ -31,6 +35,42 @@ public class Block extends Positionable implements IListenable<IBlockListener> {
 	private boolean _solid, _destructable;
 	private final int _xIndex, _yIndex;
 	private final ListenerSet<IBlockListener> _listeners;
+	private Shape _hitbox;
+
+	/**
+	 * Replaces the old hitbox with a new one. NULL will be ignored
+	 *
+	 * @param hitbox
+	 *            the new shape that represents the hitbox of this block
+	 */
+	public void setHitbox(final Shape hitbox) {
+		if (hitbox == null) {
+			_hitbox = hitbox;
+		}
+	}
+
+	/**
+	 * Derives the hitbox from a passed image (the tile used in the map for this
+	 * block)
+	 *
+	 * @param img
+	 *            the tile-image for this block to derive the hitbox from. See
+	 *            {@link MagicWand} for more detail
+	 */
+	public void computeHitbox(final Image img) {
+		setHitbox(new MagicWand().getBoundingShape(img, (int) getPosition().x,
+				(int) getPosition().y));
+	}
+
+	/**
+	 * Blocks have fixed instances of {@link Shape} as hitbox, instead of
+	 * creating a new {@link Rectangle} through this getter as in
+	 * {@link Positionable#getHitbox()}
+	 */
+	@Override
+	public Shape getHitbox() {
+		return _hitbox;
+	}
 
 	/**
 	 * @return the x-coordinate this block has in the grid of the map (not to
@@ -126,6 +166,7 @@ public class Block extends Positionable implements IListenable<IBlockListener> {
 		_yIndex = y;
 		_map = map;
 		_listeners = new ListenerSet<IBlockListener>();
+		_hitbox = super.getHitbox();
 		instances.add(this);
 	}
 

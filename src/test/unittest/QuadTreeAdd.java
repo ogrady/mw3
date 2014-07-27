@@ -1,3 +1,4 @@
+package test.unittest;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Random;

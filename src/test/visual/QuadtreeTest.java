@@ -1,4 +1,4 @@
-package test;
+package test.visual;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -88,6 +88,7 @@ public class QuadtreeTest extends BasicGame {
 		Particle.create(arg0, PARTICLES, _qt);
 		System.out.println("solid blocks: " + Block.solidBlocks.size());
 		System.out.println("tree has size: " + _qt.size());
+		assert Block.solidBlocks.size() == _qt.size();
 		arg0.getInput().addMouseListener(this);
 		_r = new Rectangle(0, 0, 0, 0);
 	}
@@ -102,8 +103,6 @@ public class QuadtreeTest extends BasicGame {
 				return _r;
 			}
 		});
-		// System.out.println("quadtreetest.update: collision candidates: " +
-		// collisions.size());
 		_collisions = collisions;
 		Particle.updateAll();
 	}

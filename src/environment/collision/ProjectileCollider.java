@@ -13,19 +13,20 @@ import environment.collision.verifier.NotselfVerifier;
 import environment.collision.verifier.OnceVerifier;
 import environment.collision.verifier.SelfprotectValidator;
 import environment.projectile.Projectile;
+
 /**
  * Collider for {@link Projectile}s. Destroys blocks and
  * {@link StationaryShield}s from Nitro and damages {@link Actor}s.
- * 
+ *
  * @author Daniel
- * 
+ *
  */
 public class ProjectileCollider extends Collider<Projectile> {
 	private int _remainingCollisions;
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param projectile
 	 *            the {@link Projectile} to handle
 	 * @param maxCollisions

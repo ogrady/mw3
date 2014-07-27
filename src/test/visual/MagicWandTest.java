@@ -1,4 +1,4 @@
-package test;
+package test.visual;
 
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
@@ -28,9 +28,13 @@ public class MagicWandTest extends BasicGame {
 
 	@Override
 	public void init(final GameContainer arg0) throws SlickException {
-		for (int j = 0; j < 100; j++) {
+		for (int j = 0; j < 1; j++) {
 			_img = new Image("rsc/test/MagicWand1.png");
-			_shape = new MagicWand().getBoundingShape(_img);
+			/*MapLoader.load("rsc/map/tm4.tmx");
+			final World w = World.last;
+			_img = w.getTiledMap().getTileImage(0, 23,
+					w.getTiledMap().getLayerIndex(Const.MAP_LAYER_SOLID));*/
+			_shape = new MagicWand().getBoundingShape(_img, 100, 100);
 		}
 		System.out.println("computed hitbox has " + _shape.getPointCount()
 				+ " points.");

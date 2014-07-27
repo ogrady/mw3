@@ -101,7 +101,9 @@ public abstract class Positionable implements IBounding,
 	}
 
 	/**
-	 * @return hitbox for collisions
+	 * @return hitbox for collisions. Per default, a bounding rectangle is
+	 *         created the spans over the {@link Positionable}, using its
+	 *         position and size.
 	 */
 	@Override
 	public Shape getHitbox() {
@@ -154,5 +156,12 @@ public abstract class Positionable implements IBounding,
 
 	public void destruct() {
 		Positionable.instances.remove(this);
+	}
+
+	@Override
+	public String toString() {
+		return String.format("%s [(%.1f|%.1f), (%.1f|%.1f)]", getClass()
+				.getSimpleName(), getPosition().x, getPosition().y,
+				getPosition().x + getWidth(), getPosition().y + getHeight());
 	}
 }

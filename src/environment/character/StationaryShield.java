@@ -30,10 +30,8 @@ import game.Viewport;
  * @author Daniel
  *
  */
-// TODO implement an IShieldListener for when a shield vanishes, to be able to
-// track how many shields a Nitro currently has
 public class StationaryShield extends Positionable implements
-		IPlayingStateListener, IListenable<IStationaryShieldListener> {
+IPlayingStateListener, IListenable<IStationaryShieldListener> {
 	public static final ArrayList<StationaryShield> instances = new ArrayList<StationaryShield>();
 	private final ListenerSet<IStationaryShieldListener> _listeners;
 	private long _ttl;
@@ -79,7 +77,7 @@ public class StationaryShield extends Positionable implements
 	public void destruct() {
 		instances.remove(this);
 		MetalWarriors.instance.getPlayingState().getListeners()
-		.unregisterListener(this);
+				.unregisterListener(this);
 		_listeners.notify(new INotifier<IStationaryShieldListener>() {
 			@Override
 			public void notify(final IStationaryShieldListener listener) {

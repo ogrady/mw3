@@ -29,6 +29,6 @@ public class DefaultCollider<P extends Positionable> extends Collider<P> {
 		addCollector(new QuadTreeCollector<Block>(World.last.getQuadtree(),
 				new IntersectionVerifier()));
 		addCollector(new CollisionCollector<Actor>(Actor.instances,
-				new IntersectionVerifier(), new NotselfVerifier()));
+				new NotselfVerifier(), new IntersectionVerifier()));
 	}
 }

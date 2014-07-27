@@ -26,7 +26,7 @@ import controller.IController;
  *
  */
 public abstract class Movable extends Positionable implements IMassObject,
-IControllable, IPlayingStateListener {
+		IControllable, IPlayingStateListener {
 	public static final ArrayList<Movable> instances = new ArrayList<Movable>();
 	protected float _xspeed;
 	protected float _yspeed;
@@ -75,14 +75,14 @@ IControllable, IPlayingStateListener {
 		_state = new ListenableEnumBitmask<MovableState>();
 		Movable.instances.add(this);
 		MetalWarriors.instance.getPlayingState().getListeners()
-				.registerListener(this);
+		.registerListener(this);
 	}
 
 	@Override
 	public void destruct() {
 		super.destruct();
 		MetalWarriors.instance.getPlayingState().getListeners()
-				.unregisterListener(this);
+		.unregisterListener(this);
 		Movable.instances.remove(this);
 	}
 
@@ -151,7 +151,7 @@ IControllable, IPlayingStateListener {
 			for (final Positionable p : xCollisions) {
 				rightCollision = true;
 				p.getCollider().onPositionableCollide(this);
-				final float leftEdgeColider = p.getHitbox().getX();
+				final float leftEdgeColider = p.getHitbox().getMinX();
 				// If the right edge of the object is inside the colliding
 				// object, move it back to the left.
 				if (_currentPosition.x + _width > leftEdgeColider) {
@@ -169,7 +169,7 @@ IControllable, IPlayingStateListener {
 			for (final Positionable p : xCollisions) {
 				leftCollision = true;
 				p.getCollider().onPositionableCollide(this);
-				final float rightEdgeColider = p.getHitbox().getX()
+				final float rightEdgeColider = p.getHitbox().getMinX()
 						+ p.getHitbox().getWidth();
 				// If the left edge of the object is inside the colliding
 				// object, move it back to the right.
@@ -194,7 +194,7 @@ IControllable, IPlayingStateListener {
 			for (final Positionable p : yCollisions) {
 				upCollision = true;
 				p.getCollider().onPositionableCollide(this);
-				final float lowerEdgeColider = p.getHitbox().getY()
+				final float lowerEdgeColider = p.getHitbox().getMinY()
 						+ p.getHitbox().getHeight();
 				// If the upper edge of the object is inside the colliding
 				// object, move it back down.
@@ -214,7 +214,7 @@ IControllable, IPlayingStateListener {
 			for (final Positionable p : yCollisions) {
 				downCollision = true;
 				p.getCollider().onPositionableCollide(this);
-				final float upperEdgeColider = p.getHitbox().getY();
+				final float upperEdgeColider = p.getHitbox().getMinY();
 				// If the lower edge of the object is inside the colliding
 				// object, move it back up.
 				if (_currentPosition.y + _height > upperEdgeColider) {

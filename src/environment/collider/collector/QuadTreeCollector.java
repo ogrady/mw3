@@ -7,7 +7,7 @@ import environment.Positionable;
 import environment.collision.verifier.CollisionVerifier;
 
 public class QuadTreeCollector<E extends Positionable> extends
-		CollisionCollector<E> {
+CollisionCollector<E> {
 	private final QuadTree<E> _quadtree;
 
 	public QuadTreeCollector(final QuadTree<E> candidates,
@@ -17,7 +17,7 @@ public class QuadTreeCollector<E extends Positionable> extends
 	}
 
 	@Override
-	public void collectionCollisions(final Positionable me,
+	public void collectCollisions(final Positionable me,
 			final HashSet<Positionable> collisions) {
 		final HashSet<E> candidates = _quadtree.getCandidates(me);
 		for (final E candidate : candidates) {

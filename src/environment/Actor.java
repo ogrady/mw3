@@ -24,7 +24,7 @@ import environment.collision.ActorCollider;
 abstract public class Actor extends Movable implements
 		IListenable<IActorListener> {
 	public static final ArrayList<Actor> instances = new ArrayList<Actor>();
-	protected ListenerSet<IActorListener> _entityListeners;
+	protected ListenerSet<IActorListener> _listeners;
 	protected String _description;
 	protected int _maxLife, _currentLife;
 
@@ -66,7 +66,7 @@ abstract public class Actor extends Movable implements
 	public Actor(final Vector2f position, final float width,
 			final float height, final float speed, final String description) {
 		super(position, width, height, speed);
-		_entityListeners = new ListenerSet<IActorListener>();
+		_listeners = new ListenerSet<IActorListener>();
 		_description = description != null ? description : getClass()
 				.getSimpleName();
 		_collider = new ActorCollider(this);
@@ -85,7 +85,7 @@ abstract public class Actor extends Movable implements
 	 */
 	public void takeDamage(final IDamageSource src, final int amount) {
 		_currentLife = Math.max(0, _currentLife - amount);
-		_entityListeners.notify(new INotifier<IActorListener>() {
+		_listeners.notify(new INotifier<IActorListener>() {
 
 			@Override
 			public void notify(final IActorListener listener) {
@@ -93,7 +93,7 @@ abstract public class Actor extends Movable implements
 			}
 		});
 		if (_currentLife == 0) {
-			_entityListeners.notify(new INotifier<IActorListener>() {
+			_listeners.notify(new INotifier<IActorListener>() {
 
 				@Override
 				public void notify(final IActorListener listener) {
@@ -107,11 +107,11 @@ abstract public class Actor extends Movable implements
 	public void destruct() {
 		super.destruct();
 		instances.remove(this);
-		_entityListeners.unregisterAll();
+		_listeners.unregisterAll();
 	}
 
 	@Override
 	public ListenerSet<IActorListener> getListeners() {
-		return _entityListeners;
+		return _listeners;
 	}
 }

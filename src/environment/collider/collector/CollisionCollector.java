@@ -135,7 +135,7 @@ public class CollisionCollector<E extends Positionable> {
 	 * @param collisions
 	 *            {@link HashSet} the collisions will be put in by reference
 	 */
-	public void collectionCollisions(final Positionable me,
+	public void collectCollisions(final Positionable me,
 			final HashSet<Positionable> collisions) {
 		for (final E candidate : _candidates) {
 			if (collides(me, candidate)) {
