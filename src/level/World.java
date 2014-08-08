@@ -161,8 +161,8 @@ public class World implements IRendereable<MapRenderer>, IBlockListener {
 		_map = tiledMap;
 		_blocks = new Block[_map.getWidth()][_map.getHeight()];
 		_renderer = new MapRenderer(this);
-		_quadtree = new QuadTree<>(null, new Rectangle(0, 0, getPixelWidth(),
-				getPixelHeight()));
+		_quadtree = new QuadTree<Block>(null, new Rectangle(0, 0,
+				getPixelWidth(), getPixelHeight()));
 		last = this;
 	}
 
