@@ -158,10 +158,6 @@ public abstract class Movable extends Positionable implements IMassObject,
 					_currentPosition.x = leftEdgeColider - _width;
 				}
 			}
-
-			if (_currentPosition.x != oldPositionX) {
-				_state.set(MovableState.MOVING);
-			}
 		}
 
 		// Move left.
@@ -176,10 +172,6 @@ public abstract class Movable extends Positionable implements IMassObject,
 				if (_currentPosition.x <= rightEdgeColider) {
 					_currentPosition.x = rightEdgeColider + 1;
 				}
-			}
-
-			if (_currentPosition.x != oldPositionX) {
-				_state.set(MovableState.MOVING);
 			}
 		}
 
@@ -204,8 +196,7 @@ public abstract class Movable extends Positionable implements IMassObject,
 			}
 
 			if (_currentPosition.y != oldPositionY) {
-				_state.set(MovableState.FLYING);
-				_state.add(MovableState.MOVING);
+				_state.add(MovableState.FLYING);
 			}
 		}
 
@@ -223,8 +214,9 @@ public abstract class Movable extends Positionable implements IMassObject,
 			}
 
 			if (_currentPosition.y != oldPositionY) {
-				_state.set(MovableState.FALLING);
-				_state.add(MovableState.MOVING);
+				if (_currentPosition.y < oldPositionY) {
+					_state.add(MovableState.FALLING);
+				}
 			}
 		}
 
@@ -240,16 +232,26 @@ public abstract class Movable extends Positionable implements IMassObject,
 					LogMessageType.PHYSICS_DEBUG);
 		}
 
-		final boolean isMoving = _currentPosition.x != oldPositionX
+		final boolean hasMoved = _currentPosition.x != oldPositionX
 				|| _currentPosition.y != oldPositionY;
 
-		if (!isMoving) {
-			_state.set(MovableState.STANDING);
+		// the following state-transitions can definitely be made based on
+		// whether the Movable has moved or not. All other states (adding
+		// FLYING, managing HOVERING...) must be done elsewhere
+		if (hasMoved) {
+			_state.remove(MovableState.STANDING);
+			_state.add(MovableState.MOVING);
+		} else {
+			_state.remove(MovableState.JUMPING);
+			_state.remove(MovableState.FALLING);
+			_state.remove(MovableState.FLYING);
+			_state.remove(MovableState.MOVING);
+			_state.add(MovableState.STANDING);
 		}
 
 		MetalWarriors.logger.print(_state.toString(),
 				LogMessageType.INPUT_DEBUG);
-		return isMoving;
+		return hasMoved;
 	}
 
 	@Override
