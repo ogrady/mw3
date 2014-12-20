@@ -41,6 +41,9 @@ public class NitroRenderer extends MechRenderer {
 		_flyingPrelude = new ObservableAnimation(loadScaledSpriteSheet(
 				Const.NITRO_RSC + "start_flying.png", 45, 50,
 				Const.SCALE_FACTOR), 100);
+		// also not the correct sprite [Daniel]
+		_dying = new ObservableAnimation(loadScaledSpriteSheet(Const.NITRO_RSC
+				+ "start_flying.png", 45, 50, Const.SCALE_FACTOR), 100);
 		_flyingPrelude.setLooping(true);
 		this.setIdle();
 	}
@@ -74,6 +77,8 @@ public class NitroRenderer extends MechRenderer {
 	@Override
 	public void render(final Graphics g, final Viewport vp) {
 		super.render(g, vp);
+		g.setColor(Color.white);
+		g.draw(_renderable.getHitbox());
 		g.setColor(Color.black);
 		g.drawString("" + _renderable.getCurrentLife(),
 				_renderable.getPosition().x, _renderable.getPosition().y - 20);
@@ -113,7 +118,16 @@ public class NitroRenderer extends MechRenderer {
 		 *
 		 * @author Daniel
 		 */
-		if (mask.has(MovableState.BLOCKING)) {
+		if (mask.has(MovableState.DYING)) {
+			setCurrentAnimation(_dying);
+			_dying.addListener(new IAnimationListener() {
+
+				@Override
+				public void onEnded() {
+					NitroRenderer.this.setCurrentAnimation(_broken);
+				}
+			});
+		} else if (mask.has(MovableState.BLOCKING)) {
 			setCurrentAnimation(_shielded);
 		} else if (mask.has(MovableState.SPECIAL)) {
 			setCurrentAnimation(_special);

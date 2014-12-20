@@ -172,7 +172,7 @@ public abstract class Mech extends Actor {
 		// those two are pretty unspecific and can be implemented in the
 		// superclass right away
 		setCharacterAction(CharacterActionName.ARM_UP, new CharacterAction(
-				Const.MECH_ARM_ROTATION_DELAY) {
+				this, Const.MECH_ARM_ROTATION_DELAY) {
 
 			@Override
 			protected void execute() {
@@ -180,7 +180,7 @@ public abstract class Mech extends Actor {
 			}
 		});
 		setCharacterAction(CharacterActionName.ARM_DOWN, new CharacterAction(
-				Const.MECH_ARM_ROTATION_DELAY) {
+				this, Const.MECH_ARM_ROTATION_DELAY) {
 
 			@Override
 			protected void execute() {

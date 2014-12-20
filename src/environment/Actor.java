@@ -76,7 +76,8 @@ abstract public class Actor extends Movable implements
 	/**
 	 * Makes the {@link Actor} reduce its hitpoints by the incoming amount of
 	 * damage and notify its listeners of this event.<br>
-	 * When its hitpoints reach zero, he will also broadcast an onDie-event.
+	 * When its hitpoints reach zero, he will also broadcast an onDie-event.<br>
+	 * The HP of an {@link Actor} can not drop below zero.
 	 *
 	 * @param src
 	 *            the source of damage
@@ -84,22 +85,24 @@ abstract public class Actor extends Movable implements
 	 *            the amount of damage
 	 */
 	public void takeDamage(final IDamageSource src, final int amount) {
-		_currentLife = Math.max(0, _currentLife - amount);
-		_listeners.notify(new INotifier<IActorListener>() {
-
-			@Override
-			public void notify(final IActorListener listener) {
-				listener.onTakeDamage(src, amount);
-			}
-		});
-		if (_currentLife == 0) {
+		if (_currentLife > 0) {
+			_currentLife = Math.max(0, _currentLife - amount);
 			_listeners.notify(new INotifier<IActorListener>() {
 
 				@Override
 				public void notify(final IActorListener listener) {
-					listener.onDie();
+					listener.onTakeDamage(src, amount);
 				}
 			});
+			if (_currentLife == 0) {
+				_state.set(MovableState.DYING);
+				_listeners.notify(new INotifier<IActorListener>() {
+					@Override
+					public void notify(final IActorListener listener) {
+						listener.onDie();
+					}
+				});
+			}
 		}
 	}
 

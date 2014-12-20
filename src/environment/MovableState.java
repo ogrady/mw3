@@ -1,6 +1,7 @@
 package environment;
 
 import util.EnumBitmask;
+import environment.character.CharacterAction;
 
 /**
  * Several states a {@link Movable} can have. Multiple states can be active at
@@ -45,7 +46,18 @@ public enum MovableState {
 	/**
 	 * The mech is currently performing its special attack
 	 */
-	SPECIAL;
+	SPECIAL,
+	/**
+	 * The mech is in the process of dying and displaying its
+	 * destruction-animation. NO {@link CharacterAction} can be performed while
+	 * in this state!
+	 */
+	DYING,
+	/**
+	 * The mech is dead and is waiting for cleanup to be removed from the game.
+	 * NO {@link CharacterAction} can be performed while in this state!
+	 */
+	DEAD;
 
 	/**
 	 * Converts a bitmask to a readable string.

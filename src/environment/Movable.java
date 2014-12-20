@@ -139,8 +139,11 @@ public abstract class Movable extends Positionable implements IMassObject,
 		final float oldPositionX = _currentPosition.x;
 		final float oldPositionY = _currentPosition.y;
 
-		if (!ignoreBlocking && _state.has(MovableState.BLOCKING)
-				|| moveFactorX == 0 && moveFactorY == 0) {
+		if (!ignoreBlocking
+				&& (_state.has(MovableState.BLOCKING)
+						|| _state.has(MovableState.DYING) || _state
+							.has(MovableState.DEAD)) || moveFactorX == 0
+				&& moveFactorY == 0) {
 			return false;
 		}
 

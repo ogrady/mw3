@@ -86,7 +86,7 @@ public class Const {
 	/**
 	 * HP Nitro initially has.
 	 */
-	public static final int NITRO_HP = 100;
+	public static final int NITRO_HP = 10;
 
 	private Const() {
 	}

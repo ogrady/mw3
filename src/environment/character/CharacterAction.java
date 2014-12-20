@@ -5,6 +5,8 @@ import listener.IListenable;
 import listener.ListenerSet;
 import listener.notifier.INotifier;
 import util.Countdown;
+import environment.Actor;
+import environment.MovableState;
 
 /**
  * {@link CharacterAction}s are exchangeable operations of any entity in the
@@ -13,7 +15,10 @@ import util.Countdown;
  * already be executed. If so, it will do the desired action and reset the
  * delay.<br>
  * As they are interchangeable objects, the base-class can define
- * basic-functionality and delay and subclasses can set other actions.
+ * basic-functionality and delay and subclasses can set other actions.<br>
+ * By default, {@link CharacterAction}s are being prevented from being performed
+ * when the performing {@link Actor} is {@link MovableState#DYING} or
+ * {@link MovableState#DEAD}.
  *
  * @author Daniel
  *
@@ -22,6 +27,7 @@ public abstract class CharacterAction implements
 		IListenable<ICharacterActionListener> {
 	private final Countdown _delay;
 	private final ListenerSet<ICharacterActionListener> _listeners;
+	private final Actor _owner;
 
 	@Override
 	public ListenerSet<ICharacterActionListener> getListeners() {
@@ -41,12 +47,15 @@ public abstract class CharacterAction implements
 	/**
 	 * Constructor
 	 *
+	 * @param performer
+	 *            the performing {@link Actor}
 	 * @param delay
 	 *            the delay for this action
 	 */
-	public CharacterAction(final long delay) {
+	public CharacterAction(final Actor performer, final long delay) {
 		_listeners = new ListenerSet<ICharacterActionListener>();
 		_delay = new Countdown(delay);
+		_owner = performer;
 	}
 
 	/**
@@ -61,7 +70,8 @@ public abstract class CharacterAction implements
 	 */
 	public boolean perform() {
 		boolean done = false;
-		if (_delay.isTimedOut()) {
+		if (_delay.isTimedOut() && !_owner.getState().has(MovableState.DYING)
+				&& !_owner.getState().has(MovableState.DEAD)) {
 			execute();
 			_delay.reset();
 			done = true;

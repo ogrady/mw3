@@ -14,15 +14,16 @@ import environment.character.mech.Mech;
  * Renderers for mechs. They have animations for the basic movements and states
  * (have to be filled in in the subclasses) and maintain a hashmap of images for
  * the armposition.
- * 
+ *
  * @author Daniel
- * 
+ *
  */
 abstract public class MechRenderer extends MovableRenderer<Mech> implements
-		IActorListener {
+IActorListener {
 	protected HashMap<Integer, ObservableAnimation> _armPositions;
 	protected ObservableAnimation _walking, _jumping, _broken, _shielded,
-			_flyingPrelude, _arm, _special, _primaryAttack, _secondaryAttack;
+	_flyingPrelude, _arm, _special, _primaryAttack, _secondaryAttack,
+			_dying;
 
 	/**
 	 * @return the map that contains the animations for all arm-positions
@@ -97,7 +98,7 @@ abstract public class MechRenderer extends MovableRenderer<Mech> implements
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param renderable
 	 */
 	public MechRenderer(final Mech mech) {
