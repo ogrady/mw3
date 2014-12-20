@@ -77,8 +77,6 @@ public class NitroRenderer extends MechRenderer {
 	@Override
 	public void render(final Graphics g, final Viewport vp) {
 		super.render(g, vp);
-		g.setColor(Color.white);
-		g.draw(_renderable.getHitbox());
 		g.setColor(Color.black);
 		g.drawString("" + _renderable.getCurrentLife(),
 				_renderable.getPosition().x, _renderable.getPosition().y - 20);

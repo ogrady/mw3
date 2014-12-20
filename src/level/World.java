@@ -55,7 +55,7 @@ public class World implements IRendereable<MapRenderer>, IBlockListener {
 	 */
 	public void playBGM() {
 		if (_bgm != null) {
-			_bgm.play();
+			_bgm.loop();
 		}
 	}
 
