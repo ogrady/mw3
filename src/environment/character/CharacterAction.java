@@ -24,7 +24,7 @@ import environment.MovableState;
  *
  */
 public abstract class CharacterAction implements
-		IListenable<ICharacterActionListener> {
+IListenable<ICharacterActionListener> {
 	private final Countdown _delay;
 	private final ListenerSet<ICharacterActionListener> _listeners;
 	private final Actor _owner;
@@ -75,18 +75,23 @@ public abstract class CharacterAction implements
 			execute();
 			_delay.reset();
 			done = true;
+			_listeners.notify(new INotifier<ICharacterActionListener>() {
+				@Override
+				public void notify(final ICharacterActionListener listener) {
+					listener.onExecute(CharacterAction.this);
+				}
+			});
 		}
 		return done;
 	}
 
 	public void stop() {
-		new INotifier<ICharacterActionListener>() {
+		_listeners.notify(new INotifier<ICharacterActionListener>() {
 			@Override
 			public void notify(final ICharacterActionListener listener) {
 				listener.onEnded(CharacterAction.this);
-
 			}
-		};
+		});
 	}
 
 	/**

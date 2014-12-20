@@ -12,4 +12,15 @@ public interface ICharacterActionListener extends IListener {
 	 *            the {@link CharacterAction} that has ended
 	 */
 	public void onEnded(CharacterAction action);
+
+	/**
+	 * Posthook for the execution of a {@link CharacterAction}. That is, someone
+	 * called {@link CharacterAction#perform()} and all preconditions were met.
+	 * Then {@link CharacterAction#execute()} is being called to do the action
+	 * itself, THEN the listeners are notified via this method.
+	 *
+	 * @param action
+	 *            the performed {@link CharacterAction}
+	 */
+	public void onExecute(CharacterAction action);
 }

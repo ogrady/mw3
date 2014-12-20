@@ -32,6 +32,9 @@ public class Const {
 	public static final String RSC_PATH = "rsc" + SEP;
 	public static final String CONF_PATH = RSC_PATH + "conf.properties";
 	public static final String NITRO_RSC = RSC_PATH + "nitro" + SEP;
+	private static final String SOUND_PATH = RSC_PATH + SEP + "sound" + SEP;
+	public static final String MUSIC_PATH = SOUND_PATH + "music" + SEP;
+	public static final String SFX_PATH = SOUND_PATH + "effect" + SEP;
 
 	/**
 	 * Factor by which sprites are scaled.

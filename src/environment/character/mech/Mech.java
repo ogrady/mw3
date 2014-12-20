@@ -33,7 +33,7 @@ import environment.projectile.Projectile;
  *
  */
 public abstract class Mech extends Actor {
-	protected enum CharacterActionName {
+	public enum CharacterActionName {
 		PRIMARY_ATTACK, SECONDARY_ATTACK, SPECIAL_ATTACK, JUMP, BLOCK, UNBLOCK, USE_ITEM, ARM_UP, ARM_DOWN
 	}
 
@@ -142,7 +142,7 @@ public abstract class Mech extends Actor {
 	 * @return the identified action. Is never null and at least an
 	 *         {@link EmptyCharacterAction}
 	 */
-	protected CharacterAction getCharacterAction(final CharacterActionName key) {
+	public CharacterAction getCharacterAction(final CharacterActionName key) {
 		assert _characterActions.get(key) != null;
 		return _characterActions.get(key);
 	}
