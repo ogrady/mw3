@@ -26,7 +26,7 @@ import controller.IController;
  *
  */
 public abstract class Movable extends Positionable implements IMassObject,
-		IControllable, IPlayingStateListener {
+IControllable, IPlayingStateListener {
 	public static final ArrayList<Movable> instances = new ArrayList<Movable>();
 	protected float _xspeed;
 	protected float _yspeed;
@@ -75,14 +75,14 @@ public abstract class Movable extends Positionable implements IMassObject,
 		_state = new ListenableEnumBitmask<MovableState>();
 		Movable.instances.add(this);
 		MetalWarriors.instance.getPlayingState().getListeners()
-		.registerListener(this);
+				.registerListener(this);
 	}
 
 	@Override
 	public void destruct() {
 		super.destruct();
 		MetalWarriors.instance.getPlayingState().getListeners()
-		.unregisterListener(this);
+				.unregisterListener(this);
 		Movable.instances.remove(this);
 	}
 
@@ -197,6 +197,7 @@ public abstract class Movable extends Positionable implements IMassObject,
 
 			if (_currentPosition.y != oldPositionY) {
 				_state.add(MovableState.FLYING);
+				_state.remove(MovableState.FALLING);
 			}
 		}
 
@@ -215,6 +216,8 @@ public abstract class Movable extends Positionable implements IMassObject,
 
 			if (_currentPosition.y != oldPositionY) {
 				if (_currentPosition.y < oldPositionY) {
+					_state.remove(MovableState.FLYING);
+					_state.remove(MovableState.JUMPING);
 					_state.add(MovableState.FALLING);
 				}
 			}
