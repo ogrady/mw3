@@ -16,6 +16,7 @@ import org.newdawn.slick.geom.Vector2f;
 import util.ListenableEnumBitmask;
 import controller.IControllable;
 import controller.IController;
+import controller.NullController;
 
 /**
  * Object that may move over the playing field. It has a certain speed and can
@@ -26,7 +27,7 @@ import controller.IController;
  *
  */
 public abstract class Movable extends Positionable implements IMassObject,
-IControllable, IPlayingStateListener {
+		IControllable, IPlayingStateListener {
 	public static final ArrayList<Movable> instances = new ArrayList<Movable>();
 	protected float _xspeed;
 	protected float _yspeed;
@@ -73,16 +74,19 @@ IControllable, IPlayingStateListener {
 		_xspeed = speed;
 		_yspeed = speed;
 		_state = new ListenableEnumBitmask<MovableState>();
+		// create a null-controller to avoid nullpointerexceptions when ticking
+		// empty mechs
+		setController(null);
 		Movable.instances.add(this);
 		MetalWarriors.instance.getPlayingState().getListeners()
-				.registerListener(this);
+		.registerListener(this);
 	}
 
 	@Override
 	public void destruct() {
 		super.destruct();
 		MetalWarriors.instance.getPlayingState().getListeners()
-				.unregisterListener(this);
+		.unregisterListener(this);
 		Movable.instances.remove(this);
 	}
 
@@ -264,9 +268,7 @@ IControllable, IPlayingStateListener {
 	@Override
 	public void onTick(final Input input, final int delta) {
 		_controller.update(input, delta);
-		if (_renderer != null) {
-			_renderer.update(delta);
-		}
+		_renderer.update(delta);
 	}
 
 	@Override
@@ -276,7 +278,7 @@ IControllable, IPlayingStateListener {
 
 	@Override
 	public void setController(final IController controller) {
-		_controller = controller;
+		_controller = controller != null ? controller : new NullController();
 	}
 
 	@Override

@@ -8,7 +8,7 @@ import org.newdawn.slick.Graphics;
 import renderer.slick.Slick2DRenderer;
 
 /**
- * {@link DefaultRenderer}s don't render anything at all. They are the basic
+ * {@link NullRenderer}s don't render anything at all. They are the basic
  * renderers that are employed for new renderable objects, to avoid
  * NullPointers.<br>
  * In most cases, this renderer will be replaced with a more specific renderer
@@ -19,9 +19,9 @@ import renderer.slick.Slick2DRenderer;
  * @author Daniel
  * 
  */
-public class DefaultRenderer extends Slick2DRenderer {
+public class NullRenderer extends Slick2DRenderer {
 
-	public DefaultRenderer() {
+	public NullRenderer() {
 	}
 
 	@Override

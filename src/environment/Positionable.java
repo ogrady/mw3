@@ -6,7 +6,7 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
 
-import renderer.DefaultRenderer;
+import renderer.NullRenderer;
 import renderer.IRendereable;
 import renderer.slick.Slick2DRenderer;
 import environment.collision.DefaultCollider;
@@ -150,7 +150,7 @@ public abstract class Positionable implements IBounding,
 		// just to make sure we don't have null pointers for colliders and
 		// renderers
 		_collider = new DefaultCollider<Positionable>(this);
-		_renderer = new DefaultRenderer();
+		_renderer = new NullRenderer();
 		Positionable.instances.add(this);
 	}
 

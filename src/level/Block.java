@@ -13,7 +13,7 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
 
-import renderer.DefaultRenderer;
+import renderer.NullRenderer;
 import util.Const;
 import util.magicwand.MagicWand;
 import environment.Positionable;
@@ -173,7 +173,7 @@ public class Block extends Positionable implements IListenable<IBlockListener> {
 	/**
 	 * Destroying a {@link Block} is NOT equal to calling it's destructor!<br>
 	 * It just removes the image and makes if undestructable and unblocking.<br>
-	 * Destroyed {@link Block}s will have a {@link DefaultRenderer}.<br>
+	 * Destroyed {@link Block}s will have a {@link NullRenderer}.<br>
 	 * The tile-id on the corresponding layer must be invisible on the
 	 * {@value Const#MAP_LAYER_DESTRUCTABLE}, or else whatever image on that
 	 * position will be used for destroyed {@link Block}s.
@@ -182,7 +182,7 @@ public class Block extends Positionable implements IListenable<IBlockListener> {
 		if (_destructable) {
 			setDestructable(false);
 			setSolid(false);
-			setRenderer(new DefaultRenderer());
+			setRenderer(new NullRenderer());
 			_map.getTiledMap().setTileId(
 					_xIndex,
 					_yIndex,
