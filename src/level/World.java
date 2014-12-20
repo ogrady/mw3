@@ -2,6 +2,8 @@ package level;
 
 import listener.IBlockListener;
 
+import org.newdawn.slick.Music;
+import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.tiled.TiledMap;
 
@@ -22,8 +24,40 @@ public class World implements IRendereable<MapRenderer>, IBlockListener {
 	private final Block[][] _blocks;
 	private MapRenderer _renderer;
 	private final QuadTree<Block> _quadtree;
+	private Music _bgm;
 
 	public static World last;
+
+	/**
+	 * Loads the background-music for this {@link World} from the given path. If
+	 * no music can be loaded, the music will be NULLed
+	 *
+	 * @param path
+	 *            path to load the bgm from. Must point to a ogg-file
+	 */
+	public void loadBGM(final String path) {
+		try {
+			_bgm = new Music(path);
+		} catch (final SlickException e) {
+			_bgm = null;
+		}
+	}
+
+	/**
+	 * @return the bgm playing in this level
+	 */
+	public Music getBGM() {
+		return _bgm;
+	}
+
+	/**
+	 * Attempts to play the bgm if not NULL
+	 */
+	public void playBGM() {
+		if (_bgm != null) {
+			_bgm.play();
+		}
+	}
 
 	/**
 	 * Places a block at a certain position in the grid. This method will mostly
