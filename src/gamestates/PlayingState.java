@@ -1,5 +1,7 @@
 package gamestates;
 
+import java.util.Random;
+
 import level.MapLoader;
 import level.World;
 import listener.IListenable;
@@ -37,7 +39,7 @@ import game.Viewport;
  *
  */
 public class PlayingState extends BasicGameState implements
-		IListenable<IPlayingStateListener> {
+IListenable<IPlayingStateListener> {
 	private Movable _player;
 	private World _map;
 	private Viewport _viewport;
@@ -103,19 +105,12 @@ public class PlayingState extends BasicGameState implements
 		_listeners = new ListenerSet<IPlayingStateListener>();
 		_container = gc;
 		loadMap("rsc/map/tm4.tmx");
+		_map.loadBGM("rsc/sound/music/DST-ClubFight.ogg");
+		_map.playBGM();
 		_player = new Nitro(new Vector2f(440, 480), "");
 		// _player = new Nitro(new Vector2f(500, 120), "");
-
+		spawnBots(10);
 		selectInputDevice((Mech) _player, mw.getConfiguration());
-		for (int j = 0; j < 0; j++) {
-			float x = _map.getBlockWidth() + j * (_player.getWidth() + 10);
-			if (x > _map.getPixelWidth() - _map.getBlockWidth()) {
-				x = _map.getPixelWidth() / 2;
-			}
-			final Nitro n = new Nitro(new Vector2f(x, 450), "");
-			n.setController(new TestAi(n));
-		}
-
 	}
 
 	/**
@@ -182,6 +177,27 @@ public class PlayingState extends BasicGameState implements
 	@Override
 	public ListenerSet<IPlayingStateListener> getListeners() {
 		return _listeners;
+	}
+
+	/**
+	 * Spawns AI-controlled Nitros somewhere on the map and makes them partake
+	 * in the game
+	 *
+	 * @param number
+	 *            amount of bots
+	 * @return the spawned bots (will be part of the game already)
+	 */
+	public Mech[] spawnBots(final int number) {
+		final Random r = new Random();
+		final Mech[] bots = new Mech[number];
+		for (int i = 0; i < number; i++) {
+			final int x = r.nextInt(_map.getPixelWidth() - 100) + 100;
+			final int y = r.nextInt(_map.getPixelHeight() - 100) + 100;
+			final Nitro n = new Nitro(new Vector2f(x, y), "Bot" + i);
+			n.setController(new TestAi(n));
+			bots[i] = n;
+		}
+		return bots;
 	}
 
 }
