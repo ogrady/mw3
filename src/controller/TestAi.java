@@ -43,7 +43,7 @@ public class TestAi implements IController {
 		case 3:
 			_controllable.primaryAttack();
 		}
-		_controllable.move(dir, 0);
+		// _controllable.move(dir, 0);
 		// _controllable.block();
 		MetalWarriors.logger.print(
 				String.format("%s HP: %d", _controllable.getDescription(),

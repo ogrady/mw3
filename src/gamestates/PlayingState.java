@@ -104,7 +104,7 @@ IListenable<IPlayingStateListener> {
 		_viewport = new Viewport(0, 0, gc);
 		_listeners = new ListenerSet<IPlayingStateListener>();
 		_container = gc;
-		loadMap("rsc/map/tm4.tmx");
+		loadMap("rsc/map/platform.tmx");
 		_map.loadBGM("rsc/sound/music/DST-ClubFight.ogg");
 		// _map.playBGM();
 		_player = new Nitro(new Vector2f(440, 480), "");

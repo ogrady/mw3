@@ -66,7 +66,7 @@ public class MetalWarriors extends StateBasedGame {
 	 * Constructor
 	 */
 	public MetalWarriors() {
-		super("Metal Warriors 3");
+		super(Const.WINDOW_NAME);
 		_configuration = new Configuration();
 		loadConfiguration();
 		instance = this;

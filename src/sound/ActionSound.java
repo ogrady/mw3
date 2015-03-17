@@ -32,24 +32,24 @@ public class ActionSound implements ICharacterActionListener {
 
 	@Override
 	public void onExecute(final CharacterAction action) {
-		// TODO: this still doesn't work as intended: play sound on 100% volume
-		// if the source is within the viewport (+10% or so) and slowly fade it
-		// out as the source moves farther away
-		final Shape vpr = MetalWarriors.instance.getPlayingState()
+		final Shape viewportRect = MetalWarriors.instance.getPlayingState()
 				.getViewport().getPlayerViewportRect();
-		final Shape or = action.getOwner().getHitbox();
-		if (vpr.intersects(or)) {
-			final float cx = vpr.getCenterX();
-			final float cy = vpr.getCenterY();
-			final float ox = or.getCenterX();
-			final float oy = or.getCenterY();
-			final float x = (float) ((ox - cx) / (vpr.getWidth() * 1.5));
-			float y = (float) ((oy - cy) / (vpr.getHeight() * 1.5));
-			y = 1;
-			System.out.println("x:" + x);
-			System.out.println("y:" + y);
-			_sound.playAt(x, y, 1);
-		}
+		final Shape srcHitbox = action.getOwner().getHitbox();
+		final float vx = viewportRect.getCenterX();
+		final float vy = viewportRect.getCenterY();
+		final float sx = srcHitbox.getCenterX();
+		final float sy = srcHitbox.getCenterY();
+		final float mx = sx - vx;
+		// adjust this to increase/decrease the hearing-range of the player
+		final float factor = 2;
+		final float radius = Math.max(viewportRect.getHeight(),
+				viewportRect.getWidth());
+		final float dst = (float) Math.sqrt(Math.pow(factor
+				* ((sx - vx) / radius), 2)
+				+ Math.pow(factor * ((sy - vy) / radius), 2));
+
+		final float vol = Math.max(0, 1 - dst);
+		_sound.playAt(1, vol, mx / 100, 1, 1);
 
 	}
 

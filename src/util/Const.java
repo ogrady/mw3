@@ -16,6 +16,7 @@ import environment.character.StationaryShield;
  *
  */
 public class Const {
+	public static final String WINDOW_NAME = "Metal Warriors 3";
 	private static final char SEP = File.separatorChar;
 	public static final String DEBUGFLAGS = "debugflags";
 

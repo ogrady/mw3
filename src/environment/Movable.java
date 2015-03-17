@@ -27,7 +27,7 @@ import controller.NullController;
  *
  */
 public abstract class Movable extends Positionable implements IMassObject,
-		IControllable, IPlayingStateListener {
+IControllable, IPlayingStateListener {
 	public static final ArrayList<Movable> instances = new ArrayList<Movable>();
 	protected float _xspeed;
 	protected float _yspeed;
@@ -79,14 +79,14 @@ public abstract class Movable extends Positionable implements IMassObject,
 		setController(null);
 		Movable.instances.add(this);
 		MetalWarriors.instance.getPlayingState().getListeners()
-		.registerListener(this);
+				.registerListener(this);
 	}
 
 	@Override
 	public void destruct() {
 		super.destruct();
 		MetalWarriors.instance.getPlayingState().getListeners()
-		.unregisterListener(this);
+				.unregisterListener(this);
 		Movable.instances.remove(this);
 	}
 
@@ -142,8 +142,8 @@ public abstract class Movable extends Positionable implements IMassObject,
 		if (!ignoreBlocking
 				&& (_state.has(MovableState.BLOCKING)
 						|| _state.has(MovableState.DYING) || _state
-							.has(MovableState.DEAD)) || moveFactorX == 0
-				&& moveFactorY == 0) {
+						.has(MovableState.DEAD)) || moveFactorX == 0
+						&& moveFactorY == 0) {
 			return false;
 		}
 
@@ -152,8 +152,14 @@ public abstract class Movable extends Positionable implements IMassObject,
 		_currentPosition.x += moveFactorX * _xspeed;
 
 		final Collection<Positionable> xCollisions = _collider.getCollisions();
-
-		// Move right.
+		// TODO: currently, each collision is applied multiple times. Let's
+		// assume, that P1 intersects with P2 left and at the bottom - the
+		// onPositionableCollide would be called twice.
+		// Move right. Also, the collisions are calculated twice (once for x-,
+		// once for y-movement. It is currently needed as we first apply
+		// x-movement, then adjust the positionable to not have any collisions
+		// towards the x-direction, then check for y-collisions. Can this be
+		// reduced to checking only once?
 		if (moveFactorX > 0) {
 			for (final Positionable p : xCollisions) {
 				rightCollision = true;
