@@ -1,6 +1,7 @@
 build/
 bin/
-lib/*/src
+lib/slick/src/
+lib/*/src/
 debugflags
 .classpath
 META-INF
