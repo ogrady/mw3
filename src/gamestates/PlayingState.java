@@ -106,10 +106,10 @@ IListenable<IPlayingStateListener> {
 		_container = gc;
 		loadMap("rsc/map/tm4.tmx");
 		_map.loadBGM("rsc/sound/music/DST-ClubFight.ogg");
-		_map.playBGM();
+		// _map.playBGM();
 		_player = new Nitro(new Vector2f(440, 480), "");
 		// _player = new Nitro(new Vector2f(500, 120), "");
-		spawnBots(10);
+		spawnBots(1);
 		selectInputDevice((Mech) _player, mw.getConfiguration());
 	}
 
@@ -151,6 +151,15 @@ IListenable<IPlayingStateListener> {
 				listener.onRender(g, _viewport);
 			}
 		});
+		// TODO: this code is part of checking the viewport for adjusting the
+		// volume of distant sounds. As soon as this is fixed, this part can be
+		// removed
+		/*g.setColor(Color.red);
+		g.draw(new Rectangle(-_viewport.getPosition().x, -_viewport
+				.getPosition().y + 5, _viewport.getWidth() + 5, _viewport
+				.getHeight()));
+		g.setColor(Color.blue);
+		g.draw(_viewport.getViewportRect());*/
 	}
 
 	@Override

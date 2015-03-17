@@ -108,7 +108,7 @@ public class MetalWarriors extends StateBasedGame {
 		try {
 			final AppGameContainer app = new AppGameContainer(
 					new MetalWarriors());
-			app.setDisplayMode(800, 600, false);
+			app.setDisplayMode(900, 600, false);
 			app.setVSync(true);
 			app.setTargetFrameRate(60);
 			app.start();

@@ -10,9 +10,9 @@ import environment.Positionable;
  * A viewport determines the portion of the playing field that can be seen. It
  * therefore has a position which is its upper left corner while the width and
  * height are determined via the width and height of the gaming window
- * 
+ *
  * @author Daniel
- * 
+ *
  */
 public class Viewport {
 	private final Vector2f _position;
@@ -41,15 +41,20 @@ public class Viewport {
 
 	/**
 	 * @return a {@link Rectangle} that can be used for collision-check (only
-	 *         draw entities whose hitboxes intercept with the viewport)
+	 *         draw entities whose hitboxes intersect with the viewport)
 	 */
 	public Rectangle getViewportRect() {
 		return new Rectangle(_position.x, _position.y, getWidth(), getHeight());
 	}
 
+	public Rectangle getPlayerViewportRect() {
+		return new Rectangle(-_position.x, -_position.y, getWidth(),
+				getHeight());
+	}
+
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param x
 	 *            initial x-ps
 	 * @param y
@@ -64,7 +69,7 @@ public class Viewport {
 
 	/**
 	 * Centers the viewport around a positionable (e.g. the player)
-	 * 
+	 *
 	 * @param center
 	 *            the positionable to focus
 	 */
@@ -73,6 +78,8 @@ public class Viewport {
 				/ 2 - getWidth() / 2;
 		final float y = center.getPosition().y + center.getHitbox().getHeight()
 				/ 2 - getHeight() / 2;
+		// negative, because when scrolling to the left, the level is "shifted"
+		// to the right
 		_position.set(-x, -y);
 	}
 }

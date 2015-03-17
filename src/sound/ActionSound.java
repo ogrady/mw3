@@ -5,6 +5,7 @@ import logger.LogMessageType;
 
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
+import org.newdawn.slick.geom.Shape;
 
 import environment.character.CharacterAction;
 import game.MetalWarriors;
@@ -31,14 +32,32 @@ public class ActionSound implements ICharacterActionListener {
 
 	@Override
 	public void onExecute(final CharacterAction action) {
-		_sound.play(0.1f, 20);
+		// TODO: this still doesn't work as intended: play sound on 100% volume
+		// if the source is within the viewport (+10% or so) and slowly fade it
+		// out as the source moves farther away
+		final Shape vpr = MetalWarriors.instance.getPlayingState()
+				.getViewport().getPlayerViewportRect();
+		final Shape or = action.getOwner().getHitbox();
+		if (vpr.intersects(or)) {
+			final float cx = vpr.getCenterX();
+			final float cy = vpr.getCenterY();
+			final float ox = or.getCenterX();
+			final float oy = or.getCenterY();
+			final float x = (float) ((ox - cx) / (vpr.getWidth() * 1.5));
+			float y = (float) ((oy - cy) / (vpr.getHeight() * 1.5));
+			y = 1;
+			System.out.println("x:" + x);
+			System.out.println("y:" + y);
+			_sound.playAt(x, y, 1);
+		}
+
 	}
 
 	/**
 	 * Attempts to load a sound from a given path. Stops the game if loading
 	 * fails. TODO: look for a more graceful method, like using an empty sound,
 	 * or whatever
-	 * 
+	 *
 	 * @param path
 	 *            path wher the soundfile is
 	 * @return the loaded file
