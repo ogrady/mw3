@@ -46,11 +46,11 @@ public class ScreenFactory {
 								});
 							}
 						});
+						text("heeello");
 					}
 				});
 			}
 		}.build(nifty);
 		return configScreen;
 	}
-
 }

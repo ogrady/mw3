@@ -12,17 +12,17 @@ import environment.projectile.Projectile;
  * projectile to keep on flying. Some controllers might want to manipulate the
  * delta-vector of their bullet to simulate intersting movement, such as
  * jittered ballistics or even homing missiles.
- * 
- * 
+ *
+ *
  * @author Daniel
- * 
+ *
  */
 public class GenericProjectileController implements IController {
 	private Projectile _projectile;
 
 	/**
 	 * Contructor
-	 * 
+	 *
 	 * @param projectile
 	 *            projectile to control
 	 */
@@ -44,7 +44,7 @@ public class GenericProjectileController implements IController {
 					String.format(
 							"controllables for %s must be of class 'Projectile'. An instance of %s was passed instead.",
 							getClass().getSimpleName(), controllable.getClass()
-									.getSimpleName()));
+							.getSimpleName()));
 		}
 	}
 

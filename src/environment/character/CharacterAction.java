@@ -24,10 +24,18 @@ import environment.MovableState;
  *
  */
 public abstract class CharacterAction implements
-IListenable<ICharacterActionListener> {
+		IListenable<ICharacterActionListener> {
 	private final Countdown _delay;
 	private final ListenerSet<ICharacterActionListener> _listeners;
 	private final Actor _owner;
+
+	/**
+	 * @return the owner of the {@link CharacterAction} to which this action is
+	 *         tied to
+	 */
+	public Actor getOwner() {
+		return _owner;
+	}
 
 	@Override
 	public ListenerSet<ICharacterActionListener> getListeners() {

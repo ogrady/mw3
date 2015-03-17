@@ -21,9 +21,9 @@ import game.Configuration;
  * Oddly enough, pressing the left and right shoulder-triggers doesn't cause an
  * event. So we apparently can't use them.
  * </p>
- * 
+ *
  * @author Daniel
- * 
+ *
  */
 public class MechXboxPadController implements IController, ControllerListener {
 	// the following mapping is taken from the actual events, the
@@ -95,7 +95,7 @@ public class MechXboxPadController implements IController, ControllerListener {
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param _mech
 	 *            the mech to controll
 	 */

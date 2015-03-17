@@ -6,9 +6,9 @@ package controller;
  * of an object.<br>
  * This includes input-devices, such as mice, keyboards, controllers... as well
  * as AIs or network commands
- * 
+ *
  * @author Daniel
- * 
+ *
  * @param <C>
  *            type of the controller
  */
