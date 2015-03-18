@@ -152,10 +152,7 @@ IControllable, IPlayingStateListener {
 		_currentPosition.x += moveFactorX * _xspeed;
 
 		final Collection<Positionable> xCollisions = _collider.getCollisions();
-		// TODO: currently, each collision is applied multiple times. Let's
-		// assume, that P1 intersects with P2 left and at the bottom - the
-		// onPositionableCollide would be called twice.
-		// Move right. Also, the collisions are calculated twice (once for x-,
+		// TODO: currently, the collisions are calculated twice (once for x-,
 		// once for y-movement. It is currently needed as we first apply
 		// x-movement, then adjust the positionable to not have any collisions
 		// towards the x-direction, then check for y-collisions. Can this be
@@ -278,6 +275,7 @@ IControllable, IPlayingStateListener {
 	public void onTick(final Input input, final int delta) {
 		_controller.update(input, delta);
 		_renderer.update(delta);
+		applyGravity(9.81f);
 	}
 
 	@Override

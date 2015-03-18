@@ -39,7 +39,7 @@ import game.Viewport;
  *
  */
 public class PlayingState extends BasicGameState implements
-IListenable<IPlayingStateListener> {
+		IListenable<IPlayingStateListener> {
 	private Movable _player;
 	private World _map;
 	private Viewport _viewport;
@@ -104,7 +104,7 @@ IListenable<IPlayingStateListener> {
 		_viewport = new Viewport(0, 0, gc);
 		_listeners = new ListenerSet<IPlayingStateListener>();
 		_container = gc;
-		loadMap("rsc/map/platform.tmx");
+		loadMap("rsc/map/tm4.tmx");
 		_map.loadBGM("rsc/sound/music/DST-ClubFight.ogg");
 		// _map.playBGM();
 		_player = new Nitro(new Vector2f(440, 480), "");
@@ -151,23 +151,11 @@ IListenable<IPlayingStateListener> {
 				listener.onRender(g, _viewport);
 			}
 		});
-		// TODO: this code is part of checking the viewport for adjusting the
-		// volume of distant sounds. As soon as this is fixed, this part can be
-		// removed
-		/*g.setColor(Color.red);
-		g.draw(new Rectangle(-_viewport.getPosition().x, -_viewport
-				.getPosition().y + 5, _viewport.getWidth() + 5, _viewport
-				.getHeight()));
-		g.setColor(Color.blue);
-		g.draw(_viewport.getViewportRect());*/
 	}
 
 	@Override
 	public void update(final GameContainer gc, final StateBasedGame sbg,
 			final int delta) throws SlickException {
-		for (final Movable mv : Movable.instances) {
-			mv.applyGravity(9.81f);
-		}
 		_listeners.notify(new INotifier<IPlayingStateListener>() {
 			@Override
 			public void notify(final IPlayingStateListener listener) {

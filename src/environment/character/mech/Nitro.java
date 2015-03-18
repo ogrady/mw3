@@ -36,12 +36,31 @@ public class Nitro extends Mech implements IStationaryShieldListener {
 		super(position, 0, 0, 5, description);
 		_maxLife = Const.NITRO_HP;
 		_currentLife = Const.NITRO_HP;
-		setCharacterAction(CharacterActionName.SPECIAL_ATTACK,
-				new CharacterAction(this, Const.NITRO_SHIELD_DELAY) {
+		// we need empty actions for this, as per default an
+		// EmptyCharacterAction would be used, which always returns false on
+		// perform() and therefore we couldn't block at all.
+		setCharacterAction(CharacterActionName.BLOCK, new CharacterAction(this,
+				0) {
+
 			@Override
 			protected void execute() {
-				if (!_state.has(MovableState.BLOCKING)
-						&& _activeShields < Const.NITRO_MAX_SHIELD_COUNT) {
+
+			}
+		});
+		setCharacterAction(CharacterActionName.UNBLOCK, new CharacterAction(
+				this, 0) {
+
+			@Override
+			protected void execute() {
+
+			}
+		});
+		setCharacterAction(CharacterActionName.SPECIAL_ATTACK,
+				new CharacterAction(this, Const.NITRO_SHIELD_DELAY,
+						MovableState.BLOCKING) {
+			@Override
+			protected void execute() {
+				if (_activeShields < Const.NITRO_MAX_SHIELD_COUNT) {
 					_activeShields++;
 					final StationaryShield s = new StationaryShield(
 							_currentPosition);
@@ -52,20 +71,20 @@ public class Nitro extends Mech implements IStationaryShieldListener {
 			}
 		});
 		setCharacterAction(CharacterActionName.PRIMARY_ATTACK,
-				new CharacterAction(this, Const.NITRO_SMG_DELAY) {
+				new CharacterAction(this, Const.NITRO_SMG_DELAY,
+						MovableState.BLOCKING) {
 			@Override
 			protected void execute() {
-				if (!_state.has(MovableState.BLOCKING)) {
-					final NitroRenderer r = (NitroRenderer) _renderer;
-					final Vector2f exitPoint = r.getArmJoint().add(
-							getFireline().scale(r.getArmLength()));
-					new SMGBullet(exitPoint, Nitro.this.getFireline()
-							.scale(Const.NITRO_SMG_SPEED), Nitro.this);
-				}
+				final NitroRenderer r = (NitroRenderer) _renderer;
+				final Vector2f exitPoint = r.getArmJoint().add(
+						getFireline().scale(r.getArmLength()));
+				new SMGBullet(exitPoint, Nitro.this.getFireline()
+						.scale(Const.NITRO_SMG_SPEED), Nitro.this);
 			}
 		});
 		setCharacterAction(CharacterActionName.SECONDARY_ATTACK,
-				new CharacterAction(this, Const.NITRO_SWORD_DELAY) {
+				new CharacterAction(this, Const.NITRO_SWORD_DELAY,
+						MovableState.BLOCKING) {
 
 			@Override
 			protected void execute() {

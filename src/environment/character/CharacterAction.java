@@ -1,5 +1,8 @@
 package environment.character;
 
+import java.util.HashSet;
+import java.util.Iterator;
+
 import listener.ICharacterActionListener;
 import listener.IListenable;
 import listener.ListenerSet;
@@ -24,10 +27,11 @@ import environment.MovableState;
  *
  */
 public abstract class CharacterAction implements
-		IListenable<ICharacterActionListener> {
+IListenable<ICharacterActionListener> {
 	private final Countdown _delay;
 	private final ListenerSet<ICharacterActionListener> _listeners;
 	private final Actor _owner;
+	protected HashSet<MovableState> _forbiddenStates;
 
 	/**
 	 * @return the owner of the {@link CharacterAction} to which this action is
@@ -40,6 +44,21 @@ public abstract class CharacterAction implements
 	@Override
 	public ListenerSet<ICharacterActionListener> getListeners() {
 		return _listeners;
+	}
+
+	/**
+	 * The set of states the {@link Actor} must not be in to execute the action.
+	 * By default, {@link MovableState#DYING} and {@link MovableState#DEAD} are
+	 * forbidden. They can be removed or other states can be added by
+	 * manipulating this set.
+	 *
+	 * @return a set of {@link MovableState}s the {@link Actor} can't be in when
+	 *         executing this action. In fact, being in one of them cancels the
+	 *         execution of the action. See {@link #isStateValid()} for further
+	 *         detail.
+	 */
+	public HashSet<MovableState> getForbiddenStates() {
+		return _forbiddenStates;
 	}
 
 	/**
@@ -59,11 +78,23 @@ public abstract class CharacterAction implements
 	 *            the performing {@link Actor}
 	 * @param delay
 	 *            the delay for this action
+	 * @param forbidden
+	 *            an optional list of forbidden states this action can't be
+	 *            executed in. Basically just a convenience method for using
+	 *            {@link #getForbiddenStates()} after initialisation. See there
+	 *            for more info.
 	 */
-	public CharacterAction(final Actor performer, final long delay) {
+	public CharacterAction(final Actor performer, final long delay,
+			final MovableState... forbidden) {
+		_forbiddenStates = new HashSet<MovableState>();
 		_listeners = new ListenerSet<ICharacterActionListener>();
 		_delay = new Countdown(delay);
 		_owner = performer;
+		_forbiddenStates.add(MovableState.DYING);
+		_forbiddenStates.add(MovableState.DEAD);
+		for (final MovableState ms : forbidden) {
+			_forbiddenStates.add(ms);
+		}
 	}
 
 	/**
@@ -78,8 +109,7 @@ public abstract class CharacterAction implements
 	 */
 	public boolean perform() {
 		boolean done = false;
-		if (_delay.isTimedOut() && !_owner.getState().has(MovableState.DYING)
-				&& !_owner.getState().has(MovableState.DEAD)) {
+		if (_delay.isTimedOut() && isStateValid()) {
 			execute();
 			_delay.reset();
 			done = true;
@@ -100,6 +130,24 @@ public abstract class CharacterAction implements
 				listener.onEnded(CharacterAction.this);
 			}
 		});
+	}
+
+	/**
+	 * Checks whether the state of the {@link Actor} is valid. This is the case
+	 * iff it's current state-mask holds not a single one of the forbidden
+	 * states.
+	 *
+	 * @return true, iff the {@link Actor} is allowed to execute the action
+	 *         statewise
+	 */
+	private boolean isStateValid() {
+		boolean valid = true;
+		final Iterator<MovableState> it = _forbiddenStates.iterator();
+		while (valid && it.hasNext()) {
+			valid = !_owner.getState().has(it.next());
+
+		}
+		return valid;
 	}
 
 	/**

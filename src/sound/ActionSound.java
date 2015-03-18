@@ -41,7 +41,8 @@ public class ActionSound implements ICharacterActionListener {
 		final float sy = srcHitbox.getCenterY();
 		final float mx = sx - vx;
 		// adjust this to increase/decrease the hearing-range of the player
-		final float factor = 2;
+		final float factor = 0.75f * 2;
+
 		final float radius = Math.max(viewportRect.getHeight(),
 				viewportRect.getWidth());
 		final float dst = (float) Math.sqrt(Math.pow(factor
