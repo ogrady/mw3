@@ -40,117 +40,129 @@ package listener;
  * <img src=
  * "http://upload.wikimedia.org/wikipedia/commons/2/20/SNES_Controller.jpg"
  * width="400px" height="200px">
- * 
+ *
  * @author Daniel
- * 
+ *
  */
 public interface IInputListener extends IListener {
 	/**
 	 * called when the controller receives LEFT keypress
-	 * 
+	 *
 	 * @param down
 	 *            whether the key is pressed or not (true = pressed, false =
 	 *            released)
 	 */
-	void onLeftButton(boolean down);
+	default void onLeftButton(final boolean down) {
+	}
 
 	/**
 	 * called when the controller receives RIGHT keypress
-	 * 
+	 *
 	 * @param down
 	 *            whether the key is pressed or not (true = pressed, false =
 	 *            released)
 	 */
-	void onRightButton(boolean down);
+	default void onRightButton(final boolean down) {
+	}
 
 	/**
 	 * called when the controller receives UP keypress
-	 * 
+	 *
 	 * @param down
 	 *            whether the key is pressed or not (true = pressed, false =
 	 *            released)
 	 */
-	void onUpButton(boolean down);
+	default void onUpButton(final boolean down) {
+	}
 
 	/**
 	 * called when the controller receives DOWN keypress
-	 * 
+	 *
 	 * @param down
 	 *            whether the key is pressed or not (true = pressed, false =
 	 *            released)
 	 */
-	void onDownButton(boolean down);
+	default void onDownButton(final boolean down) {
+	}
 
 	/**
 	 * called when the controller receives L keypress (use equipped item)
-	 * 
+	 *
 	 * @param down
 	 *            whether the key is pressed or not (true = pressed, false =
 	 *            released)
 	 */
-	void onItemButton(boolean down);
+	default void onItemButton(final boolean down) {
+	}
 
 	/**
 	 * called when the controller receives R keypress (block)
-	 * 
+	 *
 	 * @param down
 	 *            whether the key is pressed or not (true = pressed, false =
 	 *            released)
 	 */
-	void onBlockButton(boolean down);
+	default void onBlockButton(final boolean down) {
+	}
 
 	/**
 	 * called when the controller receives A keypress (secondary attack)
-	 * 
+	 *
 	 * @param down
 	 *            whether the key is pressed or not (true = pressed, false =
 	 *            released)
 	 */
-	void onSecondaryAttackButton(boolean down);
+	default void onSecondaryAttackButton(final boolean down) {
+	}
 
 	/**
 	 * called when the controller receives B keypress (jump)
-	 * 
+	 *
 	 * @param down
 	 *            whether the key is pressed or not (true = pressed, false =
 	 *            released)
 	 */
-	void onJumpButton(boolean down);
+	default void onJumpButton(final boolean down) {
+	}
 
 	/**
 	 * called when the controller receives X keypress (special action)
-	 * 
+	 *
 	 * @param down
 	 *            whether the key is pressed or not (true = pressed, false =
 	 *            released)
 	 */
-	void onSpecialActionButton(boolean down);
+	default void onSpecialActionButton(final boolean down) {
+	}
 
 	/**
 	 * called when the controller receives Y keypress (primary attack)
-	 * 
+	 *
 	 * @param down
 	 *            whether the key is pressed or not (true = pressed, false =
 	 *            released)
 	 */
-	void onPrimaryAttackButton(boolean down);
+	default void onPrimaryAttackButton(final boolean down) {
+	}
 
 	/**
 	 * called when the controller receives SELECT keypress (eject pilot / enter
 	 * mech)
-	 * 
+	 *
 	 * @param down
 	 *            whether the key is pressed or not (true = pressed, false =
 	 *            released)
 	 */
-	void onSelectButton(boolean down);
+	default void onSelectButton(final boolean down) {
+	}
 
 	/**
 	 * called when the controller receives START keypress
-	 * 
+	 *
 	 * @param down
 	 *            whether the key is pressed or not (true = pressed, false =
 	 *            released)
 	 */
-	void onStartButton(boolean down);
+	default void onStartButton(final boolean down) {
+	}
 }

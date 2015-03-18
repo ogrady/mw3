@@ -11,5 +11,6 @@ public interface IConfigListener extends IListener {
 	 * @param conf
 	 *            the newly loaded configuration
 	 */
-	void onLoad(Configuration config);
+	default void onLoad(final Configuration config) {
+	}
 }

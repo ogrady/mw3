@@ -12,5 +12,6 @@ public interface IAnimationListener extends IListener {
 	 * (Daniel)
 	 *
 	 */
-	public void onEnded();
+	default void onEnded() {
+	}
 }

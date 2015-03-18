@@ -11,7 +11,6 @@ import renderer.slick.ObservableAnimation;
 import renderer.slick.PositionableRenderer;
 import util.Const;
 import util.IBitmask;
-import environment.IDamageSource;
 import environment.MovableState;
 import environment.character.mech.Nitro;
 import game.Viewport;
@@ -63,8 +62,8 @@ public class NitroRenderer extends MechRenderer {
 				frame.draw(_renderable.getPosition().x + adjustedX,
 						_renderable.getPosition().y - adjustedY,
 						(_renderable.getDirection() - 1) * -frame.getWidth()
-						/ 2, 0, (_renderable.getDirection() + 1)
-						* frame.getWidth() / 2, frame.getHeight());
+								/ 2, 0, (_renderable.getDirection() + 1)
+								* frame.getWidth() / 2, frame.getHeight());
 			}
 		};
 		_subrenderers.add(_armRenderer);
@@ -79,22 +78,8 @@ public class NitroRenderer extends MechRenderer {
 	}
 
 	@Override
-	public void onTakeDamage(final IDamageSource src, final int amount) {
-
-	}
-
-	@Override
 	public void onDie() {
 		_subrenderers.remove(_armRenderer);
-	}
-
-	@Override
-	public void onSpawn() {
-	}
-
-	@Override
-	public void onFullHeal() {
-
 	}
 
 	@Override

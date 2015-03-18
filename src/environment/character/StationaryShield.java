@@ -2,7 +2,6 @@ package environment.character;
 
 import java.util.ArrayList;
 
-import level.World;
 import listener.IListenable;
 import listener.IPlayingStateListener;
 import listener.IStationaryShieldListener;
@@ -31,7 +30,7 @@ import game.Viewport;
  *
  */
 public class StationaryShield extends Positionable implements
-IPlayingStateListener, IListenable<IStationaryShieldListener> {
+		IPlayingStateListener, IListenable<IStationaryShieldListener> {
 	public static final ArrayList<StationaryShield> instances = new ArrayList<StationaryShield>();
 	private final ListenerSet<IStationaryShieldListener> _listeners;
 	private long _ttl;
@@ -69,15 +68,10 @@ IPlayingStateListener, IListenable<IStationaryShieldListener> {
 	}
 
 	@Override
-	public void onLoadMap(final World map) {
-		// shield doesn't give a fuck
-	}
-
-	@Override
 	public void destruct() {
 		instances.remove(this);
 		MetalWarriors.instance.getPlayingState().getListeners()
-				.unregisterListener(this);
+		.unregisterListener(this);
 		_listeners.notify(new INotifier<IStationaryShieldListener>() {
 			@Override
 			public void notify(final IStationaryShieldListener listener) {

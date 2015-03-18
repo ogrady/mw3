@@ -21,7 +21,8 @@ public interface IPlayingStateListener extends IListener {
 	 * @param delta
 	 *            the milliseconds passed since the last time
 	 */
-	public void onTick(Input input, int delta);
+	default void onTick(final Input input, final int delta) {
+	}
 
 	/**
 	 * Called from the game whenever another render-cycle begins.<br>
@@ -33,7 +34,9 @@ public interface IPlayingStateListener extends IListener {
 	 * @param vp
 	 *            the viewport the player currently sees
 	 */
-	public void onRender(Graphics g, Viewport vp);
+	default void onRender(final Graphics g, final Viewport vp) {
+	}
 
-	public void onLoadMap(World map);
+	default void onLoadMap(final World map) {
+	}
 }

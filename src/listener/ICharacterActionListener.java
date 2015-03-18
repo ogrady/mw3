@@ -11,7 +11,8 @@ public interface ICharacterActionListener extends IListener {
 	 * @param action
 	 *            the {@link CharacterAction} that has ended
 	 */
-	public void onEnded(CharacterAction action);
+	default void onEnded(final CharacterAction action) {
+	}
 
 	/**
 	 * Posthook for the execution of a {@link CharacterAction}. That is, someone
@@ -22,5 +23,6 @@ public interface ICharacterActionListener extends IListener {
 	 * @param action
 	 *            the performed {@link CharacterAction}
 	 */
-	public void onExecute(CharacterAction action);
+	default void onExecute(final CharacterAction action) {
+	}
 }
