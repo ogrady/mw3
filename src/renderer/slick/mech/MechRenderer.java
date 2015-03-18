@@ -19,11 +19,11 @@ import environment.character.mech.Mech;
  *
  */
 abstract public class MechRenderer extends MovableRenderer<Mech> implements
-IActorListener {
+		IActorListener {
 	protected HashMap<Integer, ObservableAnimation> _armPositions;
 	protected ObservableAnimation _walking, _jumping, _broken, _shielded,
-	_flyingPrelude, _arm, _special, _primaryAttack, _secondaryAttack,
-			_dying;
+			_flyingPrelude, _arm, _special, _primaryAttack, _secondaryAttack,
+	_dying;
 
 	/**
 	 * @return the map that contains the animations for all arm-positions
@@ -103,6 +103,7 @@ IActorListener {
 	 */
 	public MechRenderer(final Mech mech) {
 		super(mech);
+		mech.getListeners().registerListener(this);
 		_armPositions = new HashMap<Integer, ObservableAnimation>();
 	}
 

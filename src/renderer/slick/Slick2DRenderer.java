@@ -1,5 +1,8 @@
 package renderer.slick;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
@@ -10,12 +13,20 @@ import renderer.IRenderer;
 /**
  * Renderer for slick games on a 2D surface {@link Graphics}.<br>
  * Used as abstraction layer to be able to replace the presentation.
- * 
+ *
  * @author Daniel
- * 
+ *
  */
 abstract public class Slick2DRenderer implements IRenderer {
 	protected ObservableAnimation _current;
+	protected ArrayList<IRenderer> _subrenderers;
+
+	/**
+	 * @return list of subrenderers
+	 */
+	public List<IRenderer> getSubrenderer() {
+		return _subrenderers;
+	}
 
 	/**
 	 * @return the currently looped animation. Whenever the renderer receives an
@@ -29,7 +40,7 @@ abstract public class Slick2DRenderer implements IRenderer {
 	 * Sets the current animation.<br>
 	 * It also restarts the former animation so it can restart when being used
 	 * again.
-	 * 
+	 *
 	 * @param newCurrent
 	 *            new current animation
 	 */
@@ -58,8 +69,15 @@ abstract public class Slick2DRenderer implements IRenderer {
 	}
 
 	/**
+	 * Constructor
+	 */
+	public Slick2DRenderer() {
+		_subrenderers = new ArrayList<IRenderer>();
+	}
+
+	/**
 	 * Loads a {@link SpriteSheet} in scaled form
-	 * 
+	 *
 	 * @param path
 	 *            path to the spritesheet
 	 * @param frameWidth
@@ -85,7 +103,7 @@ abstract public class Slick2DRenderer implements IRenderer {
 
 	/**
 	 * Updates the currently running animation by some milliseconds
-	 * 
+	 *
 	 * @param delta
 	 *            the milliseconds passed since the last tick
 	 */

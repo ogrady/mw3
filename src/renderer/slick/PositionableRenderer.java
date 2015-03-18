@@ -6,6 +6,7 @@ import org.newdawn.slick.Animation;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
+import renderer.IRenderer;
 import environment.Positionable;
 import game.MetalWarriors;
 import game.Viewport;
@@ -18,7 +19,7 @@ import game.Viewport;
  *
  */
 abstract public class PositionableRenderer<P extends Positionable> extends
-		Slick2DRenderer {
+Slick2DRenderer {
 	protected P _renderable;
 
 	/**
@@ -42,6 +43,9 @@ abstract public class PositionableRenderer<P extends Positionable> extends
 				(_renderable.getDirection() - 1) * -frame.getWidth() / 2, 0,
 				(_renderable.getDirection() + 1) * frame.getWidth() / 2,
 				frame.getHeight());
+		for (final IRenderer sub : _subrenderers) {
+			sub.render(g, vp);
+		}
 	}
 
 	/**

@@ -8,6 +8,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.geom.Vector2f;
 
 import renderer.slick.ObservableAnimation;
+import renderer.slick.PositionableRenderer;
 import util.Const;
 import util.IBitmask;
 import environment.IDamageSource;
@@ -16,6 +17,7 @@ import environment.character.mech.Nitro;
 import game.Viewport;
 
 public class NitroRenderer extends MechRenderer {
+	private final PositionableRenderer<Nitro> _armRenderer;
 
 	public NitroRenderer(final Nitro pos) {
 		super(pos);
@@ -45,6 +47,27 @@ public class NitroRenderer extends MechRenderer {
 		_dying = new ObservableAnimation(loadScaledSpriteSheet(Const.NITRO_RSC
 				+ "start_flying.png", 45, 50, Const.SCALE_FACTOR), 100);
 		_flyingPrelude.setLooping(true);
+
+		// arm subrenderer, will be removed when the mech is destroyed
+		_armRenderer = new PositionableRenderer<Nitro>(pos) {
+			@Override
+			public void render(final Graphics g, final Viewport vp) {
+				_arm.start();
+				_arm.setCurrentFrame(_renderable.getArmPosition());
+				final Image frame = _arm.getCurrentFrame();
+				final float adjustedCenter = (_renderable.getWidth() - frame
+						.getWidth()) / 2;
+				final float adjustedX = adjustedCenter
+						+ _renderable.getDirection() * 11 * Const.SCALE_FACTOR;
+				final float adjustedY = 7 * Const.SCALE_FACTOR;
+				frame.draw(_renderable.getPosition().x + adjustedX,
+						_renderable.getPosition().y - adjustedY,
+						(_renderable.getDirection() - 1) * -frame.getWidth()
+						/ 2, 0, (_renderable.getDirection() + 1)
+						* frame.getWidth() / 2, frame.getHeight());
+			}
+		};
+		_subrenderers.add(_armRenderer);
 		this.setIdle();
 	}
 
@@ -62,7 +85,7 @@ public class NitroRenderer extends MechRenderer {
 
 	@Override
 	public void onDie() {
-		setCurrentAnimation(_broken);
+		_subrenderers.remove(_armRenderer);
 	}
 
 	@Override
@@ -80,18 +103,6 @@ public class NitroRenderer extends MechRenderer {
 		g.setColor(Color.black);
 		g.drawString("" + _renderable.getCurrentLife(),
 				_renderable.getPosition().x, _renderable.getPosition().y - 20);
-		_arm.start();
-		_arm.setCurrentFrame(_renderable.getArmPosition());
-		final Image frame = _arm.getCurrentFrame();
-		final float adjustedCenter = (_renderable.getWidth() - frame.getWidth()) / 2;
-		final float adjustedX = adjustedCenter + _renderable.getDirection()
-				* 11 * Const.SCALE_FACTOR;
-		final float adjustedY = 7 * Const.SCALE_FACTOR;
-		frame.draw(_renderable.getPosition().x + adjustedX,
-				_renderable.getPosition().y - adjustedY,
-				(_renderable.getDirection() - 1) * -frame.getWidth() / 2, 0,
-				(_renderable.getDirection() + 1) * frame.getWidth() / 2,
-				frame.getHeight());
 	}
 
 	/**
