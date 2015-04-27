@@ -1,5 +1,4 @@
 package environment.character.mech;
-import java.io.*;
 
 import listener.IAnimationListener;
 import listener.IStationaryShieldListener;
@@ -249,8 +248,6 @@ public class Nitro extends Mech implements IStationaryShieldListener {
 			angle *= -1;
 		}
 		arm = arm.transform(Transform.createRotateTransform(angle,armLocation.x,armLocation.y));
-
-		System.out.println(mech.union(arm)[0].getMinY() + " " + mech.getMinY());
 
 		return mech.union(arm)[0];
 	}
