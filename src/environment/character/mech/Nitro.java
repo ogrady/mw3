@@ -85,7 +85,12 @@ public class Nitro extends Mech implements IStationaryShieldListener {
 						MovableState.BLOCKING) {
 			@Override
 			protected void execute() {
-				Vector2f exitPoint = getArmJoint().add(getFireline().scale(getArmLength()));
+				Vector2f exitPoint = getArmJoint();
+				if (getDirection() <= 0) {
+					exitPoint = exitPoint.sub(new Vector2f(Const.NITRO_SMG_DIAMETER,0));
+				} 
+
+				exitPoint = exitPoint.add(getFireline().scale(getArmLength()));
 				new SMGBullet(exitPoint, Nitro.this.getFireline()
 						.scale(Const.NITRO_SMG_SPEED), Nitro.this);
 			}
@@ -134,7 +139,8 @@ public class Nitro extends Mech implements IStationaryShieldListener {
 		});
 
 		new NitroSoundManager(this);
-		final NitroRenderer renderer = new NitroRenderer(this);
+		//final NitroRenderer renderer = new NitroRenderer(this);
+		final NitroHitboxRenderer renderer = new NitroHitboxRenderer(this);
 		setRenderer(renderer);
 		renderer.getSpecialAnimation().getListeners()
 		.registerListener(new IAnimationListener() {
@@ -210,17 +216,43 @@ public class Nitro extends Mech implements IStationaryShieldListener {
 	 * @return the point around which the arm rotates
 	 */
 	public Vector2f getArmJoint() {
+		float relativeX;
+
+		// Take into consideration direction of the mech since the position of the joint is not directly in the center
+		if (getDirection() > 0) {
+			relativeX = 16 * Const.SCALE_FACTOR;
+		} else {
+			relativeX = getWidth() - (16 * Const.SCALE_FACTOR);
+		}
 		return getPosition()
 				.copy()
-				.add(new Vector2f(16 * Const.SCALE_FACTOR,
+				.add(new Vector2f(relativeX,
 						13 * Const.SCALE_FACTOR));
 	}
 
+	/**
+	 * @return combined hitbox of mech and arm
+	 */
 	@Override
 	public Shape getHitbox() {
 		Shape mech = super.getHitbox();
 
-		return mech;
+		Vector2f armLocation = getArmJoint();
+		Shape arm;
+		float angle;
+		angle = (float)Math.toRadians(ANGLES[getArmPosition()]-90);
+
+		if (getDirection() > 0) {
+			arm = new Rectangle(armLocation.x,armLocation.y,getArmLength(),20);
+		} else {
+			arm = new Rectangle(armLocation.x-getArmLength(),armLocation.y,getArmLength(),20);
+			angle *= -1;
+		}
+		arm = arm.transform(Transform.createRotateTransform(angle,armLocation.x,armLocation.y));
+
+		System.out.println(mech.union(arm)[0].getMinY() + " " + mech.getMinY());
+
+		return mech.union(arm)[0];
 	}
 
 	@Override
