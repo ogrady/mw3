@@ -4,6 +4,7 @@ import listener.IAnimationListener;
 import listener.IStationaryShieldListener;
 
 import org.newdawn.slick.geom.Vector2f;
+import org.newdawn.slick.geom.Shape;
 
 import renderer.slick.mech.NitroRenderer;
 import sound.NitroSoundManager;
@@ -76,8 +77,8 @@ public class Nitro extends Mech implements IStationaryShieldListener {
 			@Override
 			protected void execute() {
 				final NitroRenderer r = (NitroRenderer) _renderer;
-				final Vector2f exitPoint = r.getArmJoint().add(
-						getFireline().scale(r.getArmLength()));
+				final Vector2f exitPoint = getArmJoint().add(
+						getFireline().scale(getArmLength()));
 				new SMGBullet(exitPoint, Nitro.this.getFireline()
 						.scale(Const.NITRO_SMG_SPEED), Nitro.this);
 			}
@@ -95,8 +96,8 @@ public class Nitro extends Mech implements IStationaryShieldListener {
 					exitpoint.x -= ParticleSword.SWORDSIZE;
 				}
 				final NitroRenderer r = (NitroRenderer) _renderer;
-				r.getArmJoint().add(
-						getFireline().scale(r.getArmLength()));
+				getArmJoint().add(
+						getFireline().scale(getArmLength()));
 				new ParticleSword(Nitro.this);
 			}
 		});
@@ -119,6 +120,31 @@ public class Nitro extends Mech implements IStationaryShieldListener {
 				_state.remove(MovableState.SPECIAL);
 			}
 		});
+	}
+	
+	/**
+	 * @return length of the arm, from joint to tip, to determine the exit-point
+	 *         for bullets
+	 */
+	public int getArmLength() {
+		return (int) (28 * Const.SCALE_FACTOR);
+	}
+
+	/**
+	 * @return the point around which the arm rotates
+	 */
+	public Vector2f getArmJoint() {
+		return getPosition()
+				.copy()
+				.add(new Vector2f(16 * Const.SCALE_FACTOR,
+						13 * Const.SCALE_FACTOR));
+	}
+
+	@Override
+	public Shape getHitbox() {
+		Shape mech = super.getHitbox();
+
+		return mech;
 	}
 
 	@Override

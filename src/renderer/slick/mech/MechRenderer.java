@@ -106,16 +106,4 @@ abstract public class MechRenderer extends MovableRenderer<Mech> implements
 		mech.getListeners().registerListener(this);
 		_armPositions = new HashMap<Integer, ObservableAnimation>();
 	}
-
-	/**
-	 * @return length of the arm, from joint to tip, to determine the exit-point
-	 *         for bullets
-	 */
-	abstract public int getArmLength();
-
-	/**
-	 * @return the point around which the arm rotates
-	 */
-	abstract public Vector2f getArmJoint();
-
 }

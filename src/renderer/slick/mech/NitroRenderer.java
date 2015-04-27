@@ -152,20 +152,6 @@ public class NitroRenderer extends MechRenderer {
 	}
 
 	@Override
-	public Vector2f getArmJoint() {
-		return _renderable
-				.getPosition()
-				.copy()
-				.add(new Vector2f(16 * Const.SCALE_FACTOR,
-						13 * Const.SCALE_FACTOR));
-	}
-
-	@Override
-	public int getArmLength() {
-		return (int) (28 * Const.SCALE_FACTOR);
-	}
-
-	@Override
 	public void onAdd(final IBitmask<MovableState> mask,
 			final MovableState newElement) {
 		handleBitmaskChanges(mask, newElement, null);
