@@ -59,6 +59,10 @@ public class Const {
 	 */
 	public static final long NITRO_SHIELD_DELAY = 1000;
 	/**
+	 * Size of a bullet
+	 */
+	public static final int NITRO_SMG_DIAMETER = 5;
+	/**
 	 * Time in ms until Nitro can fire his SMG again.
 	 */
 	public static final long NITRO_SMG_DELAY = 200;

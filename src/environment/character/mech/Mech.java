@@ -37,8 +37,6 @@ public abstract class Mech extends Actor {
 		PRIMARY_ATTACK, SECONDARY_ATTACK, SPECIAL_ATTACK, JUMP, BLOCK, UNBLOCK, USE_ITEM, ARM_UP, ARM_DOWN
 	}
 
-	private static final int[] ANGLES = { 0, 30, 50, 68, 90, 112, 130, 150, 180 };
-	protected int _armPosition;
 	/**
 	 * This contains a mapping of {@link CharacterActionName} to
 	 * {@link CharacterAction}s. Useful for iterating over ALL
@@ -47,59 +45,6 @@ public abstract class Mech extends Actor {
 	 * for each of them
 	 */
 	private final HashMap<CharacterActionName, CharacterAction> _characterActions;
-
-	/**
-	 * Mechs can rotate their arms to determine the direction they shoot in.<br>
-	 * The arm can have eight different states.
-	 * <p>
-	 * 0 - being vertically up<br>
-	 * 4 - being straight forward<br>
-	 * 8 - being vertically down<br>
-	 * </p>
-	 * Having 3 states in between each.<br>
-	 * So between each arm-position lies an angle of 20 degrees.<br>
-	 * The state of the arm says nothing about the direction the mech is facing
-	 * into. So having an arm-state of 7 could mean having the arm lifted by 20 degrees
-	 * from the ground and facing left or right. The direction can still be
-	 * obtained from {@link #getDirection()}
-	 *
-	 * @return a number between 0 and 9, representing the current angle of the
-	 *         arm
-	 */
-	public int getArmPosition() {
-		return _armPosition;
-	}
-
-	/**
-	 * Rotates the arm up by 20 degrees
-	 */
-	public void armUp() {
-		getCharacterAction(CharacterActionName.ARM_UP).perform();
-	}
-
-	/**
-	 * Rotates the arm down by 20 degrees
-	 */
-	public void armDown() {
-		getCharacterAction(CharacterActionName.ARM_DOWN).perform();
-	}
-
-	/**
-	 * The fireline is the vector, that determines the direction in which the
-	 * Mechs {@link Projectile}s will fly. This is a normalised vector and
-	 * therefore only determines the direction, not the magnitude, nor the
-	 * position. Each time this method is called, a new vector will be created.
-	 * So there is no way to manipulate the internal vector and no need to copy
-	 * that vector before using it.
-	 *
-	 * @return the vector that determines the direction of shot
-	 *         {@link Projectile}
-	 */
-	public Vector2f getFireline() {
-		final double angle = Math.toRadians(ANGLES[getArmPosition()]);
-		return new Vector2f((float) Math.sin(angle) * getDirection(),
-				(float) -Math.cos(angle));
-	}
 
 	/**
 	 * Replaces an old {@link CharacterAction} with a new one. All listeners
@@ -162,32 +107,15 @@ public abstract class Mech extends Actor {
 		super(position, width, height, speed, description);
 		_characterActions = new HashMap<CharacterActionName, CharacterAction>(
 				CharacterActionName.values().length);
-		// look straight
-		_armPosition = 4;
 		// make sure every character action has at least an empty action. Those
 		// don't do anything and can be replaced in the subclasses.
 		for (final CharacterActionName key : CharacterActionName.values()) {
 			setCharacterAction(key, new EmptyCharacterAction());
 		}
-		// those two are pretty unspecific and can be implemented in the
-		// superclass right away
-		setCharacterAction(CharacterActionName.ARM_UP, new CharacterAction(
-				this, Const.MECH_ARM_ROTATION_DELAY) {
-
-			@Override
-			protected void execute() {
-				_armPosition = Math.max(_armPosition - 1, 0);
-			}
-		});
-		setCharacterAction(CharacterActionName.ARM_DOWN, new CharacterAction(
-				this, Const.MECH_ARM_ROTATION_DELAY) {
-
-			@Override
-			protected void execute() {
-				_armPosition = Math.min(_armPosition + 1, 8);
-			}
-		});
 	}
+
+	abstract public void armUp();
+	abstract public void armDown();
 
 	/**
 	 * Asks the {@link Mech} to perform the primary-attack-action (shooting in

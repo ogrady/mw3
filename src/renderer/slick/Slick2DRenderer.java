@@ -108,7 +108,11 @@ abstract public class Slick2DRenderer implements IRenderer {
 	 *            the milliseconds passed since the last tick
 	 */
 	public void update(final long delta) {
-		getCurrentAnimation().update(delta);
+		ObservableAnimation anim = getCurrentAnimation();
+		// Hitbox Renderer has no animations
+		if(anim != null) {
+			getCurrentAnimation().update(delta);
+		}
 	}
 
 }

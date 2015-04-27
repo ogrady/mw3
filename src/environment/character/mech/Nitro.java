@@ -1,12 +1,16 @@
 package environment.character.mech;
+import java.io.*;
 
 import listener.IAnimationListener;
 import listener.IStationaryShieldListener;
 
 import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.geom.Shape;
+import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Transform;
 
 import renderer.slick.mech.NitroRenderer;
+import renderer.slick.mech.NitroHitboxRenderer;
 import sound.NitroSoundManager;
 import util.Const;
 import environment.MovableState;
@@ -32,11 +36,16 @@ import game.MetalWarriors;
  */
 public class Nitro extends Mech implements IStationaryShieldListener {
 	private int _activeShields;
+	protected int _armPosition;
+	private static final int[] ANGLES = { 0, 30, 50, 68, 90, 112, 130, 150, 180 };
 
 	public Nitro(final Vector2f position, final String description) {
-		super(position, 0, 0, 5, description);
+		super(position, 72, 90, 5, description);
 		_maxLife = Const.NITRO_HP;
 		_currentLife = Const.NITRO_HP;
+		// look straight
+		_armPosition = 4;
+
 		// we need empty actions for this, as per default an
 		// EmptyCharacterAction would be used, which always returns false on
 		// perform() and therefore we couldn't block at all.
@@ -76,9 +85,7 @@ public class Nitro extends Mech implements IStationaryShieldListener {
 						MovableState.BLOCKING) {
 			@Override
 			protected void execute() {
-				final NitroRenderer r = (NitroRenderer) _renderer;
-				final Vector2f exitPoint = getArmJoint().add(
-						getFireline().scale(getArmLength()));
+				Vector2f exitPoint = getArmJoint().add(getFireline().scale(getArmLength()));
 				new SMGBullet(exitPoint, Nitro.this.getFireline()
 						.scale(Const.NITRO_SMG_SPEED), Nitro.this);
 			}
@@ -95,10 +102,25 @@ public class Nitro extends Mech implements IStationaryShieldListener {
 				} else {
 					exitpoint.x -= ParticleSword.SWORDSIZE;
 				}
-				final NitroRenderer r = (NitroRenderer) _renderer;
 				getArmJoint().add(
 						getFireline().scale(getArmLength()));
 				new ParticleSword(Nitro.this);
+			}
+		});
+		setCharacterAction(CharacterActionName.ARM_UP, new CharacterAction(
+				this, Const.MECH_ARM_ROTATION_DELAY) {
+
+			@Override
+			protected void execute() {
+				_armPosition = Math.max(_armPosition - 1, 0);
+			}
+		});
+		setCharacterAction(CharacterActionName.ARM_DOWN, new CharacterAction(
+				this, Const.MECH_ARM_ROTATION_DELAY) {
+
+			@Override
+			protected void execute() {
+				_armPosition = Math.min(_armPosition + 1, 8);
 			}
 		});
 		setCharacterAction(CharacterActionName.JUMP, new CharacterAction(this,
@@ -110,16 +132,70 @@ public class Nitro extends Mech implements IStationaryShieldListener {
 				_state.add(MovableState.FLYING);
 			}
 		});
+
 		new NitroSoundManager(this);
-		final NitroRenderer nr = new NitroRenderer(this);
-		setRenderer(nr);
-		nr.getSpecialAnimation().getListeners()
+		final NitroRenderer renderer = new NitroRenderer(this);
+		setRenderer(renderer);
+		renderer.getSpecialAnimation().getListeners()
 		.registerListener(new IAnimationListener() {
 			@Override
 			public void onEnded() {
 				_state.remove(MovableState.SPECIAL);
 			}
 		});
+	}
+
+	/**
+	 * Mechs can rotate their arms to determine the direction they shoot in.<br>
+	 * The arm can have eight different states.
+	 * <p>
+	 * 0 - being vertically up<br>
+	 * 4 - being straight forward<br>
+	 * 8 - being vertically down<br>
+	 * </p>
+	 * Having 3 states in between each.<br>
+	 * So between each arm-position lies an angle of 20 degrees.<br>
+	 * The state of the arm says nothing about the direction the mech is facing
+	 * into. So having an arm-state of 7 could mean having the arm lifted by 20 degrees
+	 * from the ground and facing left or right. The direction can still be
+	 * obtained from {@link #getDirection()}
+	 *
+	 * @return a number between 0 and 9, representing the current angle of the
+	 *         arm
+	 */
+	public int getArmPosition() {
+		return _armPosition;
+	}
+
+	/**
+	 * The fireline is the vector, that determines the direction in which the
+	 * Mechs {@link Projectile}s will fly. This is a normalised vector and
+	 * therefore only determines the direction, not the magnitude, nor the
+	 * position. Each time this method is called, a new vector will be created.
+	 * So there is no way to manipulate the internal vector and no need to copy
+	 * that vector before using it.
+	 *
+	 * @return the vector that determines the direction of shot
+	 *         {@link Projectile}
+	 */
+	public Vector2f getFireline() {
+		final double angle = Math.toRadians(ANGLES[getArmPosition()]);
+		return new Vector2f((float) Math.sin(angle) * getDirection(),
+				(float) -Math.cos(angle));
+	}
+
+	/**
+	 * Rotates the arm up by 20 degrees
+	 */
+	public void armUp() {
+		getCharacterAction(CharacterActionName.ARM_UP).perform();
+	}
+
+	/**
+	 * Rotates the arm down by 20 degrees
+	 */
+	public void armDown() {
+		getCharacterAction(CharacterActionName.ARM_DOWN).perform();
 	}
 	
 	/**
