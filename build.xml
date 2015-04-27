@@ -1,61 +1,76 @@
-<!--  Ant script to compile project and generate jar
-      Works for linux already; needs refining to respect backslashes in windows paths
-      -> TODO: use pathconvert
+<project name="mw3" default="help" basedir=".">
 
-      Should compile, pack jar and start game by calling "ant run" once
--->
-<project>
-   <!-- Set definitions, afterwards use variables only -->
-   <property name="lib.dir" value="lib/slick" />
-   <property name="build.dir" value="build" />
-   <property name="classes.dir" value="classes" />
-   <property name="jar.dir" value="jar" />
-   <property name="jar.name" value="mw3.jar" />
+<property name="build.sysclasspath" value="last"/>
 
-   <!-- Explicitly list all referenced external jars here -->
-   <path id="classpath">
-      <pathelement location="lib/slick/slick.jar" />
-      <pathelement location="lib/slick/lwjgl.jar" />
-   </path>
+<target name="help">
+    <echo message="Common build targets:" />
+    <echo message="jar         - Builds testconsole.jar" />
+    <echo message="build       - Same as clean+jar" />
+    <echo message="compile     - Compiles TestConsole classes" />
+    <echo message="clean       - Remove all *.class and testconsole.jar" />
+</target>
 
-   <!-- Use different runtime libs depending on OS -->
-   <condition property="native-libs" value="natives-windows">
-      <os family="windows" />
-   </condition>
-   <condition property="native-libs" value="natives-linux">
-      <os family="unix" />
-   </condition>
+<property file="build.properties"/>
+<property name="buildDir" value="build" />
+<property name="classesDir" value="classes" />
 
-   <!-- Detect changes to later compile only if we have to -->
-   <uptodate property="nochanges" targetfile="${build.dir}/${jar.dir}/${jar.name}">
-      <srcfiles dir="src" includes="**/*.java" />
-   </uptodate>
+<path id="classpath">
+    <pathelement path="." />
+    <fileset dir="lib">
+		<include name="**/*.jar" />
+    </fileset>
+    <pathelement location="." />
+</path>
 
-   <target name="clean">
-     <delete dir="${build.dir}" />
-   </target>
+<!-- Use different runtime libs depending on OS -->
+<condition property="native-libs" value="natives-windows">
+	<os family="windows" />
+</condition>
+<condition property="native-libs" value="natives-linux">
+	<os family="unix" />
+</condition>
 
-   <target name="compile" unless="nochanges">
-      <mkdir dir="${build.dir}/${classes.dir}" />
-      <javac srcdir="src" destdir="${build.dir}/${classes.dir}" classpathref="classpath" includeantruntime="false"/>
-   </target>
+<target name="build" depends="clean,jar"/>
 
-   <target name="jar" depends="compile">
-      <mkdir dir="${build.dir}/${jar.dir}" />
-      <manifestclasspath property="jar.classpath" jarfile="${build.dir}/${jar.dir}/${jar.name}">
-         <classpath refid="classpath" />
-      </manifestclasspath>
-      <jar destfile="${build.dir}/${jar.dir}/${jar.name}" basedir="${build.dir}/${classes.dir}">
+<target name="jar" depends="compile">
+	<manifestclasspath property="jar.classpath" jarfile="${buildDir}/toolbox.jar">
+        <classpath refid="classpath" />
+    </manifestclasspath>
+    <jar
+		 jarfile="${buildDir}/toolbox.jar">
          <manifest>
             <attribute name="Main-Class" value="game.MetalWarriors" />
             <attribute name="Class-Path" value="${jar.classpath}" />
-         </manifest>
-      </jar>
-   </target>
+			</manifest>
+			<fileset dir="${buildDir}/${classesDir}"/>
+    </jar>
+</target>
 
-   <target name="run" depends="jar">
-      <java jar="${build.dir}/${jar.dir}/${jar.name}" fork="true">
-         <sysproperty key="java.library.path" path="${lib.dir}/${native-libs}"/>
-      </java>
-   </target>
+<target name="compile">
+	<mkdir dir="${buildDir}/${classesDir}"/>
+    <javac
+        srcdir="src"
+		  destdir="${buildDir}/${classesDir}"
+        classpathref="classpath"/>
+    <copy todir="${buildDir}/${classesDir}">
+        <fileset dir="rsc">
+            <include name="**/*.xsl" />
+            <include name="**/*.gif" />
+            <include name="**/*.jpg" />
+            <include name="**/*.png" />
+            <include name="**/*.properties" />
+        </fileset>
+    </copy>
+</target>
+
+<target name="run" depends="jar">
+	<java jar="${buildDir}/toolbox.jar" fork="true">
+		<sysproperty key="java.library.path" path="lib/slick/${native-libs}"/>
+	</java>
+</target>
+
+<target name="clean">
+	<delete dir="${buildDir}"/>
+</target>
+
 </project>
