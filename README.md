@@ -2,14 +2,9 @@
 Metal Warriors 3
 ===
 
-### Eclipse Setup
+### Code-Setup
 
-1. Pull the code
-2. Open existing project in mw3/. (There should be a .project file already)
-3. Add all mw3/lib/(slick|nifty)/*.jar files to the Libraries in the Build Path of the project.
-4. Choose your native-*.jar for your OS from the Libraries in the Build Path of the project and unroll it to select "Native library location: ..."
-5. Click "Edit..." and then "Workspace" to select the folder mw3/lib/slick/natives-*/ depending on your OS as the path to the native libraries.
-6. Add rsc/ and src/ to the Source in the Build Path of the project.
+See https://github.com/ogrady/mw3/wiki/Eclipse-Setup
 
 
 ### Howto
