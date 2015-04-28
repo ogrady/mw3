@@ -3,19 +3,22 @@ package environment.character.mech;
 import listener.IAnimationListener;
 import listener.IStationaryShieldListener;
 
-import org.newdawn.slick.geom.Vector2f;
-import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Transform;
+import org.newdawn.slick.geom.Vector2f;
 
+import renderer.slick.CollisionRenderer;
+import renderer.slick.HitboxRenderer;
 import renderer.slick.mech.NitroRenderer;
-import renderer.slick.mech.NitroHitboxRenderer;
 import sound.NitroSoundManager;
 import util.Const;
 import environment.MovableState;
+import environment.Positionable;
 import environment.character.CharacterAction;
 import environment.character.StationaryShield;
 import environment.projectile.ParticleSword;
+import environment.projectile.Projectile;
 import environment.projectile.SMGBullet;
 import game.MetalWarriors;
 
@@ -86,10 +89,12 @@ public class Nitro extends Mech implements IStationaryShieldListener {
 			protected void execute() {
 				Vector2f exitPoint = getArmJoint();
 				if (getDirection() <= 0) {
-					exitPoint = exitPoint.sub(new Vector2f(Const.NITRO_SMG_DIAMETER,0));
-				} 
+					exitPoint = exitPoint.sub(new Vector2f(
+							Const.NITRO_SMG_DIAMETER, 0));
+				}
 
-				exitPoint = exitPoint.add(getFireline().scale(getArmLength()));
+				exitPoint = exitPoint.add(getFireline().scale(
+						getArmLength()));
 				new SMGBullet(exitPoint, Nitro.this.getFireline()
 						.scale(Const.NITRO_SMG_SPEED), Nitro.this);
 			}
@@ -106,8 +111,7 @@ public class Nitro extends Mech implements IStationaryShieldListener {
 				} else {
 					exitpoint.x -= ParticleSword.SWORDSIZE;
 				}
-				getArmJoint().add(
-						getFireline().scale(getArmLength()));
+				getArmJoint().add(getFireline().scale(getArmLength()));
 				new ParticleSword(Nitro.this);
 			}
 		});
@@ -138,8 +142,12 @@ public class Nitro extends Mech implements IStationaryShieldListener {
 		});
 
 		new NitroSoundManager(this);
-		//final NitroRenderer renderer = new NitroRenderer(this);
-		final NitroHitboxRenderer renderer = new NitroHitboxRenderer(this);
+		final NitroRenderer renderer = new NitroRenderer(this);
+		// TODO remove those subrenderers once the
+		// "nitro is falling through the floor like an idiot"-bug is resolved
+		renderer.getSubrenderers().add(new HitboxRenderer<Positionable>(this));
+		renderer.getSubrenderers().add(
+				new CollisionRenderer<Positionable>(this));
 		setRenderer(renderer);
 		renderer.getSpecialAnimation().getListeners()
 		.registerListener(new IAnimationListener() {
@@ -161,9 +169,9 @@ public class Nitro extends Mech implements IStationaryShieldListener {
 	 * Having 3 states in between each.<br>
 	 * So between each arm-position lies an angle of 20 degrees.<br>
 	 * The state of the arm says nothing about the direction the mech is facing
-	 * into. So having an arm-state of 7 could mean having the arm lifted by 20 degrees
-	 * from the ground and facing left or right. The direction can still be
-	 * obtained from {@link #getDirection()}
+	 * into. So having an arm-state of 7 could mean having the arm lifted by 20
+	 * degrees from the ground and facing left or right. The direction can still
+	 * be obtained from {@link #getDirection()}
 	 *
 	 * @return a number between 0 and 9, representing the current angle of the
 	 *         arm
@@ -192,6 +200,7 @@ public class Nitro extends Mech implements IStationaryShieldListener {
 	/**
 	 * Rotates the arm up by 20 degrees
 	 */
+	@Override
 	public void armUp() {
 		getCharacterAction(CharacterActionName.ARM_UP).perform();
 	}
@@ -199,10 +208,11 @@ public class Nitro extends Mech implements IStationaryShieldListener {
 	/**
 	 * Rotates the arm down by 20 degrees
 	 */
+	@Override
 	public void armDown() {
 		getCharacterAction(CharacterActionName.ARM_DOWN).perform();
 	}
-	
+
 	/**
 	 * @return length of the arm, from joint to tip, to determine the exit-point
 	 *         for bullets
@@ -217,16 +227,15 @@ public class Nitro extends Mech implements IStationaryShieldListener {
 	public Vector2f getArmJoint() {
 		float relativeX;
 
-		// Take into consideration direction of the mech since the position of the joint is not directly in the center
+		// Take into consideration direction of the mech since the position of
+		// the joint is not directly in the center
 		if (getDirection() > 0) {
 			relativeX = 16 * Const.SCALE_FACTOR;
 		} else {
-			relativeX = getWidth() - (16 * Const.SCALE_FACTOR);
+			relativeX = getWidth() - 16 * Const.SCALE_FACTOR;
 		}
-		return getPosition()
-				.copy()
-				.add(new Vector2f(relativeX,
-						13 * Const.SCALE_FACTOR));
+		return getPosition().copy().add(
+				new Vector2f(relativeX, 13 * Const.SCALE_FACTOR));
 	}
 
 	/**
@@ -234,20 +243,23 @@ public class Nitro extends Mech implements IStationaryShieldListener {
 	 */
 	@Override
 	public Shape getHitbox() {
-		Shape mech = super.getHitbox();
+		final Shape mech = super.getHitbox();
 
-		Vector2f armLocation = getArmJoint();
+		final Vector2f armLocation = getArmJoint();
 		Shape arm;
 		float angle;
-		angle = (float)Math.toRadians(ANGLES[getArmPosition()]-90);
+		angle = (float) Math.toRadians(ANGLES[getArmPosition()] - 90);
 
 		if (getDirection() > 0) {
-			arm = new Rectangle(armLocation.x,armLocation.y,getArmLength(),20);
+			arm = new Rectangle(armLocation.x, armLocation.y, getArmLength(),
+					20);
 		} else {
-			arm = new Rectangle(armLocation.x-getArmLength(),armLocation.y,getArmLength(),20);
+			arm = new Rectangle(armLocation.x - getArmLength(), armLocation.y,
+					getArmLength(), 20);
 			angle *= -1;
 		}
-		arm = arm.transform(Transform.createRotateTransform(angle,armLocation.x,armLocation.y));
+		arm = arm.transform(Transform.createRotateTransform(angle,
+				armLocation.x, armLocation.y));
 
 		return mech.union(arm)[0];
 	}

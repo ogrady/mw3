@@ -34,7 +34,7 @@ Slick2DRenderer {
 
 	/**
 	 * Renders the positionable at its current position. Flips the animation if
-	 * the direction isinversed (= -1)
+	 * {@link Positionable#getDirection()} is inversed (= -1)
 	 */
 	@Override
 	public void render(final Graphics g, final Viewport vp) {

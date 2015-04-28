@@ -18,6 +18,7 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.GameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import renderer.slick.HitboxMapRenderer;
 import util.Const;
 import controller.IController;
 import controller.TestAi;
@@ -39,7 +40,7 @@ import game.Viewport;
  *
  */
 public class PlayingState extends BasicGameState implements
-		IListenable<IPlayingStateListener> {
+IListenable<IPlayingStateListener> {
 	private Movable _player;
 	private World _map;
 	private Viewport _viewport;
@@ -106,6 +107,7 @@ public class PlayingState extends BasicGameState implements
 		_container = gc;
 		loadMap("rsc/map/tm4.tmx");
 		_map.loadBGM("rsc/sound/music/DST-ClubFight.ogg");
+		_map.setRenderer(new HitboxMapRenderer(_map));
 		// _map.playBGM();
 		_player = new Nitro(new Vector2f(440, 480), "");
 		// _player = new Nitro(new Vector2f(500, 120), "");

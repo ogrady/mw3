@@ -22,9 +22,9 @@ abstract public class Slick2DRenderer implements IRenderer {
 	protected ArrayList<IRenderer> _subrenderers;
 
 	/**
-	 * @return list of subrenderers
+	 * @return list of subrenderers. Can be manipulated by reference.
 	 */
-	public List<IRenderer> getSubrenderer() {
+	public List<IRenderer> getSubrenderers() {
 		return _subrenderers;
 	}
 
@@ -108,9 +108,9 @@ abstract public class Slick2DRenderer implements IRenderer {
 	 *            the milliseconds passed since the last tick
 	 */
 	public void update(final long delta) {
-		ObservableAnimation anim = getCurrentAnimation();
+		final ObservableAnimation anim = getCurrentAnimation();
 		// Hitbox Renderer has no animations
-		if(anim != null) {
+		if (anim != null) {
 			getCurrentAnimation().update(delta);
 		}
 	}
