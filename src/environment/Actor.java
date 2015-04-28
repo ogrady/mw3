@@ -12,7 +12,7 @@ import org.newdawn.slick.geom.Vector2f;
 import environment.collision.ActorCollider;
 
 /**
- * Actors are movable objects that can have an additional descriton string.<br>
+ * Actors are movable objects that can have an additional description string.<br>
  * As a fallback, the simple class name is used as description if null is
  * passed.<br>
  * They are the main actors in the game, such as the pilots and mechs and
