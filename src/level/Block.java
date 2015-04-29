@@ -59,8 +59,8 @@ public class Block extends Positionable implements IListenable<IBlockListener> {
 	 *            {@link MagicWand} for more detail
 	 */
 	public void computeHitbox(final Image img) {
-		setHitbox(new Hitbox(new Shape[]{new MagicWand().getBoundingShape(img, (int) getPosition().x,
-				(int) getPosition().y)}));
+		setHitbox(new Hitbox(new MagicWand().getBoundingShape(img, (int) getPosition().x,
+				(int) getPosition().y)));
 	}
 
 	/**

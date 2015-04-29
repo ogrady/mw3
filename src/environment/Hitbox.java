@@ -1,5 +1,8 @@
 package environment;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import org.newdawn.slick.geom.Shape;
 
 /**
@@ -9,9 +12,14 @@ import org.newdawn.slick.geom.Shape;
  * 
  */
 public class Hitbox {
-	private Shape[] individualHitboxes;
+	private ArrayList<Shape> individualHitboxes;
 	public Hitbox(Shape[] _individualHitboxes) {
-		individualHitboxes = _individualHitboxes;
+		individualHitboxes = new ArrayList<Shape>(Arrays.asList(_individualHitboxes));
+	}
+
+	public Hitbox(Shape hitboxShape) {
+		individualHitboxes = new ArrayList<Shape>();
+		individualHitboxes.add(hitboxShape);
 	}
 
 	public boolean intersects(Shape other) {
@@ -86,7 +94,7 @@ public class Hitbox {
 		return maxY;
 	}
 
-	public Shape[] getShapes() {
+	public ArrayList<Shape> getShapes() {
 		return individualHitboxes;
 	}
 }

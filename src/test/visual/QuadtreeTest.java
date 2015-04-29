@@ -95,7 +95,7 @@ public class QuadtreeTest extends BasicGame {
 		assert Block.solidBlocks.size() == _qt.size();
 		arg0.getInput().addMouseListener(this);
 		_r = new Rectangle(0, 0, 0, 0);
-		hitbox = new Hitbox(new Shape[]{_r});
+		hitbox = new Hitbox(_r);
 	}
 
 	@Override
