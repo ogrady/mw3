@@ -22,6 +22,10 @@ public class Hitbox {
 		individualHitboxes.add(hitboxShape);
 	}
 
+	public void addShape(Shape s) {
+		individualHitboxes.add(s);
+	}
+
 	public boolean intersects(Shape other) {
 		boolean intersects = false;
 		for(Shape s : individualHitboxes) {

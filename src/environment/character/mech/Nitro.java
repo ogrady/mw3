@@ -244,9 +244,8 @@ public class Nitro extends Mech implements IStationaryShieldListener {
 	 */
 	@Override
 	public Hitbox getHitbox() {
-		final Hitbox mech = super.getHitbox();
+		Hitbox mech = super.getHitbox();
 
-		/*
 		final Vector2f armLocation = getArmJoint();
 		Shape arm;
 		float angle;
@@ -262,8 +261,9 @@ public class Nitro extends Mech implements IStationaryShieldListener {
 		}
 		arm = arm.transform(Transform.createRotateTransform(angle,
 				armLocation.x, armLocation.y));
-		*/
 		//return mech.union(arm)[0];
+		mech.addShape(arm);
+
 		return mech;
 	}
 

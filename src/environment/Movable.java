@@ -5,6 +5,7 @@ import game.Viewport;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.io.*;
 
 import listener.IPlayingStateListener;
 import logger.LogMessageType;
@@ -198,6 +199,10 @@ IControllable, IPlayingStateListener {
 				p.getCollider().onPositionableCollide(this);
 				final float lowerEdgeColider = p.getHitbox().getMinY()
 						+ p.getHitbox().getHeight();
+
+				System.out.println(p.getHitbox().getMinY());
+				System.out.println(p.getHitbox().getMaxY());
+				System.out.println(p.getHitbox().getHeight());
 				// If the upper edge of the object is inside the colliding
 				// object, move it back down.
 				if (_currentPosition.y <= lowerEdgeColider) {
