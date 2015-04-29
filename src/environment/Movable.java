@@ -200,13 +200,11 @@ IControllable, IPlayingStateListener {
 				final float lowerEdgeColider = p.getHitbox().getMinY()
 						+ p.getHitbox().getHeight();
 
-				System.out.println(p.getHitbox().getMinY());
-				System.out.println(p.getHitbox().getMaxY());
-				System.out.println(p.getHitbox().getHeight());
 				// If the upper edge of the object is inside the colliding
 				// object, move it back down.
-				if (_currentPosition.y <= lowerEdgeColider) {
-					_currentPosition.y = lowerEdgeColider + 1;
+				// Consider that there could be an arm sticking out below our y-positon
+				if (getHitbox().getMinY() <= lowerEdgeColider) {
+					_currentPosition.y = lowerEdgeColider + 1 + (_currentPosition.y-getHitbox().getMinY());
 				}
 			}
 

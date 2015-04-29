@@ -7,9 +7,9 @@ import org.newdawn.slick.geom.Shape;
 
 /**
  * Holds a collection of {@link Shape} and generalizes access methods for combinations of shapes
- * 
+ *
  * @author Fabian
- * 
+ *
  */
 public class Hitbox {
 	private ArrayList<Shape> individualHitboxes;
