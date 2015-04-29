@@ -23,6 +23,7 @@ import org.newdawn.slick.geom.Vector2f;
 import util.Const;
 import util.QuadTree;
 import environment.IBounding;
+import environment.Hitbox;
 
 /**
  * Testclass for testing quadtrees. To be removed in final release.<br>
@@ -40,6 +41,7 @@ public class QuadtreeTest extends BasicGame {
 	private World _world;
 	private QuadTree<Block> _qt;
 	private Rectangle _r;
+	private Hitbox hitbox;
 	private Collection<Block> _collisions;
 
 	public QuadtreeTest() {
@@ -71,7 +73,9 @@ public class QuadtreeTest extends BasicGame {
 		if (_collisions != null) {
 			g.setColor(Color.red);
 			for (final Block b : _collisions) {
-				g.fill(b.getHitbox());
+				for(Shape s : b.getHitbox().getShapes()) {
+					g.fill(s);
+				}
 			}
 		}
 		Particle.drawAll(g);
@@ -91,6 +95,7 @@ public class QuadtreeTest extends BasicGame {
 		assert Block.solidBlocks.size() == _qt.size();
 		arg0.getInput().addMouseListener(this);
 		_r = new Rectangle(0, 0, 0, 0);
+		hitbox = new Hitbox(new Shape[]{_r});
 	}
 
 	@Override
@@ -99,8 +104,8 @@ public class QuadtreeTest extends BasicGame {
 		final HashSet<Block> collisions = _qt.getCandidates(new IBounding() {
 
 			@Override
-			public Shape getHitbox() {
-				return _r;
+			public Hitbox getHitbox() {
+				return hitbox;
 			}
 		});
 		_collisions = collisions;
@@ -113,6 +118,7 @@ public class QuadtreeTest extends BasicGame {
 		if (button == 0) {
 			new ArrayList<Block>();
 			_r = new Rectangle(x, y, 30, 30);
+			hitbox = new Hitbox(new Shape[]{_r});
 		} else {
 			final Block b = _world.getBlockAt(x, y);
 			b.setSolid(!b.isSolid());
@@ -237,8 +243,8 @@ public class QuadtreeTest extends BasicGame {
 		}
 
 		@Override
-		public Shape getHitbox() {
-			return new Rectangle(_p.x, _p.y, 2, 2);
+		public Hitbox getHitbox() {
+			return new Hitbox(new Shape[]{new Rectangle(_p.x, _p.y, 2, 2)});
 		}
 	}
 }

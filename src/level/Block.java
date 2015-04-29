@@ -17,6 +17,7 @@ import renderer.NullRenderer;
 import util.Const;
 import util.magicwand.MagicWand;
 import environment.Positionable;
+import environment.Hitbox;
 import environment.collision.DefaultCollider;
 import environment.collision.DestructableBlockCollider;
 import environment.collision.NeverCollider;
@@ -35,7 +36,7 @@ public class Block extends Positionable implements IListenable<IBlockListener> {
 	private boolean _solid, _destructable;
 	private final int _xIndex, _yIndex;
 	private final ListenerSet<IBlockListener> _listeners;
-	private Shape _hitbox;
+	private Hitbox _hitbox;
 
 	/**
 	 * Replaces the old hitbox with a new one. NULL will be ignored
@@ -43,7 +44,7 @@ public class Block extends Positionable implements IListenable<IBlockListener> {
 	 * @param hitbox
 	 *            the new shape that represents the hitbox of this block
 	 */
-	public void setHitbox(final Shape hitbox) {
+	public void setHitbox(final Hitbox hitbox) {
 		if (hitbox == null) {
 			_hitbox = hitbox;
 		}
@@ -58,8 +59,8 @@ public class Block extends Positionable implements IListenable<IBlockListener> {
 	 *            {@link MagicWand} for more detail
 	 */
 	public void computeHitbox(final Image img) {
-		setHitbox(new MagicWand().getBoundingShape(img, (int) getPosition().x,
-				(int) getPosition().y));
+		setHitbox(new Hitbox(new Shape[]{new MagicWand().getBoundingShape(img, (int) getPosition().x,
+				(int) getPosition().y)}));
 	}
 
 	/**
@@ -68,7 +69,7 @@ public class Block extends Positionable implements IListenable<IBlockListener> {
 	 * {@link Positionable#getHitbox()}
 	 */
 	@Override
-	public Shape getHitbox() {
+	public Hitbox getHitbox() {
 		return _hitbox;
 	}
 

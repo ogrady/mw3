@@ -3,6 +3,7 @@ package renderer.slick;
 import java.util.Collection;
 
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.geom.Shape;
 
 import environment.Positionable;
 import game.Viewport;
@@ -27,7 +28,9 @@ public class CollisionRenderer<P extends Positionable> extends
 		final Collection<Positionable> collisions = _renderable.getCollider()
 				.getCollisions();
 		for (final Positionable pos : collisions) {
-			g.fill(pos.getHitbox());
+			for(Shape s : pos.getHitbox().getShapes()) {
+				g.fill(s);
+			}
 		}
 	}
 

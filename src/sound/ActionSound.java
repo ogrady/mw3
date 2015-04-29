@@ -8,6 +8,7 @@ import org.newdawn.slick.Sound;
 import org.newdawn.slick.geom.Shape;
 
 import environment.character.CharacterAction;
+import environment.Hitbox;
 import game.MetalWarriors;
 
 /**
@@ -34,7 +35,7 @@ public class ActionSound implements ICharacterActionListener {
 	public void onExecute(final CharacterAction action) {
 		final Shape viewportRect = MetalWarriors.instance.getPlayingState()
 				.getViewport().getPlayerViewportRect();
-		final Shape srcHitbox = action.getOwner().getHitbox();
+		final Hitbox srcHitbox = action.getOwner().getHitbox();
 		final float vx = viewportRect.getCenterX();
 		final float vy = viewportRect.getCenterY();
 		final float sx = srcHitbox.getCenterX();

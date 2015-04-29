@@ -10,6 +10,7 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 
 import environment.IBounding;
+import environment.Hitbox;
 
 /**
  * Quadtrees are two-dimensional indices that allow you to retrieve elements
@@ -252,11 +253,11 @@ public class QuadTree<E extends IBounding> implements Collection<E> {
 	 *         to 4 (touches all four subtrees) elements. Those are the indices
 	 *         for the {@link #_nodes}.
 	 */
-	private List<Integer> getIndices(final Shape s) {
+	private List<Integer> getIndices(final Hitbox h) {
 		final List<Integer> indices = new ArrayList<Integer>(4);
 		if (_split) {
 			for (int i = 0; i < _nodes.length; i++) {
-				if (_nodes[i].getBounds().intersects(s)) {
+				if (h.intersects(_nodes[i].getBounds())) {
 					indices.add(i);
 				}
 			}
@@ -335,7 +336,7 @@ public class QuadTree<E extends IBounding> implements Collection<E> {
 		// in it. In that case, check if it is contained in the list of elements
 		// or, if split, look for the subtrees if they have it. We can stop our
 		// search as soon as one child contains the object.
-		if (_bounds.intersects(b.getHitbox())) {
+		if (b.getHitbox().intersects(_bounds)) {
 			if (!_split) {
 				contains = _elements.contains(b);
 			} else {

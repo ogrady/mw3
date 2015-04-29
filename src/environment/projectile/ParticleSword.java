@@ -2,6 +2,7 @@ package environment.projectile;
 
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Vector2f;
+import org.newdawn.slick.geom.Shape;
 
 import renderer.slick.Slick2DRenderer;
 import util.Const;
@@ -54,7 +55,9 @@ public class ParticleSword extends Projectile {
 
 			@Override
 			public void render(final Graphics g, final Viewport vp) {
-				g.draw(getHitbox());
+				for(Shape s : getHitbox().getShapes()) {
+					g.draw(s);
+				}
 			}
 
 			@Override

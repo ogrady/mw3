@@ -13,6 +13,7 @@ import renderer.slick.HitboxRenderer;
 import renderer.slick.mech.NitroRenderer;
 import sound.NitroSoundManager;
 import util.Const;
+import environment.Hitbox;
 import environment.MovableState;
 import environment.Positionable;
 import environment.character.CharacterAction;
@@ -242,9 +243,10 @@ public class Nitro extends Mech implements IStationaryShieldListener {
 	 * @return combined hitbox of mech and arm
 	 */
 	@Override
-	public Shape getHitbox() {
-		final Shape mech = super.getHitbox();
+	public Hitbox getHitbox() {
+		final Hitbox mech = super.getHitbox();
 
+		/*
 		final Vector2f armLocation = getArmJoint();
 		Shape arm;
 		float angle;
@@ -260,8 +262,9 @@ public class Nitro extends Mech implements IStationaryShieldListener {
 		}
 		arm = arm.transform(Transform.createRotateTransform(angle,
 				armLocation.x, armLocation.y));
-
-		return mech.union(arm)[0];
+		*/
+		//return mech.union(arm)[0];
+		return mech;
 	}
 
 	@Override

@@ -9,6 +9,7 @@ import org.newdawn.slick.geom.Shape;
 
 import util.QuadTree;
 import environment.IBounding;
+import environment.Hitbox;
 
 public class QuadTreeAdd {
 	@Test
@@ -19,8 +20,8 @@ public class QuadTreeAdd {
 		for (int i = 0; i < elements; i++) {
 			qt.add(new IBounding() {
 				@Override
-				public Shape getHitbox() {
-					return new Rectangle(r.nextInt(100), r.nextInt(100), 10, 10);
+				public Hitbox getHitbox() {
+					return new Hitbox(new Shape[]{new Rectangle(r.nextInt(100), r.nextInt(100), 10, 10)});
 				}
 			});
 		}

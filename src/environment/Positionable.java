@@ -106,9 +106,9 @@ public abstract class Positionable implements IBounding,
 	 *         position and size.
 	 */
 	@Override
-	public Shape getHitbox() {
-		return new Rectangle(getPosition().x, getPosition().y, getWidth() - 1,
-				getHeight() - 1);
+	public Hitbox getHitbox() {
+		return new Hitbox(new Shape[]{new Rectangle(getPosition().x, getPosition().y, getWidth() - 1,
+				getHeight() - 1)});
 	}
 
 	@Override
