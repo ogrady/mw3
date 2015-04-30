@@ -203,8 +203,11 @@ IControllable, IPlayingStateListener {
 				// If the upper edge of the object is inside the colliding
 				// object, move it back down.
 				// Consider that there could be an arm sticking out below our y-positon
-				if (getHitbox().getMinY() <= lowerEdgeColider) {
-					_currentPosition.y = lowerEdgeColider + 1 + (_currentPosition.y-getHitbox().getMinY());
+				for(float f : getHitbox().getAllY()) {
+					if (f <= lowerEdgeColider) {
+						_currentPosition.y = lowerEdgeColider + 1 + (_currentPosition.y-f);
+						break;
+					}
 				}
 			}
 

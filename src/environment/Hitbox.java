@@ -14,6 +14,8 @@ import org.newdawn.slick.geom.Shape;
 public class Hitbox {
 	private ArrayList<Shape> individualHitboxes;
 	public Hitbox(Shape[] _individualHitboxes) {
+		for(Shape s : _individualHitboxes) {
+		}
 		individualHitboxes = new ArrayList<Shape>(Arrays.asList(_individualHitboxes));
 	}
 
@@ -26,6 +28,16 @@ public class Hitbox {
 		individualHitboxes.add(s);
 	}
 
+	public boolean contains(float x, float y) {
+		for(Shape s : individualHitboxes) {
+			if(s.contains(x,y)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	public boolean intersects(Shape other) {
 		boolean intersects = false;
 		for(Shape s : individualHitboxes) {
@@ -33,6 +45,27 @@ public class Hitbox {
 		}
 
 		return intersects;
+	}
+
+	public float[] getPoints() {
+		float[] points = new float[0];
+		for(Shape s : individualHitboxes) {
+			points = concatArrays(s.getPoints(),points);
+		}
+		return points;
+	}
+
+	public float[] getAllY() {
+		float[] points = getPoints();
+		float[] yValues = new float[points.length / 2];
+		int j = 0;
+		for(int i = 1; i < points.length; i=i+2) {
+			if(i % 2 != 0) {
+				yValues[j++] = points[i];
+			}
+		}
+
+		return yValues;
 	}
 
 	public boolean intersects(Hitbox other) {
@@ -44,6 +77,12 @@ public class Hitbox {
 		}
 
 		return intersects;
+	}
+
+	protected  static float[] concatArrays(float[] first, float[] second) {
+		float[] result = Arrays.copyOf(first, first.length + second.length);
+		System.arraycopy(second, 0, result, first.length, second.length);
+		return result;
 	}
 
 	public float getCenterX() {
