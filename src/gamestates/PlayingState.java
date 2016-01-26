@@ -18,6 +18,7 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.GameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import renderer.slick.MapRenderer;
 import util.Const;
 import controller.IController;
 import controller.TestAi;
@@ -38,8 +39,7 @@ import game.Viewport;
  * @author Daniel
  *
  */
-public class PlayingState extends BasicGameState implements
-		IListenable<IPlayingStateListener> {
+public class PlayingState extends BasicGameState implements IListenable<IPlayingStateListener> {
 	private Movable _player;
 	private World _map;
 	private Viewport _viewport;
@@ -93,23 +93,22 @@ public class PlayingState extends BasicGameState implements
 	}
 
 	@Override
-	public void init(final GameContainer gc, final StateBasedGame sbg)
-			throws SlickException {
+	public void init(final GameContainer gc, final StateBasedGame sbg) throws SlickException {
 		if (!(sbg instanceof MetalWarriors)) {
-			throw new RuntimeException(getClass().getSimpleName()
-					+ " can only be used with an instance of "
-					+ MetalWarriors.class.getSimpleName());
+			throw new RuntimeException(getClass().getSimpleName() + " can only be used with an instance of " + MetalWarriors.class.getSimpleName());
 		}
 		final MetalWarriors mw = (MetalWarriors) sbg;
 		_viewport = new Viewport(0, 0, gc);
 		_listeners = new ListenerSet<IPlayingStateListener>();
 		_container = gc;
+		_container.setVSync(true);
 		loadMap("rsc/map/tm4.tmx");
 		_map.loadBGM("rsc/sound/music/DST-ClubFight.ogg");
+		_map.setRenderer(new MapRenderer(_map));
 		// _map.playBGM();
 		_player = new Nitro(new Vector2f(440, 480), "");
 		// _player = new Nitro(new Vector2f(500, 120), "");
-		spawnBots(1);
+		spawnBots(20);
 		selectInputDevice((Mech) _player, mw.getConfiguration());
 	}
 
@@ -123,13 +122,11 @@ public class PlayingState extends BasicGameState implements
 	 *            the configuration to fetch the key-binding for the controller
 	 *            from
 	 */
-	private static void selectInputDevice(final Mech mov,
-			final Configuration conf) {
+	private static void selectInputDevice(final Mech mov, final Configuration conf) {
 		IController controller = null;
 		int i = 0;
 		while (i < Controllers.getControllerCount() && controller == null) {
-			if (Controllers.getController(i).getName().toLowerCase()
-					.contains("xbox")) {
+			if (Controllers.getController(i).getName().toLowerCase().contains("xbox")) {
 				controller = new MechXboxPadController(mov, conf);
 			}
 			i++;
@@ -141,8 +138,7 @@ public class PlayingState extends BasicGameState implements
 	}
 
 	@Override
-	public void render(final GameContainer gc, final StateBasedGame sbg,
-			final Graphics g) throws SlickException {
+	public void render(final GameContainer gc, final StateBasedGame sbg, final Graphics g) throws SlickException {
 		g.translate(_viewport.getPosition().x, _viewport.getPosition().y);
 		_map.getRenderer().render(g, _viewport);
 		_listeners.notify(new INotifier<IPlayingStateListener>() {
@@ -154,8 +150,7 @@ public class PlayingState extends BasicGameState implements
 	}
 
 	@Override
-	public void update(final GameContainer gc, final StateBasedGame sbg,
-			final int delta) throws SlickException {
+	public void update(final GameContainer gc, final StateBasedGame sbg, final int delta) throws SlickException {
 		_listeners.notify(new INotifier<IPlayingStateListener>() {
 			@Override
 			public void notify(final IPlayingStateListener listener) {
