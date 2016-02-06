@@ -92,7 +92,7 @@ IControllable, IPlayingStateListener {
 
 	@Override
 	public void applyGravity(final float g) {
-		// yspeed += _g;
+	    _yspeed += g;
 		move(0, 1, true);
 	}
 
@@ -229,7 +229,9 @@ IControllable, IPlayingStateListener {
 					_state.remove(MovableState.FLYING);
 					_state.remove(MovableState.JUMPING);
 					_state.add(MovableState.FALLING);
-				}
+				} 
+			} else {
+				_yspeed = 0;
 			}
 		}
 
@@ -275,7 +277,8 @@ IControllable, IPlayingStateListener {
 	public void onTick(final Input input, final int delta) {
 		_controller.update(input, delta);
 		_renderer.update(delta);
-		applyGravity(9.81f);
+		// Apply earth gravity based on the fact that 4pixels equal 1meter.
+		applyGravity(((float)delta/1000.0f)*9.81f*4.0f);
 	}
 
 	@Override
