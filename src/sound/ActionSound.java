@@ -60,7 +60,7 @@ public class ActionSound implements ICharacterActionListener {
 	 * or whatever
 	 *
 	 * @param path
-	 *            path wher the soundfile is
+	 *            path where the soundfile is
 	 * @return the loaded file
 	 */
 	public static Sound loadSound(final String path) {
