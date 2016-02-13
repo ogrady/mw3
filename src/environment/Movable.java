@@ -92,8 +92,7 @@ IControllable, IPlayingStateListener {
 
 	@Override
 	public void applyGravity(final float g) {
-	    _yspeed += g;
-		move(0, 1, true);
+		move(0, g, true);
 	}
 
 	/**
@@ -103,9 +102,9 @@ IControllable, IPlayingStateListener {
 	 * Fails when collisions occur.
 	 *
 	 * @param moveFactorX
-	 *            times the x-speed
+	 *            added to the x-speed
 	 * @param moveFactorY
-	 *            times the y-speed
+	 *            added to the y-speed
 	 * @return whether or not the movement was successful (true, if no
 	 *         collisions occurred)
 	 */
@@ -130,7 +129,7 @@ IControllable, IPlayingStateListener {
 	 *            outside the class
 	 * @return returns true, if a movement (change of placement) occurred.
 	 */
-	private boolean move(final float moveFactorX, final float moveFactorY,
+	private boolean move(final float moveAccelerationX, final float moveAccelerationY,
 			final boolean ignoreBlocking) {
 		boolean rightCollision = false;
 		boolean leftCollision = false;
@@ -139,17 +138,20 @@ IControllable, IPlayingStateListener {
 		final float oldPositionX = _currentPosition.x;
 		final float oldPositionY = _currentPosition.y;
 
+		_xspeed += moveAccelerationX;
+		_yspeed += moveAccelerationY;
+		
 		if (!ignoreBlocking
 				&& (_state.has(MovableState.BLOCKING)
 						|| _state.has(MovableState.DYING) || _state
-						.has(MovableState.DEAD)) || moveFactorX == 0
-						&& moveFactorY == 0) {
+						.has(MovableState.DEAD)) || _xspeed == 0
+						&& _yspeed == 0) {
 			return false;
 		}
+		
+		setDirection((int) moveAccelerationX);
 
-		setDirection((int) moveFactorX);
-
-		_currentPosition.x += moveFactorX * _xspeed;
+		_currentPosition.x += _xspeed;
 
 		final Collection<Positionable> xCollisions = _collider.getCollisions();
 		// TODO: currently, the collisions are calculated twice (once for x-,
@@ -157,7 +159,7 @@ IControllable, IPlayingStateListener {
 		// x-movement, then adjust the positionable to not have any collisions
 		// towards the x-direction, then check for y-collisions. Can this be
 		// reduced to checking only once?
-		if (moveFactorX > 0) {
+		if (_xspeed > 0) {
 			for (final Positionable p : xCollisions) {
 				rightCollision = true;
 				p.getCollider().onPositionableCollide(this);
@@ -171,7 +173,7 @@ IControllable, IPlayingStateListener {
 		}
 
 		// Move left.
-		if (moveFactorX < 0) {
+		if (_xspeed < 0) {
 			for (final Positionable p : xCollisions) {
 				leftCollision = true;
 				p.getCollider().onPositionableCollide(this);
@@ -187,12 +189,12 @@ IControllable, IPlayingStateListener {
 
 		final float newPositionX = _currentPosition.x;
 		_currentPosition.x = oldPositionX;
-		_currentPosition.y += moveFactorY * _yspeed;
+		_currentPosition.y += _yspeed;
 
 		final Collection<Positionable> yCollisions = _collider.getCollisions();
 
 		// Moved up.
-		if (moveFactorY < 0) {
+		if (_yspeed < 0) {
 			for (final Positionable p : yCollisions) {
 				upCollision = true;
 				p.getCollider().onPositionableCollide(this);
@@ -212,7 +214,7 @@ IControllable, IPlayingStateListener {
 		}
 
 		// Moved down.
-		if (moveFactorY > 0) {
+		if (_yspeed > 0) {
 			for (final Positionable p : yCollisions) {
 				downCollision = true;
 				p.getCollider().onPositionableCollide(this);
@@ -238,8 +240,8 @@ IControllable, IPlayingStateListener {
 		_currentPosition.x = newPositionX;
 
 		if (leftCollision || rightCollision || upCollision || downCollision) {
-			MetalWarriors.logger.print("MoveFactorX: " + moveFactorX
-					+ " MoveFactorY: " + moveFactorY
+			MetalWarriors.logger.print("MoveFactorX: " + moveAccelerationX
+					+ " MoveFactorY: " + moveAccelerationY
 					+ (leftCollision ? " Left" : "")
 					+ (rightCollision ? " Right" : "")
 					+ (upCollision ? " Up" : "")

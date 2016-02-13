@@ -105,7 +105,7 @@ public class Nitro extends Mech implements IStationaryShieldListener {
 
 			@Override
 			protected void execute() {
-				move(0, -2);
+				move(0, -2.0f);
 				_state.add(MovableState.FLYING);
 			}
 		});
