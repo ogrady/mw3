@@ -31,6 +31,8 @@ IControllable, IPlayingStateListener {
 	public static final ArrayList<Movable> instances = new ArrayList<Movable>();
 	protected float _xspeed;
 	protected float _yspeed;
+	protected float _maxSpeed;
+	protected float _weight;
 	protected IController _controller;
 	protected ListenableEnumBitmask<MovableState> _state;
 
@@ -69,10 +71,12 @@ IControllable, IPlayingStateListener {
 	 *            horizontal speed
 	 */
 	public Movable(final Vector2f position, final float width,
-			final float height, final float speed) {
+			final float height, final float speed, final float weight) {
 		super(position, width, height);
-		_xspeed = speed;
-		_yspeed = speed;
+		_weight = weight;
+		_xspeed = 0;
+		_yspeed = 0;
+		_maxSpeed = speed;
 		_state = new ListenableEnumBitmask<MovableState>();
 		// create a null-controller to avoid nullpointerexceptions when ticking
 		// empty mechs
@@ -101,15 +105,15 @@ IControllable, IPlayingStateListener {
 	 * direction.<br>
 	 * Fails when collisions occur.
 	 *
-	 * @param moveFactorX
+	 * @param moveAccelerationX
 	 *            added to the x-speed
-	 * @param moveFactorY
+	 * @param moveAccelerationY
 	 *            added to the y-speed
 	 * @return whether or not the movement was successful (true, if no
 	 *         collisions occurred)
 	 */
-	public boolean move(final float moveFactorX, final float moveFactorY) {
-		return this.move(moveFactorX, moveFactorY, false);
+	public boolean move(final float moveAccelerationX, final float moveAccelerationY) {
+		return this.move(moveAccelerationX, moveAccelerationY, false);
 	}
 
 	/**
@@ -138,8 +142,8 @@ IControllable, IPlayingStateListener {
 		final float oldPositionX = _currentPosition.x;
 		final float oldPositionY = _currentPosition.y;
 
-		_xspeed += moveAccelerationX;
-		_yspeed += moveAccelerationY;
+		_xspeed = Math.min(_xspeed + moveAccelerationX, _maxSpeed);
+		_yspeed = Math.min(_yspeed + moveAccelerationY, 9.0f);
 		
 		if (!ignoreBlocking
 				&& (_state.has(MovableState.BLOCKING)
@@ -149,7 +153,7 @@ IControllable, IPlayingStateListener {
 			return false;
 		}
 		
-		setDirection((int) moveAccelerationX);
+		setDirection((int) _xspeed);
 
 		_currentPosition.x += _xspeed;
 
@@ -259,6 +263,8 @@ IControllable, IPlayingStateListener {
 			_state.remove(MovableState.STANDING);
 			_state.add(MovableState.MOVING);
 		} else {
+			_xspeed = 0;
+			_yspeed = 0;
 			_state.remove(MovableState.JUMPING);
 			_state.remove(MovableState.FALLING);
 			_state.remove(MovableState.FLYING);
@@ -269,6 +275,44 @@ IControllable, IPlayingStateListener {
 		MetalWarriors.logger.print(_state.toString(),
 				LogMessageType.INPUT_DEBUG);
 		return hasMoved;
+	}
+	
+	/**
+	 * Stops the Mech instantly and sets its x-axis movement to 0.0f.
+	 */
+	public void stop() {
+		_xspeed = 0.0f;
+	}
+	
+	/**
+	 * This is how the Mech breaks.
+	 */
+	public void haltMovement(final int delta) {
+		final float FRICTION_CONSTANT;
+		
+		if(_state.has(MovableState.FALLING) || _state.has(MovableState.FLYING) ||
+		   _state.has(MovableState.JUMPING) || _state.has(MovableState.HOVERING)) {
+			FRICTION_CONSTANT = 0.2f;
+		} else {
+			FRICTION_CONSTANT = 0.5f;
+		}
+
+		float breakAcceleration = (((float)delta)/1000.0f) * _weight * 9.81f * 4.0f * FRICTION_CONSTANT;
+		boolean stop;	
+		
+		if(_xspeed > 0.0f) {
+			breakAcceleration = -1.0f * breakAcceleration;
+			stop = _xspeed + breakAcceleration <= 0.1;
+		} else {
+			stop = _xspeed + breakAcceleration >= -0.1;
+		}
+		
+		if(stop) {
+			this.stop();			
+		} else {
+			this.move(breakAcceleration, 0);			
+		}
+		
 	}
 
 	@Override
