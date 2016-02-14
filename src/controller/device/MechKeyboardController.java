@@ -26,44 +26,60 @@ public class MechKeyboardController implements IController {
 
 	@Override
 	public void update(final Input input, final int delta) {
-		int deltaX = 0;
-		final int deltaY = 0;
+		float deltaX = 0;
+		float deltaY = 0;
+		boolean buttonPressed = false;
 		if (input.isKeyDown(_configuration.getInteger(Configuration.KB_START))) {
 			MetalWarriors.instance.gotoMenu();
+			buttonPressed = true;
 		}
 		if (input.isKeyDown(_configuration.getInteger(Configuration.KB_UP))) {
 			_mech.armUp();
+			buttonPressed = true;
 		}
 		if (input.isKeyDown(_configuration.getInteger(Configuration.KB_DOWN))) {
 			_mech.armDown();
+			buttonPressed = true;
 		}
 		if (input.isKeyDown(_configuration.getInteger(Configuration.KB_LEFT))) {
-			deltaX = -1;
+			deltaX = -0.5f;
+			buttonPressed = true;
 		}
 		if (input.isKeyDown(_configuration.getInteger(Configuration.KB_RIGHT))) {
-			deltaX = 1;
+			deltaX = 0.5f;
+			buttonPressed = true;
 		}
 		if (input.isKeyDown(_configuration.getInteger(Configuration.KB_JUMP))) {
 			_mech.jump();
+			buttonPressed = true;
 		}
 		if (input
 				.isKeyDown(_configuration.getInteger(Configuration.KB_SPECIAL))) {
 			_mech.specialAttack();
+			buttonPressed = true;
 		}
 		if (input.isKeyDown(_configuration
 				.getInteger(Configuration.KB_ATTACK_1))) {
 			_mech.primaryAttack();
+			buttonPressed = true;
 		}
 		if (input.isKeyDown(_configuration
 				.getInteger(Configuration.KB_ATTACK_2))) {
 			_mech.secondaryAttack();
+			buttonPressed = true;
 		}
 		if (input.isKeyDown(_configuration.getInteger(Configuration.KB_BLOCK))) {
 			_mech.block();
+			buttonPressed = true;
 		} else {
 			_mech.unblock();
 		}
-		_mech.move(deltaX, deltaY);
+		
+		if(buttonPressed) {
+			_mech.move(deltaX, deltaY);
+		} else {
+			_mech.haltMovement(delta);
+		}
 	}
 
 	@Override

@@ -133,7 +133,7 @@ public class Projectile extends Movable implements IDamageSource {
 	public Projectile(final Vector2f position, final Vector2f deltaVector,
 			final float damage, final float maxTravelDistance,
 			final Actor source) {
-		super(position.copy(), 5, 5, deltaVector.length());
+		super(position.copy(), 5, 5, 0.0f, deltaVector.length());
 		_baseDamage = damage;
 		_deltaVector = deltaVector;
 		_maxTravelDistance = maxTravelDistance;

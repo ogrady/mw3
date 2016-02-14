@@ -59,7 +59,7 @@ public abstract class Mech extends Actor {
 	 * Having 3 states in between each.<br>
 	 * So between each arm-position lies an angle of 20 degrees.<br>
 	 * The state of the arm says nothing about the direction the mech is facing
-	 * into. So having an arm-state of 7 could mean having the arm lifted by 20°
+	 * into. So having an arm-state of 7 could mean having the arm lifted by 20ï¿½
 	 * from the ground and facing left or right. The direction can still be
 	 * obtained from {@link #getDirection()}
 	 *
@@ -71,14 +71,14 @@ public abstract class Mech extends Actor {
 	}
 
 	/**
-	 * Rotates the arm up by 20°
+	 * Rotates the arm up by 20ï¿½
 	 */
 	public void armUp() {
 		getCharacterAction(CharacterActionName.ARM_UP).perform();
 	}
 
 	/**
-	 * Rotates the arm down by 20°
+	 * Rotates the arm down by 20ï¿½
 	 */
 	public void armDown() {
 		getCharacterAction(CharacterActionName.ARM_DOWN).perform();
@@ -155,11 +155,12 @@ public abstract class Mech extends Actor {
 	 * @param width
 	 * @param height
 	 * @param speed
+	 * @param weight
 	 * @param description
 	 */
 	public Mech(final Vector2f position, final float width, final float height,
-			final float speed, final String description) {
-		super(position, width, height, speed, description);
+			final float speed, final float weight, final String description) {
+		super(position, width, height, speed, weight, description);
 		_characterActions = new HashMap<CharacterActionName, CharacterAction>(
 				CharacterActionName.values().length);
 		// look straight

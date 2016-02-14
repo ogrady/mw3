@@ -64,8 +64,8 @@ abstract public class Actor extends Movable implements
 	 *            description string
 	 */
 	public Actor(final Vector2f position, final float width,
-			final float height, final float speed, final String description) {
-		super(position, width, height, speed);
+			final float height, final float speed, final float weight, final String description) {
+		super(position, width, height, speed, weight);
 		_listeners = new ListenerSet<IActorListener>();
 		_description = description != null ? description : getClass()
 				.getSimpleName();

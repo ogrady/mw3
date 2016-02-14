@@ -33,7 +33,7 @@ public class Nitro extends Mech implements IStationaryShieldListener {
 	private int _activeShields;
 
 	public Nitro(final Vector2f position, final String description) {
-		super(position, 0, 0, 5, description);
+		super(position, 0, 0, 5, 10.0f, description);
 		_maxLife = Const.NITRO_HP;
 		_currentLife = Const.NITRO_HP;
 		// we need empty actions for this, as per default an
@@ -105,7 +105,7 @@ public class Nitro extends Mech implements IStationaryShieldListener {
 
 			@Override
 			protected void execute() {
-				move(0, -2.0f);
+				move(0, -1.0f);
 				_state.add(MovableState.FLYING);
 			}
 		});

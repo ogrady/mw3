@@ -4,4 +4,5 @@ lib/slick/src/
 lib/*/src/
 debugflags
 .classpath
+.metadata/
 META-INF
